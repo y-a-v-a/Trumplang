@@ -1,5 +1,15 @@
 # Trumplang
 
+## Syntax examples
+
+```Trumplang
+I HAVE THE BEST DEAL PERSON! JUST HIRED (HUGE AGE! JUST HIRED 42 & TWEET NAME! JUST HIRED "DONALD")
+I HAVE THE BEST TWEET GUY! JUST HIRED PERSON! FOLLOW NAME!
+```
+
+
+## Other notes
+
 You've covered the most important aspects of designing an esoteric programming language. Let me check if there are any other pieces that might enhance the Trumplang ecosystem:
 
 1. **Official Logo/Badge** - Many programming languages have a distinctive logo. For Trumplang, you could create a logo that combines code elements with Trump-inspired imagery. This would be useful for GitHub repositories, documentation, and marketing.

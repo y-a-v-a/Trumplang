@@ -21,12 +21,38 @@ This document outlines additional implementation notes and considerations for de
   - Division by zero: "THAT'S A DISASTER. You can't divide by zero, that's for losers!"
   - Array index out of bounds: "YOU'RE TRYING TO CLIMB OVER THE WALL! Stay within the boundaries!"
   - Undefined variable: "NOBODY KNOWS WHAT THIS IS. You need to declare it first, believe me!"
+  - Panic/fatal error: "This code is a DISASTER! Very sad code, maybe the worst code ever written!" (Used for catastrophic runtime failures or unrecoverable errors when the program must terminate immediately)
+  - Program exit: `BORING` keyword immediately exits the program execution (for when the program is no longer interesting)
+
+- **Exception Handling**
+  - Try block: `DESPITE THE NEGATIVE PRESS COVFEFE` followed by code that might cause errors
+  - Catch block: `FAKE NEWS MEDIA WILL TELL YOU` followed by error handling code
+  - Finally block: `BUT THE TRUTH IS` followed by code that always executes
+  - Example structure:
+    ```
+    DESPITE THE NEGATIVE PRESS COVFEFE
+      // code that might throw an error
+    FAKE NEWS MEDIA WILL TELL YOU
+      // error handling code
+    BUT THE TRUTH IS
+      // code that always executes
+    YOU'RE FIRED
+    ```
 
 ## Implementation Features
 
 - **Special Variables**
   - Built-in variables that don't need declaration, like `AMERICA!` or `ME!`
   - System constants like `TREMENDOUS_PI!` or `HUGE_MAX!`
+  - Command line arguments accessible via the global array `IMMIGRANTS!`
+    - Access specific arguments with: `IMMIGRANTS! SECTION 0` (first argument)
+    - Get number of arguments with: `COUNT IMMIGRANTS!`
+    - Every program has access to this without declaration
+    
+- **Console Operations**
+  - Console logging: `LIBERATE expression` (outputs to console for debugging)
+  - Similar to "print" but formatted for debugging purposes
+  - Intended for developers to monitor program execution
 
 - **Import System**
   - Import statement: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"`
@@ -36,14 +62,23 @@ This document outlines additional implementation notes and considerations for de
   - Debug mode called "EXTREME VETTING"
   - Stack trace titled "THE FAILING PATH"
   - Performance profiler called "WINNING METRICS"
+  - Syntax checker called "LAW & ORDER"
 
 - **File System**
   - All filenames must be in uppercase with `.MAGA` extension
   - Import files are referred to as "DEALS"
   - Directory listing feature called "SHOW ME THE PEOPLE"
+  - File I/O operations:
+    - File open: `I HAVE BEEN VERY OPEN WITH "FILENAME.MAGA" FOR TREMENDOUS READING` or `I HAVE BEEN VERY OPEN WITH "FILENAME.MAGA" FOR BEAUTIFUL WRITING`
+    - File read: `TAKE THE TREMENDOUS WORDS FROM FILE!`
+    - File write: `PUT MY PERFECT WORDS IN FILE!: expression`
+    - File close: `I'M DONE WITH FILE!, TOTALLY DONE`
+    - File delete: `THAT FILE! IS A DISASTER, REMOVE IT`
+    - File check exists: `DO WE HAVE "FILENAME.MAGA"? BELIEVE ME, PEOPLE ARE ASKING`
 
 - **Documentation**
   - All documentation should be written in Trump's voice
+    - Documentation should be written as if Trump himself is explaining how to use the language.
   - Examples should reflect genuine Trump quotes where possible
   - Help command: `TELL ME ABOUT [feature]`
 

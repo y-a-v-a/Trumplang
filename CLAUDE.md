@@ -13,8 +13,18 @@
 - Blocks begin with `BELIEVE ME` and end with `YOU'RE FIRED`
 - Comments begin with `A LOT OF PEOPLE ARE SAYING`
 - Variables: `COUNT!` (UPPERCASE with !)
+- Variable assignment: `COUNT! IS YET 0`
 - Constants: Use `I HAVE A VERY GOOD BRAIN FOR` instead of `I HAVE THE BEST`
 - Functions: `GET_FIBONACCI` (UPPERCASE without !)
+- Increment variable: `MAKE COUNT! GREATER`
+- Decrement variable: `MAKE COUNT! SMALLER`
+- While loop: `WE'RE GOING TO WIN IN A LANDSLIDE CONDITION BELIEVE ME ... YOU'RE FIRED`
+- For loop: `WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 0 TO 10 BELIEVE ME ... YOU'RE FIRED`
+- For each loop: `BILLIONS AND BILLIONS ITEM! YET ARRAY! BELIEVE ME ... YOU'RE FIRED`
+- Import files: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"`
+- Selective import: `I ONLY WANT FUNCTION_NAME FROM "MATH.MAGA"`
+- String concatenation: `TEXT! ENDORSING "MORE TEXT"` (Use `ENDORSING` for strings)
+- Mathematical addition: `NUMBER! WINNING 5` (Use `WINNING` for numbers)
 
 ## Testing
 - Name test files after original file: `FILENAME.TEST.MAGA`

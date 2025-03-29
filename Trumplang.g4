@@ -17,15 +17,20 @@ program: 'BELIEVE ME' statement+ 'MAKE AMERICA GREAT AGAIN';
 
 // Statements
 statement:
-	variableDeclaration
+	importStatement
+	| selectiveImport
+	| variableDeclaration
 	| constantDeclaration
 	| functionDeclaration
 	| functionCall
 	| ifStatement
 	| whileLoop
 	| forLoop
+	| forEachLoop
 	| arrayDeclaration
 	| assignmentStatement
+	| incrementStatement
+	| decrementStatement
 	| printStatement
 	| inputStatement
 	| returnStatement
@@ -37,11 +42,11 @@ commentStatement: 'A LOT OF PEOPLE ARE SAYING' TEXT;
 
 // Variable declarations - "I HAVE THE BEST"
 variableDeclaration:
-	'I HAVE THE BEST' dataType VARIABLE 'JUST HIRED' expression;
+	'I HAVE THE BEST' dataType VARIABLE 'IS YET' (expression | dealDeclaration);
 
 // Constants - uses "I HAVE A VERY GOOD BRAIN FOR"
 constantDeclaration:
-	'I HAVE A VERY GOOD BRAIN FOR' dataType VARIABLE 'JUST HIRED' expression;
+	'I HAVE A VERY GOOD BRAIN FOR' dataType VARIABLE 'IS YET' expression;
 
 // Data types
 dataType:
@@ -81,9 +86,9 @@ elseIfStatement:
 // Else statement - "NOBODY KNEW"
 elseStatement: 'NOBODY KNEW' statement*;
 
-// While loop - "WE'RE GOING TO WIN SO MUCH"
+// While loop - "WE'RE GOING TO WIN IN A LANDSLIDE"
 whileLoop:
-	'WE\'RE GOING TO WIN SO MUCH' 'YOU\'RE GOING TO GET TIRED OF WINNING' condition 'BELIEVE ME'
+	'WE\'RE GOING TO WIN IN A LANDSLIDE' condition 'BELIEVE ME'
 		statement* 'YOU\'RE FIRED';
 
 // For loop - "WE'RE GOING TO WIN, WIN, WIN"
@@ -93,7 +98,7 @@ forLoop:
 
 // Loop item iteration - "BILLIONS AND BILLIONS"
 forEachLoop:
-	'BILLIONS AND BILLIONS' VARIABLE 'IN' VARIABLE 'BELIEVE ME' statement* 'YOU\'RE FIRED';
+	'BILLIONS AND BILLIONS' VARIABLE 'YET' VARIABLE 'BELIEVE ME' statement* 'YOU\'RE FIRED';
 
 // Break from loop early
 loopBreak: 'FAKE NEWS MEDIA SAID ENOUGH';
@@ -103,16 +108,22 @@ arrayDeclaration:
 	'BUILD THE WALL' VARIABLE 'AND MEXICO WILL PAY FOR IT' arrayElements?;
 
 // Array elements
-arrayElements: expression ('WINNING' expression)*;
+arrayElements: expression ('PREVAILS' expression)*;
 
-// Assignment statement - updated to "JUST HIRED" (was "SO TRUE")
-assignmentStatement: VARIABLE 'JUST HIRED' expression;
+// Assignment statement - updated to "IS YET" (was "JUST HIRED")
+assignmentStatement: VARIABLE 'IS YET' expression;
 
 // Print statement - "EVERYONE IS TALKING ABOUT"
 printStatement: 'EVERYONE IS TALKING ABOUT' expression;
 
 // Input statement - "MANY PEOPLE ARE ASKING"
 inputStatement: 'MANY PEOPLE ARE ASKING' VARIABLE;
+
+// Increment operation - "MAKE GREATER"
+incrementStatement: 'MAKE' VARIABLE 'GREATER';
+
+// Decrement operation - "MAKE SMALLER"
+decrementStatement: 'MAKE' VARIABLE 'SMALLER';
 
 // Condition for control structures
 condition:
@@ -133,7 +144,8 @@ comparison:
 // Expressions
 expression:
 	term
-	| expression 'WINNING' term // Addition
+	| expression 'WINNING' term // Numeric addition
+	| expression 'ENDORSING' term // String concatenation
 	| expression 'LOSING' term; // Subtraction
 
 // Terms - updated "TREMENDOUS" to "BIG LEAGUE TIMES" for multiplication
@@ -150,10 +162,26 @@ factor:
 	| NUMBER
 	| BOOLEAN
 	| functionCall
-	| arrayAccess;
+	| arrayAccess
+	| dealAccess;
 
 // Array access - using "WALL" metaphor
 arrayAccess: VARIABLE 'SECTION' expression;
+
+// Deal field entries
+dealField: dataType VARIABLE 'IS YET' expression;
+
+// Deal structure declaration
+dealDeclaration: '(' dealField ('&' dealField)* ')';
+
+// Deal field access
+dealAccess: VARIABLE 'FOLLOW' VARIABLE;
+
+// Import statement - "I KNOW THE BEST PEOPLE FROM"
+importStatement: 'I KNOW THE BEST PEOPLE FROM' FILEPATH;
+
+// Selective import - specific "people"
+selectiveImport: 'I ONLY WANT' IDENTIFIER ('AND' IDENTIFIER)* 'FROM' FILEPATH;
 
 // Lexer Rules
 
@@ -174,6 +202,9 @@ BOOLEAN: 'VERY TRUE' | 'FAKE NEWS';
 
 // Text for comments - any characters until end of line
 TEXT: ~[\r\n]+;
+
+// File paths for imports
+FILEPATH: '"' [A-Z0-9_./]+ '.MAGA' '"';
 
 // Whitespace and line terminators
 WS: [ \t\r\n]+ -> skip;
