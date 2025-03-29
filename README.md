@@ -1,3 +1,5 @@
+# Trumplang
+
 You've covered the most important aspects of designing an esoteric programming language. Let me check if there are any other pieces that might enhance the Trumplang ecosystem:
 
 1. **Official Logo/Badge** - Many programming languages have a distinctive logo. For Trumplang, you could create a logo that combines code elements with Trump-inspired imagery. This would be useful for GitHub repositories, documentation, and marketing.

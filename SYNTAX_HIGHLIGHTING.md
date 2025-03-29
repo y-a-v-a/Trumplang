@@ -169,7 +169,7 @@ The TextMate grammar defines how the syntax is highlighted. Here's a `trumplang.
       "patterns": [
         {
           "name": "entity.name.function.trumplang",
-          "match": "\\b(TREMENDOUS|I CALL UPON)\\s+([A-Z][A-Z0-9_]*)\\b"
+          "match": "\\b(INCREDIBLE|I CALL UPON)\\s+([A-Z][A-Z0-9_]*)\\b"
         },
         {
           "name": "meta.function-call.trumplang",

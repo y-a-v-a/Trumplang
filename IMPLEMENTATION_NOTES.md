@@ -26,7 +26,7 @@ This document outlines additional implementation notes and considerations for de
 
 - **Special Variables**
   - Built-in variables that don't need declaration, like `AMERICA!` or `ME!`
-  - System constants like `TREMENDOUS_PI` or `HUGE_MAX`
+  - System constants like `TREMENDOUS_PI!` or `HUGE_MAX!`
 
 - **Import System**
   - Import statement: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"`
