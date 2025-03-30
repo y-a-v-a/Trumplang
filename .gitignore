@@ -11,7 +11,7 @@ build/
 out/
 
 # Generated parser files
-src/parser/
+#src/parser/
 .antlr/
 
 # IDE and editor files

@@ -76,7 +76,7 @@ CustomTrumplangVisitor.prototype.visitVariableDeclaration = function(ctx) {
   let variableName = '';
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification by ending with !
       variableName = child.getText();
       break;
     }
@@ -129,50 +129,84 @@ CustomTrumplangVisitor.prototype.visitVariableDeclaration = function(ctx) {
 
 // Expression visitor
 CustomTrumplangVisitor.prototype.visitExpression = function(ctx) {
-  // Check for basic expression (single term)
+  // Log the expression structure for debugging
+  console.log(`Expression with ${ctx.getChildCount()} children`);
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.ruleIndex === 28) { // term rule index
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    console.log(`  Expression Child ${i}: ${childType} - "${childText}"`);
+  }
+  
+  // Check if this expression contains an operation
+  let hasOperator = false;
+  let operatorType = null;
+  let operatorIndex = -1;
+  
+  // First pass to find any operators
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    const text = child.getText ? child.getText() : '';
+    
+    if (text === 'WINNING' || text === 'ENDORSING' || text === 'LOSING') {
+      hasOperator = true;
+      operatorType = text;
+      operatorIndex = i;
+      break;
+    }
+  }
+  
+  // If this is a compound expression with an operator
+  if (hasOperator) {
+    // Identify left and right sides of the operation
+    const leftExpr = ctx.getChild(0);
+    const rightExpr = ctx.getChild(operatorIndex + 1);
+    
+    // Get values from both sides
+    const leftValue = this.visit(leftExpr);
+    const rightValue = this.visit(rightExpr);
+    
+    console.log(`Operation: ${leftValue} ${operatorType} ${rightValue}`);
+    
+    // Perform the operation
+    switch (operatorType) {
+      case 'WINNING':
+        // Addition for numbers
+        return leftValue + rightValue;
+        
+      case 'ENDORSING':
+        // String concatenation
+        const leftStr = leftValue !== null && leftValue !== undefined ? leftValue.toString() : '';
+        const rightStr = rightValue !== null && rightValue !== undefined ? rightValue.toString() : '';
+        console.log(`String concatenation: "${leftStr}" + "${rightStr}" = "${leftStr + rightStr}"`);
+        return leftStr + rightStr;
+        
+      case 'LOSING':
+        // Subtraction
+        return leftValue - rightValue;
+    }
+  }
+  
+  // If no operators found, this is a basic expression (single term)
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    if (child.constructor && child.constructor.name === 'TermContext') {
       console.log("Visiting term in expression");
       return this.visit(child);
     }
   }
   
-  // Check for other operations by looking at the tokens
+  // If we reach here, try to visit any child that we can
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    
-    if (child && child.symbol) {
-      const operator = child.getText();
-      
-      // Addition: expression 'WINNING' term
-      if (operator === 'WINNING') {
-        const exprCtx = ctx.getChild(0);
-        const termCtx = ctx.getChild(2);
-        
-        const left = this.visit(exprCtx);
-        const right = this.visit(termCtx);
-        return left + right;
-      }
-      
-      // String concatenation: expression 'ENDORSING' term
-      if (operator === 'ENDORSING') {
-        const exprCtx = ctx.getChild(0);
-        const termCtx = ctx.getChild(2);
-        
-        const left = this.visit(exprCtx);
-        const right = this.visit(termCtx);
-        return left.toString() + right.toString();
-      }
-      
-      // Subtraction: expression 'LOSING' term
-      if (operator === 'LOSING') {
-        const exprCtx = ctx.getChild(0);
-        const termCtx = ctx.getChild(2);
-        
-        const left = this.visit(exprCtx);
-        const right = this.visit(termCtx);
-        return left - right;
+    if (child && typeof this.visit === 'function') {
+      try {
+        const result = this.visit(child);
+        if (result !== undefined) {
+          return result;
+        }
+      } catch (e) {
+        // Ignore errors when trying to visit
       }
     }
   }
@@ -219,12 +253,50 @@ CustomTrumplangVisitor.prototype.visitDataType = function(ctx) {
   return 'UNKNOWN_TYPE';
 };
 
+// Assert statement visitor
+CustomTrumplangVisitor.prototype.visitAssertStatement = function(ctx) {
+  // 'FACT CHECK' expression 'SO TRUE' expression
+  let actualExprCtx = null;
+  let expectedExprCtx = null;
+  
+  // Find the two expressions
+  let exprIndex = 0;
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    if (child.constructor && child.constructor.name === 'ExpressionContext') {
+      if (exprIndex === 0) {
+        actualExprCtx = child;
+        exprIndex++;
+      } else {
+        expectedExprCtx = child;
+      }
+    }
+  }
+  
+  if (!actualExprCtx || !expectedExprCtx) {
+    throw new Error('ASSERTION IS A DISASTER! NEEDS ACTUAL AND EXPECTED VALUES, FOLKS!');
+  }
+  
+  // Get the actual and expected values
+  const actual = this.visit(actualExprCtx);
+  const expected = this.visit(expectedExprCtx);
+  
+  console.log(`Asserting: ${actual} == ${expected}`);
+  
+  // Compare values
+  if (actual == expected) { // Loose equality check, just like original Trump comparisons
+    return true;
+  } else {
+    throw new Error(`ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`);
+  }
+};
+
 // Visit term
 CustomTrumplangVisitor.prototype.visitTerm = function(ctx) {
   // Check for factor (the most common case)
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.ruleIndex === 29) { // factor rule index
+    if (child.constructor && child.constructor.name === 'FactorContext') {
       console.log("Visiting factor in term");
       return this.visit(child);
     }
@@ -272,9 +344,9 @@ CustomTrumplangVisitor.prototype.visitAssignmentStatement = function(ctx) {
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
     
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification
       variableName = child.getText();
-    } else if (child.ruleIndex === 27) { // expression rule index
+    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
       exprCtx = child;
     }
   }
@@ -309,7 +381,7 @@ CustomTrumplangVisitor.prototype.visitIncrementStatement = function(ctx) {
   let variableName = '';
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification
       variableName = child.getText();
       break;
     }
@@ -340,7 +412,7 @@ CustomTrumplangVisitor.prototype.visitDecrementStatement = function(ctx) {
   let variableName = '';
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification
       variableName = child.getText();
       break;
     }
@@ -370,7 +442,7 @@ CustomTrumplangVisitor.prototype.visitFactor = function(ctx) {
   // Parenthesized expression
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.ruleIndex === 27) { // expression rule index
+    if (child.constructor && child.constructor.name === 'ExpressionContext') {
       return this.visit(child);
     }
   }
@@ -378,7 +450,7 @@ CustomTrumplangVisitor.prototype.visitFactor = function(ctx) {
   // Function call
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.ruleIndex === 9) { // functionCall rule index
+    if (child.constructor && child.constructor.name === 'FunctionCallContext') {
       return this.visit(child);
     }
   }
@@ -403,7 +475,7 @@ CustomTrumplangVisitor.prototype.visitFactor = function(ctx) {
   let varToken = null;
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification
       varToken = child;
       break;
     }
@@ -420,11 +492,11 @@ CustomTrumplangVisitor.prototype.visitFactor = function(ctx) {
     throw new Error(`NOBODY KNOWS WHAT ${varName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
   }
   
-  // Literal string - get the string token
+  // Literal string
   let strToken = null;
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 61) { // STRING token type
+    if (child && child.symbol && child.getText().startsWith('"') && child.getText().endsWith('"')) {
       strToken = child;
       break;
     }
@@ -436,11 +508,11 @@ CustomTrumplangVisitor.prototype.visitFactor = function(ctx) {
     return str.substring(1, str.length - 1);
   }
   
-  // Literal number - get the number token
+  // Literal number
   let numToken = null;
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 62) { // NUMBER token type
+    if (child && child.symbol && /^[0-9]+(\.[0-9]+)?$/.test(child.getText())) {
       numToken = child;
       break;
     }
@@ -450,11 +522,11 @@ CustomTrumplangVisitor.prototype.visitFactor = function(ctx) {
     return parseFloat(numToken.getText());
   }
   
-  // Literal boolean - get the boolean token
+  // Literal boolean
   let boolToken = null;
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 63) { // BOOLEAN token type
+    if (child && child.symbol && (child.getText() === 'VERY TRUE' || child.getText() === 'FAKE NEWS')) {
       boolToken = child;
       break;
     }
@@ -486,13 +558,13 @@ CustomTrumplangVisitor.prototype.visitIfStatement = function(ctx) {
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
     
-    if (child.ruleIndex === 22) { // condition rule index
+    if (child.constructor && child.constructor.name === 'ConditionContext') {
       conditionCtx = child;
-    } else if (child.ruleIndex === 1) { // statement rule index
+    } else if (child.constructor && child.constructor.name === 'StatementContext') {
       statements.push(child);
-    } else if (child.ruleIndex === 16) { // elseIfStatement rule index
+    } else if (child.constructor && child.constructor.name === 'ElseIfStatementContext') {
       elseIfContexts.push(child);
-    } else if (child.ruleIndex === 17) { // elseStatement rule index
+    } else if (child.constructor && child.constructor.name === 'ElseStatementContext') {
       elseCtx = child;
     }
   }
@@ -738,8 +810,13 @@ CustomTrumplangVisitor.prototype.visitForEachLoop = function(ctx) {
   let statements = [];
   let foundYet = false;
   
+  console.log(`ForEach loop has ${ctx.getChildCount()} children`);
+  
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    console.log(`  ForEach Child ${i}: ${childType} - "${childText}"`);
     
     if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
       if (!foundYet) {
@@ -749,8 +826,32 @@ CustomTrumplangVisitor.prototype.visitForEachLoop = function(ctx) {
       }
     } else if (child && child.symbol && child.getText() === 'YET') {
       foundYet = true;
-    } else if (child.ruleIndex === 1) { // statement rule index
+    } else if (child.constructor && child.constructor.name === 'StatementContext') {
       statements.push(child);
+    }
+  }
+  
+  // If we didn't identify the variables directly, try a different approach
+  if (!itemVar || !arrayVar) {
+    for (let i = 0; i < ctx.getChildCount(); i++) {
+      const child = ctx.getChild(i);
+      if (child && child.getText && child.getText() === 'BILLIONS AND BILLIONS') {
+        if (i + 2 < ctx.getChildCount()) {
+          const itemVarChild = ctx.getChild(i + 1);
+          const yetChild = ctx.getChild(i + 2);
+          const arrayVarChild = ctx.getChild(i + 3);
+          
+          if (itemVarChild && itemVarChild.getText) {
+            itemVar = itemVarChild.getText();
+          }
+          
+          if (arrayVarChild && arrayVarChild.getText) {
+            arrayVar = arrayVarChild.getText();
+          }
+          
+          break;
+        }
+      }
     }
   }
   
@@ -1124,10 +1225,10 @@ CustomTrumplangVisitor.prototype.visitCondition = function(ctx) {
   
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.ruleIndex === 27) { // expression rule index
+    if (child.constructor && child.constructor.name === 'ExpressionContext') {
       exprs.push(child);
       exprCount++;
-    } else if (child.ruleIndex === 23) { // comparison rule index
+    } else if (child.constructor && child.constructor.name === 'ComparisonContext') {
       comparisonCtx = child;
     }
   }
@@ -1191,13 +1292,38 @@ CustomTrumplangVisitor.prototype.visitArrayDeclaration = function(ctx) {
   let arrayName = null;
   let arrayElementsCtx = null;
   
+  // Debug the array declaration structure
+  console.log(`Array declaration with ${ctx.getChildCount()} children`);
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    console.log(`  Array Child ${i}: ${childType} - "${childText}"`);
+  }
+  
+  // Find the array name (variable) and elements
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
     
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification
       arrayName = child.getText();
-    } else if (child.ruleIndex === 19) { // arrayElements rule index
+      console.log(`  Found array name: ${arrayName}`);
+    } else if (child.constructor && child.constructor.name === 'ArrayElementsContext') {
       arrayElementsCtx = child;
+      console.log(`  Found array elements context`);
+    }
+  }
+  
+  // If we couldn't find the array name directly, look at the raw text
+  if (!arrayName) {
+    const text = ctx.getText();
+    console.log(`  Raw array declaration text: ${text}`);
+    
+    // Try to extract the variable name using regex
+    const match = /BUILD THE WALL ([A-Z0-9_]+!)/.exec(text);
+    if (match && match[1]) {
+      arrayName = match[1];
+      console.log(`  Extracted array name from text: ${arrayName}`);
     }
   }
   
@@ -1213,6 +1339,23 @@ CustomTrumplangVisitor.prototype.visitArrayDeclaration = function(ctx) {
   // Populate array if elements are provided
   if (arrayElementsCtx) {
     arrayValue = this.visit(arrayElementsCtx);
+  } else {
+    // Try to extract elements directly from the text if we can't get them from context
+    const text = ctx.getText();
+    const pattern = /AND MEXICO WILL PAY FOR IT\s+(.+)$/;
+    const match = pattern.exec(text);
+    
+    if (match && match[1]) {
+      // Split by PREVAILS to get elements
+      const elements = match[1].split(/PREVAILS/);
+      for (const element of elements) {
+        const trimmed = element.trim();
+        if (/^\d+$/.test(trimmed)) {
+          arrayValue.push(parseInt(trimmed, 10));
+        }
+      }
+      console.log(`  Extracted ${arrayValue.length} elements directly from text`);
+    }
   }
   
   console.log(`Array ${arrayName} has ${arrayValue.length} elements:`, arrayValue);
@@ -1231,7 +1374,7 @@ CustomTrumplangVisitor.prototype.visitArrayElements = function(ctx) {
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
     
-    if (child.ruleIndex === 27) { // expression rule index
+    if (child.constructor && child.constructor.name === 'ExpressionContext') {
       elements.push(this.visit(child));
     }
   }
@@ -1245,13 +1388,67 @@ CustomTrumplangVisitor.prototype.visitArrayAccess = function(ctx) {
   let arrayName = null;
   let indexExprCtx = null;
   
+  // Debug the array access structure
+  console.log(`Array access with ${ctx.getChildCount()} children`);
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    console.log(`  Array access child ${i}: ${childType} - "${childText}"`);
     
-    if (child && child.symbol && child.symbol.type === 59) { // VARIABLE token type
+    if (child && child.symbol && child.getText().endsWith('!')) { // VARIABLE token identification
       arrayName = child.getText();
-    } else if (child.ruleIndex === 27) { // expression rule index
+      console.log(`  Found array name: ${arrayName}`);
+    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
       indexExprCtx = child;
+      console.log(`  Found array index expression`);
+    }
+  }
+  
+  // If we couldn't find the parts directly, try parsing the text
+  if (!arrayName || !indexExprCtx) {
+    const text = ctx.getText();
+    console.log(`  Raw array access text: ${text}`);
+    
+    // Try to extract the array name and index
+    const match = /^([A-Z0-9_]+!)SECTION(.+)$/.exec(text);
+    if (match) {
+      if (!arrayName && match[1]) {
+        arrayName = match[1];
+        console.log(`  Extracted array name from text: ${arrayName}`);
+      }
+      
+      // Try to extract the index if it's a simple number
+      if (!indexExprCtx && /^\d+$/.test(match[2])) {
+        const index = parseInt(match[2], 10);
+        // Get the array
+        const array = this.getVariable(arrayName);
+        if (array && Array.isArray(array.value)) {
+          console.log(`  Extracted direct index: ${index}`);
+          console.log(`Accessing ${arrayName}[${index}] = ${array.value[index]}`);
+          return array.value[index];
+        }
+      }
+    }
+  }
+  
+  // Find the index expression directly in the children
+  if (!indexExprCtx) {
+    for (let i = 0; i < ctx.getChildCount(); i++) {
+      const child = ctx.getChild(i);
+      if (child.getText() === 'SECTION' && i + 1 < ctx.getChildCount()) {
+        const nextChild = ctx.getChild(i + 1);
+        if (nextChild && /^\d+$/.test(nextChild.getText())) {
+          const index = parseInt(nextChild.getText(), 10);
+          // Get the array
+          const array = this.getVariable(arrayName);
+          if (array && Array.isArray(array.value)) {
+            console.log(`  Found direct index after SECTION: ${index}`);
+            console.log(`Accessing ${arrayName}[${index}] = ${array.value[index]}`);
+            return array.value[index];
+          }
+        }
+      }
     }
   }
   
@@ -1704,6 +1901,10 @@ CustomTrumplangVisitor.prototype.visitDealDeclarationContext = function(ctx) {
 
 CustomTrumplangVisitor.prototype.visitDealAccessContext = function(ctx) {
   return this.visitDealAccess(ctx);
+};
+
+CustomTrumplangVisitor.prototype.visitAssertStatementContext = function(ctx) {
+  return this.visitAssertStatement(ctx);
 };
 
 // Fallback visitor that logs

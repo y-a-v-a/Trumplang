@@ -35,7 +35,8 @@ statement:
 	| inputStatement
 	| returnStatement
 	| commentStatement
-	| loopBreak;
+	| loopBreak
+	| assertStatement;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
 commentStatement: COMMENT;
@@ -178,6 +179,9 @@ dealDeclaration: '(' dealField ('&' dealField)* ')!!';
 
 // Deal field access
 dealAccess: VARIABLE 'FOLLOW' VARIABLE;
+
+// Assert statement - "FACT CHECK"
+assertStatement: 'FACT CHECK' expression 'SO TRUE' expression;
 
 // Import statement - "I KNOW THE BEST PEOPLE FROM"
 importStatement: 'I KNOW THE BEST PEOPLE FROM' FILEPATH;
