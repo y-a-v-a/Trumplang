@@ -1,1 +1,39 @@
-.antlr
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+
+# Build artifacts
+dist/
+build/
+out/
+
+# Generated parser files
+src/parser/
+.antlr/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env.local
+
+# Temporary files
+.tmp/
+tmp/
+temp/

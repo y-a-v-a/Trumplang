@@ -38,7 +38,7 @@ statement:
 	| loopBreak;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
-commentStatement: 'A LOT OF PEOPLE ARE SAYING' TEXT;
+commentStatement: COMMENT;
 
 // Variable declarations - "I HAVE THE BEST"
 variableDeclaration:
@@ -203,8 +203,8 @@ NUMBER: [0-9]+ ('.' [0-9]+)?;
 // Boolean values
 BOOLEAN: 'VERY TRUE' | 'FAKE NEWS';
 
-// Text for comments - any characters until end of line
-TEXT: ~[\r\n]+;
+// Comments - entire line starting with "A LOT OF PEOPLE ARE SAYING"
+COMMENT: 'A LOT OF PEOPLE ARE SAYING' ~[\r\n]*;
 
 // File paths for imports
 FILEPATH: '"' [A-Z0-9_./]+ '.MAGA' '"';

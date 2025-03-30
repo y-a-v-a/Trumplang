@@ -1,0 +1,38 @@
+{
+  "name": "trumplang",
+  "version": "1.0.0",
+  "description": "```Trumplang I HAVE THE BEST DEAL POTUS! ABSOLUTELY (HUGE AGE! ABSOLUTELY 42 & TWEET HIM! ABSOLUTELY \"DONALD\")!! I HAVE THE BEST TWEET GUY! ABSOLUTELY POTUS! FOLLOW HIM! ```",
+  "main": "src/index.js",
+  "bin": {
+    "trumplang": "src/cli/index.js"
+  },
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node src/cli/index.js EXTREME VETTING ALL",
+    "start": "node src/cli/index.js",
+    "generate-parser": "cd src && npx antlr4-tool --out parser --language JavaScript ../grammar/Trumplang.g4",
+    "build": "npm run generate-parser"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y-a-v-a/Trumplang.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/y-a-v-a/Trumplang/issues"
+  },
+  "homepage": "https://github.com/y-a-v-a/Trumplang#readme",
+  "dependencies": {
+    "antlr4": "^4.8.0"
+  },
+  "devDependencies": {
+    "antlr4-tool": "^1.1.1"
+  }
+}

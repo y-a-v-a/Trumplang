@@ -1,37 +1,134 @@
-# Trumplang
+# Trumplang - A Trump-inspired Programming Language
 
-## Syntax examples
+Trumplang is an esoteric programming language inspired by Donald Trump's speech patterns, famous quotes, and tweet style. The language is designed to look like Trump prose while functioning as a proper programming language.
 
-```Trumplang
-I HAVE THE BEST DEAL POTUS! ABSOLUTELY (HUGE AGE! ABSOLUTELY 42 & TWEET HIM! ABSOLUTELY "DONALD")!!
-I HAVE THE BEST TWEET GUY! ABSOLUTELY POTUS! FOLLOW HIM!
+## Features
+
+- ALL KEYWORDS IN UPPERCASE
+- Variables end with exclamation mark (!) and are in UPPERCASE
+- Programs start with `BELIEVE ME` and end with `MAKE AMERICA GREAT AGAIN`
+- Blocks begin with `BELIEVE ME` and end with `YOU'RE FIRED`
+- Trump-inspired error messages and runtime behavior
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/trumplang.git
+cd trumplang
+
+# Install dependencies
+npm install
+
+# Link the CLI command globally (optional)
+npm link
 ```
 
+## Usage
 
-## Other notes
+```bash
+# Run a Trumplang program
+npm start examples/FIBONACCI.MAGA
 
-You've covered the most important aspects of designing an esoteric programming language. Let me check if there are any other pieces that might enhance the Trumplang ecosystem:
+# Or if globally linked:
+trumplang examples/FIBONACCI.MAGA
 
-1. **Official Logo/Badge** - Many programming languages have a distinctive logo. For Trumplang, you could create a logo that combines code elements with Trump-inspired imagery. This would be useful for GitHub repositories, documentation, and marketing.
+# Run tests
+npm test
+```
 
-2. **Online Playground/Interpreter** - A web-based interpreter would allow people to try Trumplang without installing anything. This could be a simple page that lets users write code and see the results instantly, similar to sites like [JSFiddle](https://jsfiddle.net/) or [repl.it](https://repl.it/).
+## Example Programs
 
-3. **Sample Programs Library** - A collection of example programs beyond just Fibonacci would help people learn the language. Examples like "THE ART OF THE DEAL" calculator, "WALL BUILDER" (drawing program), etc.
+### Simple Counter
 
-4. **Standard Library** - Define a set of built-in functions that come with the language implementation. These could include functions for math, string manipulation, file I/O, etc., all with Trump-themed names.
+```
+BELIEVE ME
+A LOT OF PEOPLE ARE SAYING THIS IS A SIMPLE COUNTER PROGRAM
 
-5. **Language Specification Document** - A formal, comprehensive document that combines all your existing pieces into a canonical reference. This would be the definitive guide for the language.
+I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0
+I HAVE THE BEST HUGE MAX! ABSOLUTELY 5
+I HAVE THE BEST TWEET MESSAGE! ABSOLUTELY "COUNTING UP - TREMENDOUS NUMBERS!"
 
-6. **Community Guidelines** - Since this is a humor-based language, you might want to establish some community guidelines to ensure contributions maintain the spirit of the language without crossing into problematic territory.
+EVERYONE IS TALKING ABOUT MESSAGE!
+EVERYONE IS TALKING ABOUT COUNT!
 
-7. **Package Manager** - If the language grows, a package manager called something like "THE BEST DEALS" could allow sharing of Trumplang libraries.
+MAKE COUNT! GREATER
+EVERYONE IS TALKING ABOUT COUNT!
 
-8. **Transpiler to Another Language** - Before building a full interpreter, you might create a transpiler that converts Trumplang to a mainstream language like JavaScript or Python.
+MAKE COUNT! GREATER
+EVERYONE IS TALKING ABOUT COUNT!
 
-9. **Vim/Emacs Syntax Highlighting** - For users of these editors, having syntax highlighting would be helpful.
+MAKE COUNT! GREATER
+EVERYONE IS TALKING ABOUT COUNT!
 
-10. **GitHub Actions for Trumplang** - Automation for testing Trumplang programs in CI/CD pipelines.
+MAKE COUNT! GREATER
+EVERYONE IS TALKING ABOUT COUNT!
 
-Given what you've already created, the most valuable additions might be the online playground and a collection of sample programs. These would make the language more accessible to newcomers who want to try it out.
+MAKE COUNT! GREATER
+EVERYONE IS TALKING ABOUT COUNT!
 
-That said, what you've already developed (grammar, test framework, implementation notes, and syntax highlighting) forms a complete foundation for an esoteric language. Everything else would be enhancements to grow its usage and community.
+MAKE AMERICA GREAT AGAIN
+```
+
+### Fibonacci Sequence (Full Language - in development)
+
+```
+BELIEVE ME
+A LOT OF PEOPLE ARE SAYING THIS PROGRAM CALCULATES THE FIBONACCI SEQUENCE
+I HAVE THE BEST HUGE TERMS! ABSOLUTELY 10
+I HAVE THE BEST HUGE FIRST! ABSOLUTELY 0
+I HAVE THE BEST HUGE SECOND! ABSOLUTELY 1
+I HAVE THE BEST HUGE NEXT! ABSOLUTELY 0
+I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0
+EVERYONE IS TALKING ABOUT "FIBONACCI SEQUENCE - VERY TREMENDOUS NUMBERS!"
+EVERYONE IS TALKING ABOUT FIRST!
+WE'RE GOING TO WIN IN A LANDSLIDE COUNT! NOT AS GOOD AS TERMS! BELIEVE ME
+    COUNT! ABSOLUTELY COUNT! WINNING 1
+    
+    LISTEN COUNT! SO TRUE 1 BELIEVE ME
+        EVERYONE IS TALKING ABOUT SECOND!
+    NOBODY KNEW
+        NEXT! ABSOLUTELY (FIRST! WINNING SECOND!)
+        EVERYONE IS TALKING ABOUT NEXT!
+        FIRST! ABSOLUTELY SECOND!
+        SECOND! ABSOLUTELY NEXT!
+    YOU'RE FIRED
+YOU'RE FIRED
+MAKE AMERICA GREAT AGAIN
+```
+
+## Current Implementation Status
+
+The current interpreter implementation supports:
+
+- Variable declarations with `I HAVE THE BEST`
+- Variable assignment with `ABSOLUTELY`
+- String and number literals
+- Basic arithmetic with `WINNING` (addition)
+- Increment with `MAKE ... GREATER`
+- Decrement with `MAKE ... SMALLER`
+- Print statements with `EVERYONE IS TALKING ABOUT`
+- Comments with `A LOT OF PEOPLE ARE SAYING`
+
+Control structures and advanced features are in development.
+
+## Project Structure
+
+- `/grammar` - ANTLR4 grammar definitions
+- `/src` - Source code for the interpreter
+  - `/cli` - Command-line interface
+  - `/interpreter` - The core interpreter
+  - `/parser` - Generated parser from ANTLR4
+  - `/runtime` - Runtime environment
+- `/examples` - Example Trumplang programs
+- `/test` - Test files
+
+## Language Reference
+
+For full language documentation, see:
+- [Implementation Notes](docs/IMPLEMENTATION_NOTES.md)
+- [Testing Framework](docs/TESTING_FRAMEWORK.md)
+
+## License
+
+ISC
