@@ -36,5 +36,5 @@ EXTREME VETTING [filename.TEST.MAGA]
 
 Tests should:
 1. Have a `.TEST.MAGA` extension
-2. Use assertions with `BELIEVE ME THAT [actual] SO TRUE [expected]`
+2. Use assertions with `FACT CHECK [actual] SO TRUE [expected]`
 3. End with `AND I MEAN THAT "PASSED BIGLY"` to indicate a passing test

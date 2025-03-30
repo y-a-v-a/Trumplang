@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 // Use the full ANTLR4-based interpreter 
 const { TrumplangInterpreter } = require('../interpreter');
+const { TestRunner } = require('../test-runner');
 
 // Get the filename from command line arguments
 const args = process.argv.slice(2);
@@ -18,17 +19,20 @@ if (args[0] === 'EXTREME' && args[1] === 'VETTING') {
   // Implement test runner
   if (args[2] === 'ALL') {
     console.log('VETTING ALL TESTS! TREMENDOUS!');
-    // TODO: Run all tests
-    process.exit(0);
+    const testRunner = new TestRunner();
+    const success = testRunner.runAllTests();
+    process.exit(success ? 0 : 1);
   } else if (args[2] === 'DIRECTORY') {
     console.log(`VETTING DIRECTORY ${args[3]}! GREAT TESTS!`);
-    // TODO: Run tests in directory
-    process.exit(0);
+    const testRunner = new TestRunner();
+    const success = testRunner.runTestDirectory(args[3]);
+    process.exit(success ? 0 : 1);
   } else {
     // Run specific test
     console.log(`VETTING ${args[2]}! VERY GOOD TEST!`);
-    // TODO: Run specific test
-    process.exit(0);
+    const testRunner = new TestRunner();
+    const success = testRunner.runTestFile(args[2]);
+    process.exit(success ? 0 : 1);
   }
 }
 

@@ -47,7 +47,7 @@ The framework provides several types of assertions:
 
 | Assertion Type | Syntax | Purpose |
 |----------------|--------|---------|
-| Equal | `BELIEVE ME THAT [actual] SO TRUE [expected]` | Asserts that actual equals expected |
+| Equal | `FACT CHECK [actual] SO TRUE [expected]` | Asserts that actual equals expected |
 | Not Equal | `NOT EVEN CLOSE THAT [actual] SO TRUE [expected]` | Asserts that actual does not equal expected |
 | True | `NO DOUBT THAT [expression]` | Asserts that expression is true |
 | False | `FAKE NEWS THAT [expression]` | Asserts that expression is false |
@@ -156,17 +156,17 @@ YOU'RE FIRED
 
 TREMENDOUS TEST "FIRST FIBONACCI IS ZERO" BELIEVE ME
     I HAVE THE BEST HUGE RESULT! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 0
-    BELIEVE ME THAT RESULT! SO TRUE 0
+    FACT CHECK RESULT! SO TRUE 0
 YOU'RE FIRED
 
 TREMENDOUS TEST "SECOND FIBONACCI IS ONE" BELIEVE ME
     I HAVE THE BEST HUGE RESULT! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 1
-    BELIEVE ME THAT RESULT! SO TRUE 1
+    FACT CHECK RESULT! SO TRUE 1
 YOU'RE FIRED
 
 TREMENDOUS TEST "FIFTH FIBONACCI IS THREE" BELIEVE ME
     I HAVE THE BEST HUGE RESULT! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 4
-    BELIEVE ME THAT RESULT! SO TRUE 3
+    FACT CHECK RESULT! SO TRUE 3
 YOU'RE FIRED
 
 TREMENDOUS TEST "SEQUENCE GROWS BIGLY" BELIEVE ME

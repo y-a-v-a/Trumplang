@@ -105,7 +105,7 @@ We've successfully implemented the complete Trumplang language with all features
 
 ## Testing
 - Name test files after original file: `FILENAME.TEST.MAGA`
-- Use assertion: `BELIEVE ME THAT [actual] SO TRUE [expected]`
+- Use assertion: `FACT CHECK [actual] SO TRUE [expected]`
 - Tests should return either `PASSED BIGLY` or `TOTALLY RIGGED`
 
 ## VS Code Integration
