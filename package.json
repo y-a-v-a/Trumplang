@@ -1,5 +1,5 @@
 {
-  "name": "trumplang",
+  "name": "Trumplang",
   "version": "1.0.0",
   "description": "```Trumplang I HAVE THE BEST DEAL POTUS! ABSOLUTELY (HUGE AGE! ABSOLUTELY 42 & TWEET HIM! ABSOLUTELY \"DONALD\")!! I HAVE THE BEST TWEET GUY! ABSOLUTELY POTUS! FOLLOW HIM! ```",
   "main": "src/index.js",
@@ -12,9 +12,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node src/cli/index.js EXTREME VETTING ALL",
+    "test": "node src/cli/index.js EXTREME VETTING test/VERY_BASIC.TEST.MAGA",
+    "test-all": "node src/cli/index.js EXTREME VETTING ALL",
     "start": "node src/cli/index.js",
-    "generate-parser": "cd src && npx antlr4-tool --out parser --language JavaScript ../grammar/Trumplang.g4",
+    "generate-parser": "cd src && npx antlr4-tool --out ./src/parser --language JavaScript ./src/grammar/Trumplang.g4",
     "build": "npm run generate-parser"
   },
   "repository": {
