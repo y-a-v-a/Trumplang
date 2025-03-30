@@ -13,7 +13,7 @@
 - Blocks begin with `BELIEVE ME` and end with `YOU'RE FIRED`
 - Comments begin with `A LOT OF PEOPLE ARE SAYING`
 - Variables: `COUNT!` (UPPERCASE with !)
-- Variable assignment: `COUNT! IS YET 0`
+- Variable assignment: `COUNT! ABSOLUTELY 0`
 - Constants: Use `I HAVE A VERY GOOD BRAIN FOR` instead of `I HAVE THE BEST`
 - Functions: `GET_FIBONACCI` (UPPERCASE without !)
 - Increment variable: `MAKE COUNT! GREATER`
@@ -25,6 +25,7 @@
 - Selective import: `I ONLY WANT FUNCTION_NAME FROM "MATH.MAGA"`
 - String concatenation: `TEXT! ENDORSING "MORE TEXT"` (Use `ENDORSING` for strings)
 - Mathematical addition: `NUMBER! WINNING 5` (Use `WINNING` for numbers)
+- Deal structure declaration: End deal structures with `!!` to differentiate them from regular parentheses: `(HUGE AGE! ABSOLUTELY 42 & TWEET HIM! ABSOLUTELY "DONALD")!!`
 
 ## Testing
 - Name test files after original file: `FILENAME.TEST.MAGA`

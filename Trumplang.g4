@@ -42,11 +42,14 @@ commentStatement: 'A LOT OF PEOPLE ARE SAYING' TEXT;
 
 // Variable declarations - "I HAVE THE BEST"
 variableDeclaration:
-	'I HAVE THE BEST' dataType VARIABLE 'IS YET' (expression | dealDeclaration);
+	'I HAVE THE BEST' dataType VARIABLE 'ABSOLUTELY' (
+		expression
+		| dealDeclaration
+	);
 
 // Constants - uses "I HAVE A VERY GOOD BRAIN FOR"
 constantDeclaration:
-	'I HAVE A VERY GOOD BRAIN FOR' dataType VARIABLE 'IS YET' expression;
+	'I HAVE A VERY GOOD BRAIN FOR' dataType VARIABLE 'ABSOLUTELY' expression;
 
 // Data types
 dataType:
@@ -88,8 +91,7 @@ elseStatement: 'NOBODY KNEW' statement*;
 
 // While loop - "WE'RE GOING TO WIN IN A LANDSLIDE"
 whileLoop:
-	'WE\'RE GOING TO WIN IN A LANDSLIDE' condition 'BELIEVE ME'
-		statement* 'YOU\'RE FIRED';
+	'WE\'RE GOING TO WIN IN A LANDSLIDE' condition 'BELIEVE ME' statement* 'YOU\'RE FIRED';
 
 // For loop - "WE'RE GOING TO WIN, WIN, WIN"
 forLoop:
@@ -110,8 +112,8 @@ arrayDeclaration:
 // Array elements
 arrayElements: expression ('PREVAILS' expression)*;
 
-// Assignment statement - updated to "IS YET" (was "JUST HIRED")
-assignmentStatement: VARIABLE 'IS YET' expression;
+// Assignment statement - updated to "ABSOLUTELY" (was "IT IS YET", which was "IS YET", which was "JUST HIRED")
+assignmentStatement: VARIABLE 'ABSOLUTELY' expression;
 
 // Print statement - "EVERYONE IS TALKING ABOUT"
 printStatement: 'EVERYONE IS TALKING ABOUT' expression;
@@ -169,10 +171,10 @@ factor:
 arrayAccess: VARIABLE 'SECTION' expression;
 
 // Deal field entries
-dealField: dataType VARIABLE 'IS YET' expression;
+dealField: dataType VARIABLE 'ABSOLUTELY' expression;
 
 // Deal structure declaration
-dealDeclaration: '(' dealField ('&' dealField)* ')';
+dealDeclaration: '(' dealField ('&' dealField)* ')!!';
 
 // Deal field access
 dealAccess: VARIABLE 'FOLLOW' VARIABLE;
@@ -181,7 +183,8 @@ dealAccess: VARIABLE 'FOLLOW' VARIABLE;
 importStatement: 'I KNOW THE BEST PEOPLE FROM' FILEPATH;
 
 // Selective import - specific "people"
-selectiveImport: 'I ONLY WANT' IDENTIFIER ('AND' IDENTIFIER)* 'FROM' FILEPATH;
+selectiveImport:
+	'I ONLY WANT' IDENTIFIER ('AND' IDENTIFIER)* 'FROM' FILEPATH;
 
 // Lexer Rules
 
