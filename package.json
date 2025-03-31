@@ -31,7 +31,8 @@
   },
   "homepage": "https://github.com/y-a-v-a/Trumplang#readme",
   "dependencies": {
-    "antlr4": "^4.8.0"
+    "antlr4": "^4.8.0",
+    "debug": "^4.4.0"
   },
   "devDependencies": {
     "antlr4-tool": "^1.1.1"

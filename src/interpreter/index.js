@@ -21,7 +21,7 @@ class TrumplangInterpreter {
     // Initialize runtime environment
     this.environment = envUtils.createEnvironment();
   }
-  
+
   interpret(input) {
     try {
       // Check if parser is available
@@ -30,27 +30,27 @@ class TrumplangInterpreter {
         console.log('Input:', input.substring(0, 100) + '...');
         return null;
       }
-      
+
       // ANTLR setup
       const chars = new antlr4.InputStream(input);
       const lexer = new TrumplangLexer(chars);
       const tokens = new antlr4.CommonTokenStream(lexer);
       const parser = new TrumplangParser(tokens);
       parser.buildParseTrees = true;
-      
+
       // Get the root of the parse tree
       const tree = parser.program();
-      
+
       // Create visitor and visit the tree
       const visitor = new TrumplangVisitor(this.environment);
       return visitor.visitProgram(tree);
     } catch (error) {
-      console.error('THIS CODE IS A DISASTER! VERY SAD CODE!', error.message);
+      console.error(`THIS CODE IS A DISASTER! VERY SAD CODE!\n${error.message}`);
       throw error;
     }
   }
 }
 
 module.exports = {
-  TrumplangInterpreter
+  TrumplangInterpreter,
 };

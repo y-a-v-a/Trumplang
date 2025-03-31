@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-// Use the full ANTLR4-based interpreter 
+// Use the full ANTLR4-based interpreter
 const { TrumplangInterpreter } = require('../interpreter');
 const { TestRunner } = require('../test-runner');
 
@@ -40,28 +40,28 @@ const filename = args[0];
 
 try {
   const filePath = path.resolve(process.cwd(), filename);
-  
+
   // Check if the file exists
   if (!fs.existsSync(filePath)) {
     console.error(`THIS FILE IS FAKE NEWS! ${filename} DOESN'T EXIST!`);
     process.exit(1);
   }
-  
+
   // Check if it has the correct extension
   if (!filePath.endsWith('.MAGA')) {
     console.error('THIS FILE IS A DISASTER! NEEDS TO END WITH .MAGA!');
     process.exit(1);
   }
-  
+
   // Read the file
   const input = fs.readFileSync(filePath, 'utf8');
-  
+
   // Create interpreter and run
   const interpreter = new TrumplangInterpreter();
   const result = interpreter.interpret(input);
-  
+
   process.exit(0);
 } catch (error) {
-  console.error('THIS CODE IS A DISASTER! VERY SAD CODE!', error.message);
+  console.error(`THIS CODE IS A DISASTER! VERY SAD CODE!\n${error.message}`);
   process.exit(1);
 }

@@ -129,6 +129,11 @@ For full language documentation, see:
 - [Implementation Notes](docs/IMPLEMENTATION_NOTES.md)
 - [Testing Framework](docs/TESTING_FRAMEWORK.md)
 
+## Inspiration
+
+- https://www.thetrumparchive.com/
+
+
 ## License
 
 ISC

@@ -56,7 +56,7 @@ constantDeclaration:
 dataType:
 	'HUGE' // Integer
 	| 'BIGLY' // Float/Double
-	| 'FAKE NEWS' // Boolean
+	| 'SUPPORT' // Boolean
 	| 'TWEET' // String
 	| 'WALL' // Array
 	| 'DEAL'; // Object/Structure
@@ -181,7 +181,8 @@ dealDeclaration: '(' dealField ('&' dealField)* ')!!';
 dealAccess: VARIABLE 'FOLLOW' VARIABLE;
 
 // Assert statement - "FACT CHECK"
-assertStatement: 'FACT CHECK' expression 'SO TRUE' expression;
+assertStatement:
+	'FACT CHECK' (expression | condition) 'SO TRUE' expression;
 
 // Import statement - "I KNOW THE BEST PEOPLE FROM"
 importStatement: 'I KNOW THE BEST PEOPLE FROM' FILEPATH;
@@ -208,7 +209,8 @@ NUMBER: [0-9]+ ('.' [0-9]+)?;
 BOOLEAN: 'VERY TRUE' | 'FAKE NEWS';
 
 // Comments - entire line starting with "A LOT OF PEOPLE ARE SAYING"
-COMMENT: 'A LOT OF PEOPLE ARE SAYING' ~[\r\n]*;
+COMMENT:
+	'A LOT OF PEOPLE ARE SAYING' ~[\n\r]* ([\n\r] | EOF) -> channel(HIDDEN);
 
 // File paths for imports
 FILEPATH: '"' [A-Z0-9_./]+ '.MAGA' '"';
