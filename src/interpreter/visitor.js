@@ -265,33 +265,38 @@ CustomTrumplangVisitor.prototype.visitDataType = function (ctx) {
 
 // Assert statement visitor
 CustomTrumplangVisitor.prototype.visitAssertStatement = function (ctx) {
-  // 'FACT CHECK' expression | condition 'SO TRUE' expression
-  let actualExprCtx = null;
+  // 'FACT CHECK' (expression | condition) 'SO TRUE' expression
+  let actualCtx = null;
   let expectedExprCtx = null;
+  let isCondition = false;
 
-  // Find the two expressions
-  let exprIndex = 0;
+  // Find the actual value/condition and expected expression
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      if (exprIndex === 0) {
-        actualExprCtx = child;
-        exprIndex++;
-      } else {
-        expectedExprCtx = child;
+    
+    // Look for the 'SO TRUE' token to separate actual from expected
+    if (child && child.getText && child.getText() === 'SO TRUE') {
+      // The next child should be the expected expression
+      if (i + 1 < ctx.getChildCount()) {
+        expectedExprCtx = ctx.getChild(i + 1);
       }
+      break;
+    } else if (child.constructor && (child.constructor.name === 'ExpressionContext' || 
+                                    child.constructor.name === 'ConditionContext')) {
+      actualCtx = child;
+      isCondition = child.constructor.name === 'ConditionContext';
     }
   }
 
-  if (!actualExprCtx || !expectedExprCtx) {
+  if (!actualCtx || !expectedExprCtx) {
     throw new Error('ASSERTION IS A DISASTER! NEEDS ACTUAL AND EXPECTED VALUES, FOLKS!');
   }
 
-  // Get the actual and expected values
-  const actual = this.visit(actualExprCtx);
+  // Get the actual value - could be from expression or condition
+  const actual = this.visit(actualCtx);
   const expected = this.visit(expectedExprCtx);
 
-  debug(`Asserting: ${actual} == ${expected}`);
+  debug(`Asserting: ${actual} ${isCondition ? '(condition result)' : ''} == ${expected}`);
 
   // Compare values
   if (actual == expected) {
