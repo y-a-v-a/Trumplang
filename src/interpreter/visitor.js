@@ -424,6 +424,7 @@ CustomTrumplangVisitor.prototype.visitTerm = function (ctx) {
   // Check for multiplication: term 'BIG LEAGUE TIMES' factor
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
+
     if (child && child.symbol && child.getText() === 'BIG LEAGUE TIMES') {
       const termCtx = ctx.getChild(0);
       const factorCtx = ctx.getChild(2);
@@ -626,6 +627,9 @@ CustomTrumplangVisitor.prototype.visitFactor = function (ctx) {
     // Look up the variable in scope
     const value = this.getValue(varName);
     if (value !== null) {
+      if (typeof value === 'object') {
+        return JSON.stringify(value);
+      }
       return value;
     }
     throw new Error(`NOBODY KNOWS WHAT ${varName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
@@ -865,7 +869,7 @@ CustomTrumplangVisitor.prototype.visitIfStatement = function (ctx) {
     debug('Condition is FALSE, checking else-if blocks');
     for (let i = 0; i < elseIfContexts.length; i++) {
       const elseIfResult = this.visit(elseIfContexts[i]);
-      if (elseIfResult !== undefined) {
+      if (elseIfResult !== undefined && elseIfResult !== null) {
         return elseIfResult;
       }
     }
@@ -1365,14 +1369,13 @@ CustomTrumplangVisitor.prototype.visitFunctionDeclaration = function (ctx) {
   }
 
   // Find the function name (identifier)
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && !child.getText().endsWith('!')) {
-      // IDENTIFIER token (function name doesn't have !)
-      identifier = child.getText();
-      debug(`Found function name: ${identifier}`);
-      break;
-    }
+  // TerminalNodeImpl after INCREDIBLE so index === 1
+  const child = ctx.getChild(1);
+
+  if (child && child.symbol) {
+    // IDENTIFIER token
+    identifier = child.getText();
+    debug(`Found function name: ${identifier}`);
   }
 
   // Find the parameter list
@@ -1474,7 +1477,8 @@ CustomTrumplangVisitor.prototype.visitReturnStatement = function (ctx) {
 
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child.ruleIndex === 27) {
+
+    if (child.ruleIndex === 28) {
       // expression rule index
       exprCtx = child;
       break;
@@ -1503,10 +1507,12 @@ CustomTrumplangVisitor.prototype.visitFunctionCall = function (ctx) {
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
 
-    if (child && child.symbol && child.symbol.type === 60) {
+    debug(child?.constructor?.name);
+
+    if (child && child.symbol && child.symbol.type === 62) {
       // IDENTIFIER token type
       identifier = child.getText();
-    } else if (child.ruleIndex === 10) {
+    } else if (child && child.constructor && child.constructor.name === 'ArgumentListContext') {
       // argumentList rule index
       argListCtx = child;
     } else if (child && child.symbol && child.symbol.type === 59) {
@@ -2090,11 +2096,12 @@ CustomTrumplangVisitor.prototype.visitDealField = function (ctx) {
     const childType = child.constructor ? child.constructor.name : 'unknown';
     const childText = child.getText ? child.getText() : 'no text';
     debug(`  Field Child ${i}: ${childType} - "${childText}"`);
+    // debug(child);
 
     if (child.constructor && child.constructor.name === 'DataTypeContext') {
       fieldType = this.visit(child);
       debug(`  Found field type: ${fieldType}`);
-    } else if (child && child.symbol && child.symbol.type === 59) {
+    } else if (child && child.symbol && child.symbol.type === 61) {
       // VARIABLE token type
       fieldName = child.getText();
       debug(`  Found field name: ${fieldName}`);
@@ -2334,7 +2341,7 @@ CustomTrumplangVisitor.prototype.visitDealAccess = function (ctx) {
   let variables = [];
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 59) {
+    if (child && child.symbol && child.symbol.type === 61) {
       // VARIABLE token type
       variables.push(child.getText());
     }

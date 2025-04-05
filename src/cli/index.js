@@ -60,6 +60,8 @@ try {
   const interpreter = new TrumplangInterpreter();
   const result = interpreter.interpret(input);
 
+  process.stdout.write(`${result}`);
+
   process.exit(0);
 } catch (error) {
   console.error(`THIS CODE IS A DISASTER! VERY SAD CODE!\n${error.message}`);
