@@ -39,6 +39,7 @@ We've successfully implemented the complete Trumplang language with all features
 - Implemented functions with parameter passing
 - Added comprehensive debugging tools for development
 - Created example programs demonstrating each feature
+- Improved parser precision with BlockStatement structure for all code blocks
 
 ## Code Style Guidelines
 
@@ -57,7 +58,7 @@ We've successfully implemented the complete Trumplang language with all features
 - Data types:
   - `HUGE` - Integer
   - `BIGLY` - Float/Double
-  - `FAKE NEWS` - Boolean
+  - `SUPPORT` - Boolean
   - `TWEET` - String
   - `WALL` - Array
   - `DEAL` - Object/Structure
@@ -145,7 +146,7 @@ We've successfully implemented the complete Trumplang language with all features
   - `/src/runtime/errors.js` - Trump-styled error messages
 - `/src/debug-tree.js` - Debugging tool for parse tree visualization
 - `/src/debug-tokenizer.js` - Debugging tool for lexer tokenization
-- `/grammar/Trumplang.g4` - Complete grammar definition with support for all language features
+- `/grammar/Trumplang.g4` - Complete grammar definition with BlockStatement for all code blocks
 - `/examples/` - Example Trumplang programs
   - `/examples/SIMPLE.MAGA` - Simple variable and print example
   - `/examples/COUNTER.MAGA` - Counter with increment operations
@@ -180,8 +181,10 @@ We've successfully implemented the complete Trumplang language with all features
 - **Complex Data Handling**: Added support for nested structures and complex data manipulation
 - **Testing & Debugging**: Developed tools for debugging the parser, lexer, and interpreter
 - **Examples**: Created comprehensive example programs demonstrating all language features
+- **Grammar Refinement**: Enhanced grammar with BlockStatement structure for more precise parsing
+- **Visitor Implementation**: Updated visitor pattern to handle BlockStatement contexts across all control structures
 
-The implementation now fully supports all the core language features specified in the grammar, with a properly designed visitor-based interpreter architecture. The transition from the simplified interpreter to the full ANTLR4-based implementation is complete, and all example programs can be executed using the new interpreter.
+The implementation now fully supports all the core language features specified in the grammar, with a properly designed visitor-based interpreter architecture. The transition from the simplified interpreter to the full ANTLR4-based implementation is complete, and all example programs can be executed using the new interpreter. With the addition of BlockStatement structure in the grammar and corresponding visitors, the parser now generates more precise error messages and handles code blocks more consistently across different control structures and functions.
 
 ## Error Messages
 
@@ -201,5 +204,6 @@ Trumplang error messages should follow Trump's speech patterns. Examples:
 - Non-deal access: "THAT'S NOT A DEAL! NOBODY MAKES DEALS LIKE ME, BELIEVE ME!"
 - Invalid array element: "THAT'S A TERRIBLE ADDITION TO THE WALL! SAD!"
 - Invalid deal field type: "WRONG TYPE FOR DEAL FIELD! WE ONLY MAKE THE BEST DEALS WITH PROPER TYPES!"
+- Missing block structure: "NOBODY KNEW HOW TO VISIT BlockStatementContext! SAD!"
 
 Error messages should always end with exclamations or "SAD!" for extra Trumpian effect.

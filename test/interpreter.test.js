@@ -4,10 +4,10 @@ const { TrumplangInterpreter } = require('../src/interpreter');
 // Basic test suite for the Trumplang interpreter
 function runTests() {
   console.log('TESTING THE TRUMPLANG INTERPRETER...');
-  
+
   // Create a new interpreter instance
   const interpreter = new TrumplangInterpreter();
-  
+
   // Test 1: Basic variable declaration and assignment
   console.log('TEST 1: VARIABLES');
   const variableTest = `
@@ -15,14 +15,14 @@ function runTests() {
   I HAVE THE BEST HUGE NUMBER! ABSOLUTELY 42
   MAKE AMERICA GREAT AGAIN
   `;
-  
+
   try {
     interpreter.interpret(variableTest);
     console.log('PASSED BIGLY: VARIABLE TEST');
   } catch (error) {
     console.error('TOTALLY RIGGED:', error.message);
   }
-  
+
   // Test 2: Print statements
   console.log('TEST 2: PRINTING');
   const printTest = `
@@ -31,14 +31,14 @@ function runTests() {
   EVERYONE IS TALKING ABOUT MESSAGE!
   MAKE AMERICA GREAT AGAIN
   `;
-  
+
   try {
     interpreter.interpret(printTest);
     console.log('PASSED BIGLY: PRINT TEST');
   } catch (error) {
     console.error('TOTALLY RIGGED:', error.message);
   }
-  
+
   // Test 3: Basic arithmetic
   console.log('TEST 3: ARITHMETIC');
   const arithmeticTest = `
@@ -49,14 +49,14 @@ function runTests() {
   EVERYONE IS TALKING ABOUT RESULT!
   MAKE AMERICA GREAT AGAIN
   `;
-  
+
   try {
     interpreter.interpret(arithmeticTest);
     console.log('PASSED BIGLY: ARITHMETIC TEST');
   } catch (error) {
     console.error('TOTALLY RIGGED:', error.message);
   }
-  
+
   console.log('ALL TESTS COMPLETE!');
 }
 
@@ -66,5 +66,5 @@ if (require.main === module) {
 }
 
 module.exports = {
-  runTests
+  runTests,
 };
