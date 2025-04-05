@@ -266,34 +266,137 @@ CustomTrumplangVisitor.prototype.visitDataType = function (ctx) {
 // Assert statement visitor
 CustomTrumplangVisitor.prototype.visitAssertStatement = function (ctx) {
   // 'FACT CHECK' (expression | condition) 'SO TRUE' expression
+  debug(`Assert statement with ${ctx.getChildCount()} children`);
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    debug(`  Assert Child ${i}: ${childType} - "${childText}"`);
+  }
+  
   let actualCtx = null;
   let expectedExprCtx = null;
   let isCondition = false;
+  let soTrueIndex = -1;
 
-  // Find the actual value/condition and expected expression
+  // First, find the 'SO TRUE' token to separate actual from expected
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    
-    // Look for the 'SO TRUE' token to separate actual from expected
     if (child && child.getText && child.getText() === 'SO TRUE') {
+      soTrueIndex = i;
       // The next child should be the expected expression
       if (i + 1 < ctx.getChildCount()) {
         expectedExprCtx = ctx.getChild(i + 1);
       }
       break;
-    } else if (child.constructor && (child.constructor.name === 'ExpressionContext' || 
-                                    child.constructor.name === 'ConditionContext')) {
-      actualCtx = child;
-      isCondition = child.constructor.name === 'ConditionContext';
     }
   }
 
-  if (!actualCtx || !expectedExprCtx) {
+  // Now find the actual value/condition (everything before 'SO TRUE')
+  if (soTrueIndex > 0) {
+    // Check for ConditionContext first
+    for (let i = 0; i < soTrueIndex; i++) {
+      const child = ctx.getChild(i);
+      if (child && child.constructor && child.constructor.name === 'ConditionContext') {
+        actualCtx = child;
+        isCondition = true;
+        break;
+      }
+    }
+    
+    // If no condition found, check for ExpressionContext
+    if (!actualCtx) {
+      for (let i = 0; i < soTrueIndex; i++) {
+        const child = ctx.getChild(i);
+        if (child && child.constructor && child.constructor.name === 'ExpressionContext') {
+          actualCtx = child;
+          break;
+        }
+      }
+    }
+    
+    // If still no context found, try to handle special cases like variable and parenthesized conditions
+    if (!actualCtx) {
+      // Special case: handle (TRUE_VALUE! AND IT'S TRUE FALSE_VALUE!) type pattern
+      // Extract the condition expression between FACT CHECK and SO TRUE
+      let conditionText = '';
+      for (let i = 1; i < soTrueIndex; i++) { // Start at 1 to skip 'FACT CHECK'
+        const child = ctx.getChild(i);
+        if (child && child.getText) {
+          conditionText += child.getText() + ' ';
+        }
+      }
+      conditionText = conditionText.trim();
+      debug(`Extracted condition text: ${conditionText}`);
+      
+      // Handle different condition patterns
+      if (conditionText.startsWith('(') && conditionText.endsWith(')')) {
+        // Handle parenthesized condition
+        const innerText = conditionText.substring(1, conditionText.length - 1);
+        debug(`Inner condition text: ${innerText}`);
+        
+        // Check for variable
+        if (innerText.endsWith('!')) {
+          const varName = innerText;
+          const value = this.getValue(varName);
+          debug(`Evaluating variable in assertion: ${varName} = ${value}`);
+          actual = value;
+        }
+        // Check for boolean operators
+        else if (innerText.includes("AND IT'S TRUE")) {
+          const parts = innerText.split("AND IT'S TRUE");
+          if (parts.length === 2) {
+            const leftVar = parts[0].trim();
+            const rightVar = parts[1].trim();
+            
+            const leftVal = leftVar.endsWith('!') ? this.getValue(leftVar) : (leftVar === 'VERY TRUE');
+            const rightVal = rightVar.endsWith('!') ? this.getValue(rightVar) : (rightVar === 'VERY TRUE');
+            
+            debug(`AND operation in assertion: ${leftVal} && ${rightVal}`);
+            actual = leftVal && rightVal;
+          }
+        }
+        else if (innerText.includes("OR MAYBE")) {
+          const parts = innerText.split("OR MAYBE");
+          if (parts.length === 2) {
+            const leftVar = parts[0].trim();
+            const rightVar = parts[1].trim();
+            
+            const leftVal = leftVar.endsWith('!') ? this.getValue(leftVar) : (leftVar === 'VERY TRUE');
+            const rightVal = rightVar.endsWith('!') ? this.getValue(rightVar) : (rightVar === 'VERY TRUE');
+            
+            debug(`OR operation in assertion: ${leftVal} || ${rightVal}`);
+            actual = leftVal || rightVal;
+          }
+        }
+      } 
+      // Check for WRONG operator (negation)
+      else if (conditionText.startsWith('WRONG')) {
+        const varName = conditionText.substring(5).trim(); // Remove 'WRONG '
+        if (varName.endsWith('!')) {
+          const value = this.getValue(varName);
+          debug(`NOT operation in assertion: !${varName} = ${!value}`);
+          actual = !value;
+        }
+      }
+      // Check for simple variable
+      else if (conditionText.endsWith('!')) {
+        const varName = conditionText;
+        const value = this.getValue(varName);
+        debug(`Variable in assertion: ${varName} = ${value}`);
+        actual = value;
+      }
+    } else {
+      // We have a proper context, visit it
+      actual = this.visit(actualCtx);
+    }
+  }
+
+  if (actual === undefined || expectedExprCtx === null) {
     throw new Error('ASSERTION IS A DISASTER! NEEDS ACTUAL AND EXPECTED VALUES, FOLKS!');
   }
 
-  // Get the actual value - could be from expression or condition
-  const actual = this.visit(actualCtx);
+  // Get the expected value
   const expected = this.visit(expectedExprCtx);
 
   debug(`Asserting: ${actual} ${isCondition ? '(condition result)' : ''} == ${expected}`);
@@ -578,35 +681,164 @@ CustomTrumplangVisitor.prototype.visitFactorContext = function (ctx) {
 // If statement visitor
 CustomTrumplangVisitor.prototype.visitIfStatement = function (ctx) {
   // 'LISTEN' condition 'BELIEVE ME' statement* elseIfStatement* elseStatement? 'YOU\'RE FIRED';
+  debug(`If statement with ${ctx.getChildCount()} children`);
+  
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    debug(`  If Child ${i}: ${childType} - "${childText}"`);
+  }
 
-  // Find condition context
+  // Find condition context and statements
   let conditionCtx = null;
   let statements = [];
   let elseIfContexts = [];
   let elseCtx = null;
+  let believeMeIndex = -1;
 
-  // Parse the if statement components
+  // First find the LISTEN token and the BELIEVE ME token to identify condition
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-
-    if (child.constructor && child.constructor.name === 'ConditionContext') {
-      conditionCtx = child;
-    } else if (child.constructor && child.constructor.name === 'StatementContext') {
-      statements.push(child);
-    } else if (child.constructor && child.constructor.name === 'ElseIfStatementContext') {
-      elseIfContexts.push(child);
-    } else if (child.constructor && child.constructor.name === 'ElseStatementContext') {
-      elseCtx = child;
+    if (child && child.getText && child.getText() === 'LISTEN') {
+      // Found LISTEN token
+      debug('  Found LISTEN token at position:', i);
+    } else if (child && child.getText && child.getText() === 'BELIEVE ME') {
+      // Found BELIEVE ME token
+      believeMeIndex = i;
+      debug('  Found BELIEVE ME token at position:', i);
+      break;
     }
   }
 
-  // Evaluate the main condition
-  if (conditionCtx) {
-    const conditionResult = this.visit(conditionCtx);
-    debug('If condition result:', conditionResult);
-
+  // Special handling for boolean operators
+  if (believeMeIndex > 1) { // There must be at least LISTEN + condition before BELIEVE ME
+    let conditionText = '';
+    // Extract everything between LISTEN and BELIEVE ME as condition
+    for (let i = 1; i < believeMeIndex; i++) {
+      const child = ctx.getChild(i);
+      if (child && child.getText) {
+        conditionText += child.getText() + ' ';
+      }
+    }
+    conditionText = conditionText.trim();
+    debug('  Extracted condition text:', conditionText);
+    
+    let conditionResult = false;
+    
+    // Parse logic operators from the condition text
+    if (conditionText.includes("AND IT'S TRUE")) {
+      const parts = conditionText.split("AND IT'S TRUE");
+      if (parts.length === 2) {
+        const leftVar = parts[0].trim();
+        const rightVar = parts[1].trim();
+        
+        let leftVal = null;
+        let rightVal = null;
+        
+        // Resolve left part
+        if (leftVar.endsWith('!')) {
+          leftVal = this.getValue(leftVar);
+        } else if (leftVar === 'VERY TRUE') {
+          leftVal = true;
+        } else if (leftVar === 'FAKE NEWS') {
+          leftVal = false;
+        }
+        
+        // Resolve right part
+        if (rightVar.endsWith('!')) {
+          rightVal = this.getValue(rightVar);
+        } else if (rightVar === 'VERY TRUE') {
+          rightVal = true;
+        } else if (rightVar === 'FAKE NEWS') {
+          rightVal = false;
+        }
+        
+        if (leftVal !== null && rightVal !== null) {
+          conditionResult = leftVal && rightVal;
+          debug(`  AND operation result: ${leftVal} && ${rightVal} = ${conditionResult}`);
+        }
+      }
+    } else if (conditionText.includes("OR MAYBE")) {
+      const parts = conditionText.split("OR MAYBE");
+      if (parts.length === 2) {
+        const leftVar = parts[0].trim();
+        const rightVar = parts[1].trim();
+        
+        let leftVal = null;
+        let rightVal = null;
+        
+        // Resolve left part
+        if (leftVar.endsWith('!')) {
+          leftVal = this.getValue(leftVar);
+        } else if (leftVar === 'VERY TRUE') {
+          leftVal = true;
+        } else if (leftVar === 'FAKE NEWS') {
+          leftVal = false;
+        }
+        
+        // Resolve right part
+        if (rightVar.endsWith('!')) {
+          rightVal = this.getValue(rightVar);
+        } else if (rightVar === 'VERY TRUE') {
+          rightVal = true;
+        } else if (rightVar === 'FAKE NEWS') {
+          rightVal = false;
+        }
+        
+        if (leftVal !== null && rightVal !== null) {
+          conditionResult = leftVal || rightVal;
+          debug(`  OR operation result: ${leftVal} || ${rightVal} = ${conditionResult}`);
+        }
+      }
+    } else if (conditionText.startsWith('WRONG')) {
+      const varName = conditionText.substring(5).trim(); // Remove 'WRONG '
+      if (varName.endsWith('!')) {
+        const value = this.getValue(varName);
+        conditionResult = !value;
+        debug(`  NOT operation result: !${varName} = ${conditionResult}`);
+      }
+    } else if (conditionText.endsWith('!')) {
+      // Simple variable as condition
+      const value = this.getValue(conditionText);
+      conditionResult = !!value;
+      debug(`  Variable as condition: ${conditionText} = ${conditionResult}`);
+    } else {
+      // Standard condition context handling
+      for (let i = 0; i < ctx.getChildCount(); i++) {
+        const child = ctx.getChild(i);
+        if (child.constructor && child.constructor.name === 'ConditionContext') {
+          conditionCtx = child;
+          debug('  Found standard condition context');
+          break;
+        }
+      }
+      
+      if (conditionCtx) {
+        conditionResult = this.visit(conditionCtx);
+        debug('  Standard condition result:', conditionResult);
+      }
+    }
+    
+    // Find statements and other components
+    for (let i = believeMeIndex + 1; i < ctx.getChildCount(); i++) {
+      const child = ctx.getChild(i);
+      
+      if (child.constructor && child.constructor.name === 'StatementContext') {
+        statements.push(child);
+      } else if (child.constructor && child.constructor.name === 'ElseIfStatementContext') {
+        elseIfContexts.push(child);
+      } else if (child.constructor && child.constructor.name === 'ElseStatementContext') {
+        elseCtx = child;
+      }
+    }
+    
+    debug(`  Found ${statements.length} statements, ${elseIfContexts.length} elseIfs, and ${elseCtx ? 1 : 0} else`);
+    
+    // Execute the appropriate block based on condition result
     if (conditionResult) {
       // Execute the if block (all statements)
+      debug('  Condition is TRUE, executing if-block');
       let result;
       for (let i = 0; i < statements.length; i++) {
         result = this.visit(statements[i]);
@@ -614,6 +846,7 @@ CustomTrumplangVisitor.prototype.visitIfStatement = function (ctx) {
       return result;
     } else {
       // Check else-if blocks
+      debug('  Condition is FALSE, checking else-if blocks');
       for (let i = 0; i < elseIfContexts.length; i++) {
         const elseIfResult = this.visit(elseIfContexts[i]);
         if (elseIfResult !== undefined) {
@@ -623,7 +856,53 @@ CustomTrumplangVisitor.prototype.visitIfStatement = function (ctx) {
 
       // Check else block
       if (elseCtx) {
+        debug('  Executing else block');
         return this.visit(elseCtx);
+      }
+    }
+  } else {
+    // Fallback to traditional if handling
+    debug('  Using fallback if statement handling');
+    
+    // Find condition context
+    for (let i = 0; i < ctx.getChildCount(); i++) {
+      const child = ctx.getChild(i);
+      if (child.constructor && child.constructor.name === 'ConditionContext') {
+        conditionCtx = child;
+      } else if (child.constructor && child.constructor.name === 'StatementContext') {
+        statements.push(child);
+      } else if (child.constructor && child.constructor.name === 'ElseIfStatementContext') {
+        elseIfContexts.push(child);
+      } else if (child.constructor && child.constructor.name === 'ElseStatementContext') {
+        elseCtx = child;
+      }
+    }
+
+    // Evaluate the main condition
+    if (conditionCtx) {
+      const conditionResult = this.visit(conditionCtx);
+      debug('  If condition result:', conditionResult);
+
+      if (conditionResult) {
+        // Execute the if block (all statements)
+        let result;
+        for (let i = 0; i < statements.length; i++) {
+          result = this.visit(statements[i]);
+        }
+        return result;
+      } else {
+        // Check else-if blocks
+        for (let i = 0; i < elseIfContexts.length; i++) {
+          const elseIfResult = this.visit(elseIfContexts[i]);
+          if (elseIfResult !== undefined) {
+            return elseIfResult;
+          }
+        }
+
+        // Check else block
+        if (elseCtx) {
+          return this.visit(elseCtx);
+        }
       }
     }
   }
@@ -639,35 +918,193 @@ CustomTrumplangVisitor.prototype.visitIfStatementContext = function (ctx) {
 // Else-if statement visitor
 CustomTrumplangVisitor.prototype.visitElseIfStatement = function (ctx) {
   // 'PEOPLE ARE SAYING' condition 'BELIEVE ME' statement*
-
-  // Find condition and statements
-  let conditionCtx = null;
-  let statements = [];
-
+  debug(`Else-if statement with ${ctx.getChildCount()} children`);
+  
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    debug(`  Else-if Child ${i}: ${childType} - "${childText}"`);
+  }
 
-    if (child.ruleIndex === 22) {
-      // condition rule index
-      conditionCtx = child;
-    } else if (child.ruleIndex === 1) {
-      // statement rule index
-      statements.push(child);
+  // Find condition context
+  let conditionCtx = null;
+  let statements = [];
+  let believeMeIndex = -1;
+
+  // First find the 'PEOPLE ARE SAYING' token and the 'BELIEVE ME' token to identify condition
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    if (child && child.getText && child.getText() === 'PEOPLE ARE SAYING') {
+      // Found 'PEOPLE ARE SAYING' token
+      debug('  Found PEOPLE ARE SAYING token at position:', i);
+    } else if (child && child.getText && child.getText() === 'BELIEVE ME') {
+      // Found BELIEVE ME token
+      believeMeIndex = i;
+      debug('  Found BELIEVE ME token at position:', i);
+      break;
     }
   }
 
-  // Evaluate the condition
-  if (conditionCtx) {
-    const conditionResult = this.visit(conditionCtx);
-    debug('Else-if condition result:', conditionResult);
-
+  // Special handling for boolean operators
+  if (believeMeIndex > 1) { // There must be at least 'PEOPLE ARE SAYING' + condition before BELIEVE ME
+    let conditionText = '';
+    // Extract everything between 'PEOPLE ARE SAYING' and 'BELIEVE ME' as condition
+    for (let i = 1; i < believeMeIndex; i++) {
+      const child = ctx.getChild(i);
+      if (child && child.getText) {
+        conditionText += child.getText() + ' ';
+      }
+    }
+    conditionText = conditionText.trim();
+    debug('  Extracted condition text:', conditionText);
+    
+    let conditionResult = false;
+    
+    // Parse logic operators from the condition text
+    if (conditionText.includes("AND IT'S TRUE")) {
+      const parts = conditionText.split("AND IT'S TRUE");
+      if (parts.length === 2) {
+        const leftVar = parts[0].trim();
+        const rightVar = parts[1].trim();
+        
+        let leftVal = null;
+        let rightVal = null;
+        
+        // Resolve left part
+        if (leftVar.endsWith('!')) {
+          leftVal = this.getValue(leftVar);
+        } else if (leftVar === 'VERY TRUE') {
+          leftVal = true;
+        } else if (leftVar === 'FAKE NEWS') {
+          leftVal = false;
+        }
+        
+        // Resolve right part
+        if (rightVar.endsWith('!')) {
+          rightVal = this.getValue(rightVar);
+        } else if (rightVar === 'VERY TRUE') {
+          rightVal = true;
+        } else if (rightVar === 'FAKE NEWS') {
+          rightVal = false;
+        }
+        
+        if (leftVal !== null && rightVal !== null) {
+          conditionResult = leftVal && rightVal;
+          debug(`  AND operation result: ${leftVal} && ${rightVal} = ${conditionResult}`);
+        }
+      }
+    } else if (conditionText.includes("OR MAYBE")) {
+      const parts = conditionText.split("OR MAYBE");
+      if (parts.length === 2) {
+        const leftVar = parts[0].trim();
+        const rightVar = parts[1].trim();
+        
+        let leftVal = null;
+        let rightVal = null;
+        
+        // Resolve left part
+        if (leftVar.endsWith('!')) {
+          leftVal = this.getValue(leftVar);
+        } else if (leftVar === 'VERY TRUE') {
+          leftVal = true;
+        } else if (leftVar === 'FAKE NEWS') {
+          leftVal = false;
+        }
+        
+        // Resolve right part
+        if (rightVar.endsWith('!')) {
+          rightVal = this.getValue(rightVar);
+        } else if (rightVar === 'VERY TRUE') {
+          rightVal = true;
+        } else if (rightVar === 'FAKE NEWS') {
+          rightVal = false;
+        }
+        
+        if (leftVal !== null && rightVal !== null) {
+          conditionResult = leftVal || rightVal;
+          debug(`  OR operation result: ${leftVal} || ${rightVal} = ${conditionResult}`);
+        }
+      }
+    } else if (conditionText.startsWith('WRONG')) {
+      const varName = conditionText.substring(5).trim(); // Remove 'WRONG '
+      if (varName.endsWith('!')) {
+        const value = this.getValue(varName);
+        conditionResult = !value;
+        debug(`  NOT operation result: !${varName} = ${conditionResult}`);
+      }
+    } else if (conditionText.endsWith('!')) {
+      // Simple variable as condition
+      const value = this.getValue(conditionText);
+      conditionResult = !!value;
+      debug(`  Variable as condition: ${conditionText} = ${conditionResult}`);
+    } else {
+      // Standard condition context handling
+      for (let i = 0; i < ctx.getChildCount(); i++) {
+        const child = ctx.getChild(i);
+        if (child.constructor && child.constructor.name === 'ConditionContext') {
+          conditionCtx = child;
+          debug('  Found standard condition context');
+          break;
+        }
+      }
+      
+      if (conditionCtx) {
+        conditionResult = this.visit(conditionCtx);
+        debug('  Standard condition result:', conditionResult);
+      }
+    }
+    
+    // Find statements
+    for (let i = believeMeIndex + 1; i < ctx.getChildCount(); i++) {
+      const child = ctx.getChild(i);
+      if (child.constructor && child.constructor.name === 'StatementContext') {
+        statements.push(child);
+      }
+    }
+    
+    debug(`  Found ${statements.length} statements`);
+    
+    // Execute the appropriate block based on condition result
     if (conditionResult) {
       // Execute the else-if block
+      debug('  Condition is TRUE, executing else-if block');
       let result;
       for (let i = 0; i < statements.length; i++) {
         result = this.visit(statements[i]);
       }
       return result;
+    }
+  } else {
+    // Fallback to traditional else-if handling
+    debug('  Using fallback else-if statement handling');
+    
+    // Find condition and statements
+    for (let i = 0; i < ctx.getChildCount(); i++) {
+      const child = ctx.getChild(i);
+
+      if (child.ruleIndex === 22) {
+        // condition rule index
+        conditionCtx = child;
+      } else if (child.ruleIndex === 1) {
+        // statement rule index
+        statements.push(child);
+      }
+    }
+
+    // Evaluate the condition
+    if (conditionCtx) {
+      const conditionResult = this.visit(conditionCtx);
+      debug('  Else-if condition result:', conditionResult);
+
+      if (conditionResult) {
+        // Execute the else-if block
+        let result;
+        for (let i = 0; i < statements.length; i++) {
+          result = this.visit(statements[i]);
+        }
+        return result;
+      }
     }
   }
 
@@ -944,7 +1381,7 @@ CustomTrumplangVisitor.prototype.visitForEachLoopContext = function (ctx) {
 
 // Loop break visitor
 CustomTrumplangVisitor.prototype.visitLoopBreak = function (ctx) {
-  // 'FAKE NEWS MEDIA SAID ENOUGH';
+  // 'I WILL VETO!';
   throw new Error('BREAK');
 };
 
@@ -1244,40 +1681,89 @@ CustomTrumplangVisitor.prototype.visitArgumentListContext = function (ctx) {
 
 // Condition visitor
 CustomTrumplangVisitor.prototype.visitCondition = function (ctx) {
+  debug(`Condition with ${ctx.getChildCount()} children`);
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    const childType = child.constructor ? child.constructor.name : 'unknown';
+    const childText = child.getText ? child.getText() : 'no text';
+    debug(`  Condition Child ${i}: ${childType} - "${childText}"`);
+  }
+
   // Handle negation: 'WRONG' condition
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText() === 'WRONG') {
-      const condCtx = ctx.getChild(1); // Get the condition after 'WRONG'
-      const innerResult = this.visit(condCtx);
-      return !innerResult;
+    if (child && child.getText && child.getText() === 'WRONG') {
+      debug('Found WRONG operator (NOT)');
+      // Get the operand (variable or expression)
+      let operandCtx = null;
+      for (let j = i + 1; j < ctx.getChildCount(); j++) {
+        const nextChild = ctx.getChild(j);
+        if (nextChild && (
+            (nextChild.symbol && nextChild.getText().endsWith('!')) || // Variable
+            nextChild.constructor && nextChild.constructor.name === 'ExpressionContext' ||
+            nextChild.constructor && nextChild.constructor.name === 'ConditionContext'
+          )) {
+          operandCtx = nextChild;
+          break;
+        }
+      }
+      
+      if (operandCtx) {
+        const innerResult = this.visit(operandCtx);
+        debug(`  NOT operation: !${innerResult} = ${!innerResult}`);
+        return !innerResult;
+      }
     }
   }
 
-  // Handle AND: condition 'AND IT\'S TRUE' condition
+  // Handle AND: expression 'AND IT\'S TRUE' expression
+  let foundAnd = false;
+  let leftCtx = null;
+  let rightCtx = null;
+  
+  // Look for the AND operator
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText() === "AND IT'S TRUE") {
-      const leftCtx = ctx.getChild(0);
-      const rightCtx = ctx.getChild(2);
-
-      const leftResult = this.visit(leftCtx);
-      const rightResult = this.visit(rightCtx);
-      return leftResult && rightResult;
+    if (child && child.getText && child.getText() === "AND IT'S TRUE") {
+      foundAnd = true;
+      // Find left and right operands
+      if (i > 0) leftCtx = ctx.getChild(i - 1);
+      if (i + 1 < ctx.getChildCount()) rightCtx = ctx.getChild(i + 1);
+      break;
     }
   }
+  
+  if (foundAnd && leftCtx && rightCtx) {
+    debug('Found AND operator');
+    const leftResult = this.visit(leftCtx);
+    const rightResult = this.visit(rightCtx);
+    debug(`  AND operation: ${leftResult} && ${rightResult} = ${leftResult && rightResult}`);
+    return leftResult && rightResult;
+  }
 
-  // Handle OR: condition 'OR MAYBE' condition
+  // Handle OR: expression 'OR MAYBE' expression
+  let foundOr = false;
+  leftCtx = null;
+  rightCtx = null;
+  
+  // Look for the OR operator
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText() === 'OR MAYBE') {
-      const leftCtx = ctx.getChild(0);
-      const rightCtx = ctx.getChild(2);
-
-      const leftResult = this.visit(leftCtx);
-      const rightResult = this.visit(rightCtx);
-      return leftResult || rightResult;
+    if (child && child.getText && child.getText() === "OR MAYBE") {
+      foundOr = true;
+      // Find left and right operands
+      if (i > 0) leftCtx = ctx.getChild(i - 1);
+      if (i + 1 < ctx.getChildCount()) rightCtx = ctx.getChild(i + 1);
+      break;
     }
+  }
+  
+  if (foundOr && leftCtx && rightCtx) {
+    debug('Found OR operator');
+    const leftResult = this.visit(leftCtx);
+    const rightResult = this.visit(rightCtx);
+    debug(`  OR operation: ${leftResult} || ${rightResult} = ${leftResult || rightResult}`);
+    return leftResult || rightResult;
   }
 
   // Handle comparison: expression comparison expression
@@ -1328,6 +1814,114 @@ CustomTrumplangVisitor.prototype.visitCondition = function (ctx) {
       default:
         throw new Error(`NOBODY KNOWS THIS COMPARISON OPERATOR: ${operator}. SAD!`);
     }
+  }
+  
+  // Check if we have a single variable as the condition
+  for (let i = 0; i < ctx.getChildCount(); i++) {
+    const child = ctx.getChild(i);
+    if (child && child.symbol && child.getText().endsWith('!')) {
+      // It's a variable
+      const varName = child.getText();
+      const value = this.getValue(varName);
+      debug(`Variable as condition: ${varName} = ${value}`);
+      return !!value; // Convert to boolean
+    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
+      // It's an expression
+      const value = this.visit(child);
+      debug(`Expression as condition: ${value}`);
+      return !!value; // Convert to boolean
+    }
+  }
+
+  // If we reach here without finding an operator and operands, let's try
+  // to interpret the entire context as an expression or raw text
+  try {
+    const rawText = ctx.getText();
+    debug(`Raw condition text: ${rawText}`);
+    
+    if (rawText === 'VERY TRUE') return true;
+    if (rawText === 'FAKE NEWS') return false;
+    
+    // Try to evaluate as a combined text
+    if (rawText.includes('WRONG')) {
+      // Find the variable name after WRONG
+      const variablePart = rawText.split('WRONG')[1].trim();
+      if (variablePart.endsWith('!')) {
+        const varValue = this.getValue(variablePart);
+        debug(`NOT operation on variable: !${variablePart} = ${!varValue}`);
+        return !varValue;
+      }
+    }
+    
+    if (rawText.includes("AND IT'S TRUE")) {
+      const parts = rawText.split("AND IT'S TRUE");
+      if (parts.length === 2) {
+        const leftPart = parts[0].trim();
+        const rightPart = parts[1].trim();
+        
+        let leftValue = null;
+        let rightValue = null;
+        
+        // Try to resolve the left part
+        if (leftPart.endsWith('!')) {
+          leftValue = this.getValue(leftPart);
+        } else if (leftPart === 'VERY TRUE') {
+          leftValue = true;
+        } else if (leftPart === 'FAKE NEWS') {
+          leftValue = false;
+        }
+        
+        // Try to resolve the right part
+        if (rightPart.endsWith('!')) {
+          rightValue = this.getValue(rightPart);
+        } else if (rightPart === 'VERY TRUE') {
+          rightValue = true;
+        } else if (rightPart === 'FAKE NEWS') {
+          rightValue = false;
+        }
+        
+        if (leftValue !== null && rightValue !== null) {
+          debug(`AND operation from text: ${leftValue} && ${rightValue} = ${leftValue && rightValue}`);
+          return leftValue && rightValue;
+        }
+      }
+    }
+    
+    if (rawText.includes("OR MAYBE")) {
+      const parts = rawText.split("OR MAYBE");
+      if (parts.length === 2) {
+        const leftPart = parts[0].trim();
+        const rightPart = parts[1].trim();
+        
+        let leftValue = null;
+        let rightValue = null;
+        
+        // Try to resolve the left part
+        if (leftPart.endsWith('!')) {
+          leftValue = this.getValue(leftPart);
+        } else if (leftPart === 'VERY TRUE') {
+          leftValue = true;
+        } else if (leftPart === 'FAKE NEWS') {
+          leftValue = false;
+        }
+        
+        // Try to resolve the right part
+        if (rightPart.endsWith('!')) {
+          rightValue = this.getValue(rightPart);
+        } else if (rightPart === 'VERY TRUE') {
+          rightValue = true;
+        } else if (rightPart === 'FAKE NEWS') {
+          rightValue = false;
+        }
+        
+        if (leftValue !== null && rightValue !== null) {
+          debug(`OR operation from text: ${leftValue} || ${rightValue} = ${leftValue || rightValue}`);
+          return leftValue || rightValue;
+        }
+      }
+    }
+  } catch (e) {
+    debug(`Error trying to interpret raw condition: ${e.message}`);
   }
 
   return false;

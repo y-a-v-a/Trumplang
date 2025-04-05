@@ -74,6 +74,15 @@ TrumplangListener.prototype.exitFunctionDeclaration = function(ctx) {
 };
 
 
+// Enter a parse tree produced by TrumplangParser#blockStatement.
+TrumplangListener.prototype.enterBlockStatement = function(ctx) {
+};
+
+// Exit a parse tree produced by TrumplangParser#blockStatement.
+TrumplangListener.prototype.exitBlockStatement = function(ctx) {
+};
+
+
 // Enter a parse tree produced by TrumplangParser#parameterList.
 TrumplangListener.prototype.enterParameterList = function(ctx) {
 };

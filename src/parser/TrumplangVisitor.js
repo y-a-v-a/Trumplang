@@ -54,6 +54,12 @@ TrumplangVisitor.prototype.visitFunctionDeclaration = function(ctx) {
 };
 
 
+// Visit a parse tree produced by TrumplangParser#blockStatement.
+TrumplangVisitor.prototype.visitBlockStatement = function(ctx) {
+  return this.visitChildren(ctx);
+};
+
+
 // Visit a parse tree produced by TrumplangParser#parameterList.
 TrumplangVisitor.prototype.visitParameterList = function(ctx) {
   return this.visitChildren(ctx);
