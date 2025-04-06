@@ -377,9 +377,7 @@ CustomTrumplangVisitor.prototype.visitFactorContext = function (ctx) {
     // Look up the variable in scope
     const value = this.getValue(varName);
     if (value !== null) {
-      if (typeof value === 'object') {
-        return JSON.stringify(value);
-      }
+      // Don't stringify objects, return them directly
       return value;
     }
     throw new Error(`NOBODY KNOWS WHAT ${varName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
@@ -601,8 +599,14 @@ CustomTrumplangVisitor.prototype.visitForEachLoopContext = function (ctx) {
 
   // Get array
   const array = this.getVariable(arrayVar);
-  if (!array || !Array.isArray(array.value)) {
-    throw new Error(`${arrayVar} IS NOT A WALL (ARRAY). SAD!`);
+  debug(`Got array variable:`, array);
+  
+  if (!array) {
+    throw new Error(`NOBODY KNOWS WHAT ${arrayVar} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
+  }
+  
+  if (!array.value || !Array.isArray(array.value)) {
+    throw new Error(`${arrayVar} IS NOT A WALL (ARRAY). SAD! IT'S A ${typeof array.value}`);
   }
 
   try {
@@ -754,10 +758,15 @@ CustomTrumplangVisitor.prototype.visitFunctionCallContext = function (ctx) {
       const param = params[i];
       const arg = i < args.length ? args[i] : null;
 
-      debug(`Binding parameter ${param.name} to ${arg}`);
+      debug(`Binding parameter ${param.name} to`, arg, `(type: ${typeof arg})`);
 
       // Store parameter in function scope
-      this.currentScope.values[param.name] = { type: param.type, value: arg };
+      // For arrays and objects, we need to ensure they're passed by reference
+      // rather than by value to avoid stringification
+      this.currentScope.values[param.name] = { 
+        type: param.type, 
+        value: arg 
+      };
     }
 
     // Execute function body (block statement)

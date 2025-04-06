@@ -13,6 +13,7 @@
   },
   "scripts": {
     "test": "node src/cli/index.js EXTREME VETTING test/basic/VERY_BASIC.TEST.MAGA",
+    "debug-test": "DEBUG=* node src/cli/index.js EXTREME VETTING",
     "test-all": "node src/cli/index.js EXTREME VETTING ALL",
     "start": "node src/cli/index.js",
     "generate-parser": "npx antlr4-tool -o ./src/parser --language JavaScript ./grammar/Trumplang.g4",
