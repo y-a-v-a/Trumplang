@@ -1365,6 +1365,8 @@ function ParameterListContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_parameterList;
+    this._VARIABLE = null; // Token
+    this.paramName = []; // of Tokens
     return this;
 }
 
@@ -1441,7 +1443,8 @@ TrumplangParser.prototype.parameterList = function() {
         this.state = 142;
         this.dataType();
         this.state = 143;
-        this.match(TrumplangParser.VARIABLE);
+        localctx._VARIABLE = this.match(TrumplangParser.VARIABLE);
+        localctx.paramName.push(localctx._VARIABLE);
         this.state = 150;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
@@ -1451,7 +1454,8 @@ TrumplangParser.prototype.parameterList = function() {
             this.state = 145;
             this.dataType();
             this.state = 146;
-            this.match(TrumplangParser.VARIABLE);
+            localctx._VARIABLE = this.match(TrumplangParser.VARIABLE);
+            localctx.paramName.push(localctx._VARIABLE);
             this.state = 152;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
@@ -2374,6 +2378,7 @@ function ArrayDeclarationContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_arrayDeclaration;
+    this.arrayName = null; // Token
     return this;
 }
 
@@ -2384,12 +2389,12 @@ ArrayDeclarationContext.prototype.ARRAY_DECL = function() {
     return this.getToken(TrumplangParser.ARRAY_DECL, 0);
 };
 
-ArrayDeclarationContext.prototype.VARIABLE = function() {
-    return this.getToken(TrumplangParser.VARIABLE, 0);
-};
-
 ArrayDeclarationContext.prototype.ARRAY_ELEMENTS_DECL = function() {
     return this.getToken(TrumplangParser.ARRAY_ELEMENTS_DECL, 0);
+};
+
+ArrayDeclarationContext.prototype.VARIABLE = function() {
+    return this.getToken(TrumplangParser.VARIABLE, 0);
 };
 
 ArrayDeclarationContext.prototype.arrayElements = function() {
@@ -2430,7 +2435,7 @@ TrumplangParser.prototype.arrayDeclaration = function() {
         this.state = 209;
         this.match(TrumplangParser.ARRAY_DECL);
         this.state = 210;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.arrayName = this.match(TrumplangParser.VARIABLE);
         this.state = 211;
         this.match(TrumplangParser.ARRAY_ELEMENTS_DECL);
         this.state = 213;
@@ -2566,15 +2571,12 @@ function AssignmentStatementContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_assignmentStatement;
+    this.varName = null; // Token
     return this;
 }
 
 AssignmentStatementContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 AssignmentStatementContext.prototype.constructor = AssignmentStatementContext;
-
-AssignmentStatementContext.prototype.VARIABLE = function() {
-    return this.getToken(TrumplangParser.VARIABLE, 0);
-};
 
 AssignmentStatementContext.prototype.ASSIGNMENT = function() {
     return this.getToken(TrumplangParser.ASSIGNMENT, 0);
@@ -2582,6 +2584,10 @@ AssignmentStatementContext.prototype.ASSIGNMENT = function() {
 
 AssignmentStatementContext.prototype.expression = function() {
     return this.getTypedRuleContext(ExpressionContext,0);
+};
+
+AssignmentStatementContext.prototype.VARIABLE = function() {
+    return this.getToken(TrumplangParser.VARIABLE, 0);
 };
 
 AssignmentStatementContext.prototype.enterRule = function(listener) {
@@ -2616,7 +2622,7 @@ TrumplangParser.prototype.assignmentStatement = function() {
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 223;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.varName = this.match(TrumplangParser.VARIABLE);
         this.state = 224;
         this.match(TrumplangParser.ASSIGNMENT);
         this.state = 225;
@@ -2720,6 +2726,7 @@ function InputStatementContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_inputStatement;
+    this.varName = null; // Token
     return this;
 }
 
@@ -2768,7 +2775,7 @@ TrumplangParser.prototype.inputStatement = function() {
         this.state = 230;
         this.match(TrumplangParser.INPUT);
         this.state = 231;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.varName = this.match(TrumplangParser.VARIABLE);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -2940,6 +2947,8 @@ function ConditionContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_condition;
+    this.condVar = null; // Token
+    this.condBool = null; // Token
     return this;
 }
 
@@ -3041,12 +3050,12 @@ TrumplangParser.prototype.condition = function(_p) {
 
         case 2:
             this.state = 246;
-            this.match(TrumplangParser.VARIABLE);
+            localctx.condVar = this.match(TrumplangParser.VARIABLE);
             break;
 
         case 3:
             this.state = 247;
-            this.match(TrumplangParser.BOOLEAN);
+            localctx.condBool = this.match(TrumplangParser.BOOLEAN);
             break;
 
         case 4:
@@ -3652,15 +3661,12 @@ function ArrayAccessContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_arrayAccess;
+    this.arrayName = null; // Token
     return this;
 }
 
 ArrayAccessContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 ArrayAccessContext.prototype.constructor = ArrayAccessContext;
-
-ArrayAccessContext.prototype.VARIABLE = function() {
-    return this.getToken(TrumplangParser.VARIABLE, 0);
-};
 
 ArrayAccessContext.prototype.ARRAY_ACCESS = function() {
     return this.getToken(TrumplangParser.ARRAY_ACCESS, 0);
@@ -3668,6 +3674,10 @@ ArrayAccessContext.prototype.ARRAY_ACCESS = function() {
 
 ArrayAccessContext.prototype.expression = function() {
     return this.getTypedRuleContext(ExpressionContext,0);
+};
+
+ArrayAccessContext.prototype.VARIABLE = function() {
+    return this.getToken(TrumplangParser.VARIABLE, 0);
 };
 
 ArrayAccessContext.prototype.enterRule = function(listener) {
@@ -3702,7 +3712,7 @@ TrumplangParser.prototype.arrayAccess = function() {
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 309;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.arrayName = this.match(TrumplangParser.VARIABLE);
         this.state = 310;
         this.match(TrumplangParser.ARRAY_ACCESS);
         this.state = 311;
@@ -3732,6 +3742,7 @@ function DealFieldContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_dealField;
+    this.fieldName = null; // Token
     return this;
 }
 
@@ -3742,16 +3753,16 @@ DealFieldContext.prototype.dataType = function() {
     return this.getTypedRuleContext(DataTypeContext,0);
 };
 
-DealFieldContext.prototype.VARIABLE = function() {
-    return this.getToken(TrumplangParser.VARIABLE, 0);
-};
-
 DealFieldContext.prototype.ASSIGNMENT = function() {
     return this.getToken(TrumplangParser.ASSIGNMENT, 0);
 };
 
 DealFieldContext.prototype.expression = function() {
     return this.getTypedRuleContext(ExpressionContext,0);
+};
+
+DealFieldContext.prototype.VARIABLE = function() {
+    return this.getToken(TrumplangParser.VARIABLE, 0);
 };
 
 DealFieldContext.prototype.enterRule = function(listener) {
@@ -3788,7 +3799,7 @@ TrumplangParser.prototype.dealField = function() {
         this.state = 313;
         this.dataType();
         this.state = 314;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.fieldName = this.match(TrumplangParser.VARIABLE);
         this.state = 315;
         this.match(TrumplangParser.ASSIGNMENT);
         this.state = 316;
@@ -3928,11 +3939,17 @@ function DealAccessContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_dealAccess;
+    this.dealName = null; // Token
+    this.fieldName = null; // Token
     return this;
 }
 
 DealAccessContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 DealAccessContext.prototype.constructor = DealAccessContext;
+
+DealAccessContext.prototype.DEAL_ACCESS_KEYWORD = function() {
+    return this.getToken(TrumplangParser.DEAL_ACCESS_KEYWORD, 0);
+};
 
 DealAccessContext.prototype.VARIABLE = function(i) {
 	if(i===undefined) {
@@ -3945,10 +3962,6 @@ DealAccessContext.prototype.VARIABLE = function(i) {
     }
 };
 
-
-DealAccessContext.prototype.DEAL_ACCESS_KEYWORD = function() {
-    return this.getToken(TrumplangParser.DEAL_ACCESS_KEYWORD, 0);
-};
 
 DealAccessContext.prototype.enterRule = function(listener) {
     if(listener instanceof TrumplangListener ) {
@@ -3982,11 +3995,11 @@ TrumplangParser.prototype.dealAccess = function() {
     try {
         this.enterOuterAlt(localctx, 1);
         this.state = 330;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.dealName = this.match(TrumplangParser.VARIABLE);
         this.state = 331;
         this.match(TrumplangParser.DEAL_ACCESS_KEYWORD);
         this.state = 332;
-        this.match(TrumplangParser.VARIABLE);
+        localctx.fieldName = this.match(TrumplangParser.VARIABLE);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;
@@ -4193,11 +4206,18 @@ function SelectiveImportContext(parser, parent, invokingState) {
 	antlr4.ParserRuleContext.call(this, parent, invokingState);
     this.parser = parser;
     this.ruleIndex = TrumplangParser.RULE_selectiveImport;
+    this._IDENTIFIER = null; // Token
+    this.importName = []; // of Tokens
+    this.filePath = null; // Token
     return this;
 }
 
 SelectiveImportContext.prototype = Object.create(antlr4.ParserRuleContext.prototype);
 SelectiveImportContext.prototype.constructor = SelectiveImportContext;
+
+SelectiveImportContext.prototype.FOR_LOOP_FROM = function() {
+    return this.getToken(TrumplangParser.FOR_LOOP_FROM, 0);
+};
 
 SelectiveImportContext.prototype.IDENTIFIER = function(i) {
 	if(i===undefined) {
@@ -4210,10 +4230,6 @@ SelectiveImportContext.prototype.IDENTIFIER = function(i) {
     }
 };
 
-
-SelectiveImportContext.prototype.FOR_LOOP_FROM = function() {
-    return this.getToken(TrumplangParser.FOR_LOOP_FROM, 0);
-};
 
 SelectiveImportContext.prototype.FILEPATH = function() {
     return this.getToken(TrumplangParser.FILEPATH, 0);
@@ -4266,7 +4282,8 @@ TrumplangParser.prototype.selectiveImport = function() {
         this.state = 345;
         this.match(TrumplangParser.T__5);
         this.state = 346;
-        this.match(TrumplangParser.IDENTIFIER);
+        localctx._IDENTIFIER = this.match(TrumplangParser.IDENTIFIER);
+        localctx.importName.push(localctx._IDENTIFIER);
         this.state = 351;
         this._errHandler.sync(this);
         _la = this._input.LA(1);
@@ -4274,7 +4291,8 @@ TrumplangParser.prototype.selectiveImport = function() {
             this.state = 347;
             this.match(TrumplangParser.PARAMS_ARGS_CHAIN);
             this.state = 348;
-            this.match(TrumplangParser.IDENTIFIER);
+            localctx._IDENTIFIER = this.match(TrumplangParser.IDENTIFIER);
+            localctx.importName.push(localctx._IDENTIFIER);
             this.state = 353;
             this._errHandler.sync(this);
             _la = this._input.LA(1);
@@ -4282,7 +4300,7 @@ TrumplangParser.prototype.selectiveImport = function() {
         this.state = 354;
         this.match(TrumplangParser.FOR_LOOP_FROM);
         this.state = 355;
-        this.match(TrumplangParser.FILEPATH);
+        localctx.filePath = this.match(TrumplangParser.FILEPATH);
     } catch (re) {
     	if(re instanceof antlr4.error.RecognitionException) {
 	        localctx.exception = re;

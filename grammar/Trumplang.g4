@@ -70,7 +70,7 @@ blockStatement: OPEN_BLOCK statement* CLOSE_BLOCK;
 
 // Function parameters
 parameterList:
-	dataType VARIABLE (PARAMS_ARGS_CHAIN dataType VARIABLE)*;
+	dataType paramName += VARIABLE (PARAMS_ARGS_CHAIN dataType paramName += VARIABLE)*;
 
 // Return statement - "AND I MEAN THAT"
 returnStatement: RETURN expression;
@@ -108,19 +108,19 @@ loopBreak: BREAK;
 
 // Array declaration - "BUILD THE WALL"
 arrayDeclaration:
-	ARRAY_DECL VARIABLE ARRAY_ELEMENTS_DECL arrayElements?;
+	ARRAY_DECL arrayName = VARIABLE ARRAY_ELEMENTS_DECL arrayElements?;
 
 // Array elements
 arrayElements: expression (ARRAY_CHAIN expression)*;
 
 // Assignment statement - updated to "ABSOLUTELY" (was "IT IS YET", which was "IS YET", which was "JUST HIRED")
-assignmentStatement: VARIABLE ASSIGNMENT expression;
+assignmentStatement: varName = VARIABLE ASSIGNMENT expression;
 
 // Print statement - "EVERYONE IS TALKING ABOUT"
 printStatement: PRINT expression;
 
 // Input statement - "MANY PEOPLE ARE ASKING"
-inputStatement: INPUT VARIABLE;
+inputStatement: INPUT varName = VARIABLE;
 
 // Increment operation - "MAKE GREATER"
 incrementStatement: 'MAKE' varName = VARIABLE 'GREATER';
@@ -131,8 +131,8 @@ decrementStatement: 'MAKE' varName = VARIABLE 'SMALLER';
 // Condition for control structures
 condition:
 	expression comparison expression
-	| VARIABLE
-	| BOOLEAN
+	| condVar = VARIABLE
+	| condBool = BOOLEAN
 	| NOT condition
 	| condition AND condition
 	| condition OR condition;
@@ -171,17 +171,17 @@ factor:
 	| dealAccess;
 
 // Array access - using "WALL" metaphor
-arrayAccess: VARIABLE ARRAY_ACCESS expression;
+arrayAccess: arrayName = VARIABLE ARRAY_ACCESS expression;
 
 // Deal field entries
-dealField: dataType VARIABLE ASSIGNMENT expression;
+dealField: dataType fieldName = VARIABLE ASSIGNMENT expression;
 
 // Deal structure declaration
 dealDeclaration:
 	'(' dealField (AMPERSAND dealField)* ')' DEAL_DECLARE;
 
 // Deal field access
-dealAccess: VARIABLE DEAL_ACCESS_KEYWORD VARIABLE;
+dealAccess: dealName = VARIABLE DEAL_ACCESS_KEYWORD fieldName = VARIABLE;
 
 // Assert statement - "FACT CHECK"
 assertStatement:
@@ -192,7 +192,7 @@ importStatement: IMPORT filePath = FILEPATH;
 
 // Selective import - specific "people"
 selectiveImport:
-	'I ONLY WANT' IDENTIFIER (PARAMS_ARGS_CHAIN IDENTIFIER)* 'FROM' FILEPATH;
+	'I ONLY WANT' importName += IDENTIFIER (PARAMS_ARGS_CHAIN importName += IDENTIFIER)* 'FROM' filePath = FILEPATH;
 
 // Lexer Rules
 IF_DECL: 'LISTEN';
