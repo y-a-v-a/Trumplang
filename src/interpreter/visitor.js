@@ -1354,7 +1354,6 @@ CustomTrumplangVisitor.prototype.visitFunctionDeclaration = function (ctx) {
   // 'INCREDIBLE' IDENTIFIER 'PEOPLE TELL ME' parameterList? blockStatement
 
   // Find the identifier, parameters, and block statement
-  let identifier = null;
   let paramListCtx = null;
   let blockCtx = null;
 
@@ -1368,15 +1367,9 @@ CustomTrumplangVisitor.prototype.visitFunctionDeclaration = function (ctx) {
     debug(`  Function Child ${i}: ${childType} - "${childText}"`);
   }
 
-  // Find the function name (identifier)
-  // TerminalNodeImpl after INCREDIBLE so index === 1
-  const child = ctx.getChild(1);
-
-  if (child && child.symbol) {
-    // IDENTIFIER token
-    identifier = child.getText();
-    debug(`Found function name: ${identifier}`);
-  }
+  // Get function name directly using the labeled element in the grammar
+  const identifier = ctx.funcName.text;
+  debug(`Found function name: ${identifier}`);
 
   // Find the parameter list
   for (let i = 0; i < ctx.getChildCount(); i++) {
@@ -1500,19 +1493,18 @@ CustomTrumplangVisitor.prototype.visitReturnStatementContext = function (ctx) {
 // Function call visitor
 CustomTrumplangVisitor.prototype.visitFunctionCall = function (ctx) {
   // 'I CALL UPON' IDENTIFIER 'PEOPLE TELL ME' argumentList?
-  let identifier = null;
   let argListCtx = null;
   let argVars = [];
+
+  // Get function name directly using the labeled element in the grammar
+  const identifier = ctx.funcName.text;
 
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
 
     debug(child?.constructor?.name);
 
-    if (child && child.symbol && child.symbol.type === 62) {
-      // IDENTIFIER token type
-      identifier = child.getText();
-    } else if (child && child.constructor && child.constructor.name === 'ArgumentListContext') {
+    if (child && child.constructor && child.constructor.name === 'ArgumentListContext') {
       // argumentList rule index
       argListCtx = child;
     } else if (child && child.symbol && child.symbol.type === 59) {
