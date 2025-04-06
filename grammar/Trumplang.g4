@@ -13,7 +13,7 @@
 grammar Trumplang;
 
 // Program structure
-program: 'BELIEVE ME' statement+ 'MAKE AMERICA GREAT AGAIN';
+program: PROG_START statement+ PROG_END;
 
 // Statements
 statement:
@@ -44,14 +44,14 @@ commentStatement: COMMENT;
 
 // Variable declarations - "I HAVE THE BEST"
 variableDeclaration:
-	'I HAVE THE BEST' dataType VARIABLE ASSIGNMENT (
+	VARIABLE_DECL dataType varName = VARIABLE ASSIGNMENT (
 		expression
 		| dealDeclaration
 	);
 
 // Constants - uses "I HAVE A VERY GOOD BRAIN FOR"
 constantDeclaration:
-	'I HAVE A VERY GOOD BRAIN FOR' dataType VARIABLE ASSIGNMENT expression;
+	CONSTANT_DECL dataType varName = VARIABLE ASSIGNMENT expression;
 
 // Data types
 dataType:
@@ -64,70 +64,69 @@ dataType:
 
 // Function declaration - "INCREDIBLE" (was "TREMENDOUS")
 functionDeclaration:
-	'INCREDIBLE' IDENTIFIER 'PEOPLE TELL ME' parameterList? blockStatement;
+	FUNCTION_DECL funcName = IDENTIFIER PARAMS_ARGS_START parameterList? blockStatement;
 
 blockStatement: OPEN_BLOCK statement* CLOSE_BLOCK;
 
 // Function parameters
-parameterList: dataType VARIABLE ('AND' dataType VARIABLE)*;
+parameterList:
+	dataType VARIABLE (PARAMS_ARGS_CHAIN dataType VARIABLE)*;
 
 // Return statement - "AND I MEAN THAT"
-returnStatement: 'AND I MEAN THAT' expression;
+returnStatement: RETURN expression;
 
 // Function call - "I CALL UPON"
 functionCall:
-	'I CALL UPON' IDENTIFIER 'PEOPLE TELL ME' argumentList?;
+	FUNC_CALL funcName = IDENTIFIER PARAMS_ARGS_START argumentList?;
 
 // Function arguments
-argumentList: expression ('AND' expression)*;
+argumentList: expression (PARAMS_ARGS_CHAIN expression)*;
 
 // If statement - "LISTEN"
 ifStatement:
-	'LISTEN' condition statement elseIfStatement* elseStatement?;
+	IF_DECL condition statement elseIfStatement* elseStatement?;
 
 // Else if statement - "PEOPLE ARE SAYING"
-elseIfStatement: 'PEOPLE ARE SAYING' condition statement;
+elseIfStatement: ELSE_IF_DECL condition statement;
 
 // Else statement - "NOBODY KNEW"
-elseStatement: 'NOBODY KNEW' statement;
+elseStatement: ELSE_DECL statement;
 
 // While loop - "WE'RE GOING TO WIN IN A LANDSLIDE"
-whileLoop:
-	'WE\'RE GOING TO WIN IN A LANDSLIDE' condition blockStatement;
+whileLoop: WHILE_LOOP_DECL condition blockStatement;
 
 // For loop - "WE'RE GOING TO WIN, WIN, WIN"
 forLoop:
-	'WE\'RE GOING TO WIN, WIN, WIN' 'WITH' VARIABLE 'FROM' expression 'TO' expression blockStatement
-		;
+	FOR_LOOP_WITH varName = VARIABLE FOR_LOOP_FROM expression FOR_LOOP_TO expression blockStatement;
 
 // Loop item iteration - "BILLIONS AND BILLIONS"
 forEachLoop:
-	'BILLIONS AND BILLIONS' VARIABLE 'YET' VARIABLE blockStatement;
+	FOR_EACH_LOOP_DECL varName = VARIABLE FOR_EACH_FROM listName = VARIABLE blockStatement;
 
 // Break from loop early
-loopBreak: 'I WILL VETO!';
+loopBreak: BREAK;
 
 // Array declaration - "BUILD THE WALL"
 arrayDeclaration:
-	'BUILD THE WALL' VARIABLE 'AND MEXICO WILL PAY FOR IT' arrayElements?;
+	ARRAY_DECL VARIABLE ARRAY_ELEMENTS_DECL arrayElements?;
 
 // Array elements
-arrayElements: expression ('PREVAILS' expression)*;
+arrayElements: expression (ARRAY_CHAIN expression)*;
 
 // Assignment statement - updated to "ABSOLUTELY" (was "IT IS YET", which was "IS YET", which was "JUST HIRED")
 assignmentStatement: VARIABLE ASSIGNMENT expression;
 
 // Print statement - "EVERYONE IS TALKING ABOUT"
-printStatement: 'EVERYONE IS TALKING ABOUT' expression;
+printStatement: PRINT expression;
 
 // Input statement - "MANY PEOPLE ARE ASKING"
-inputStatement: 'MANY PEOPLE ARE ASKING' VARIABLE;
+inputStatement: INPUT VARIABLE;
 
 // Increment operation - "MAKE GREATER"
-incrementStatement: 'MAKE' VARIABLE 'GREATER';
+incrementStatement: 'MAKE' varName = VARIABLE 'GREATER';
 
 // Decrement operation - "MAKE SMALLER"
-decrementStatement: 'MAKE' VARIABLE 'SMALLER';
+decrementStatement: 'MAKE' varName = VARIABLE 'SMALLER';
 
 // Condition for control structures
 condition:
@@ -172,7 +171,7 @@ factor:
 	| dealAccess;
 
 // Array access - using "WALL" metaphor
-arrayAccess: VARIABLE 'SECTION' expression;
+arrayAccess: VARIABLE ARRAY_ACCESS expression;
 
 // Deal field entries
 dealField: dataType VARIABLE ASSIGNMENT expression;
@@ -182,20 +181,78 @@ dealDeclaration:
 	'(' dealField (AMPERSAND dealField)* ')' DEAL_DECLARE;
 
 // Deal field access
-dealAccess: VARIABLE 'FOLLOW' VARIABLE;
+dealAccess: VARIABLE DEAL_ACCESS_KEYWORD VARIABLE;
 
 // Assert statement - "FACT CHECK"
 assertStatement:
-	'FACT CHECK' (expression | condition) 'SO TRUE' expression;
+	ASSERT_CALL (expression | condition) EQUALS expression;
 
 // Import statement - "I KNOW THE BEST PEOPLE FROM"
-importStatement: 'I KNOW THE BEST PEOPLE FROM' FILEPATH;
+importStatement: IMPORT filePath = FILEPATH;
 
 // Selective import - specific "people"
 selectiveImport:
-	'I ONLY WANT' IDENTIFIER ('AND' IDENTIFIER)* 'FROM' FILEPATH;
+	'I ONLY WANT' IDENTIFIER (PARAMS_ARGS_CHAIN IDENTIFIER)* 'FROM' FILEPATH;
 
 // Lexer Rules
+IF_DECL: 'LISTEN';
+
+ELSE_IF_DECL: 'PEOPLE ARE SAYING';
+
+ELSE_DECL: 'NOBODY KNEW';
+
+ARRAY_DECL: 'BUILD THE WALL';
+
+ARRAY_ELEMENTS_DECL: 'AND MEXICO WILL PAY FOR IT';
+
+ARRAY_ACCESS: 'SECTION';
+
+ARRAY_CHAIN: 'PREVAILS';
+
+PROG_START: 'GOD BLESS THE USA!!!';
+
+PROG_END: 'MAKE AMERICA GREAT AGAIN';
+
+FUNCTION_DECL: 'INCREDIBLE';
+
+VARIABLE_DECL: 'I HAVE THE BEST';
+
+CONSTANT_DECL: 'I HAVE A VERY GOOD BRAIN FOR';
+
+PARAMS_ARGS_START: 'PEOPLE TELL ME';
+
+PARAMS_ARGS_CHAIN: 'AND';
+
+RETURN: 'AND I MEAN THAT';
+
+FUNC_CALL: 'I CALL UPON';
+
+BREAK: 'I WILL VETO!';
+
+WHILE_LOOP_DECL: 'WE\'RE GOING TO WIN IN A LANDSLIDE';
+
+FOR_LOOP_DECL: 'WE\'RE GOING TO WIN, WIN, WIN';
+
+FOR_LOOP_WITH: 'WITH';
+
+FOR_LOOP_FROM: 'FROM';
+
+FOR_LOOP_TO: 'TO';
+
+FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
+
+FOR_EACH_FROM: 'YET';
+
+PRINT: 'EVERYONE IS TALKING ABOUT';
+
+INPUT: 'MANY PEOPLE ARE ASKING';
+
+IMPORT: 'I KNOW THE BEST PEOPLE FROM';
+
+DEAL_ACCESS_KEYWORD: 'FOLLOW';
+
+ASSERT_CALL: 'FACT CHECK';
+
 EQUALS: 'SO TRUE';
 
 NOT_EQUALS: 'TOTAL DISASTER';
