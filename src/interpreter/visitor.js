@@ -54,9 +54,6 @@ CustomTrumplangVisitor.prototype.defineVariable = function (name, type, value) {
 
 // Main program visitor
 CustomTrumplangVisitor.prototype.visitProgram = function (ctx) {
-  // Verify program structure
-  // 'BELIEVE ME' statement+ 'MAKE AMERICA GREAT AGAIN';
-
   // Visit all statements
   const statements = ctx.statement();
   let result;
@@ -70,20 +67,9 @@ CustomTrumplangVisitor.prototype.visitProgram = function (ctx) {
 
 // Variable declaration visitor
 CustomTrumplangVisitor.prototype.visitVariableDeclaration = function (ctx) {
-  // 'I HAVE THE BEST' dataType VARIABLE 'ABSOLUTELY' (expression | dealDeclaration)
   const dataType = this.visit(ctx.dataType());
-
-  // Extract the variable token
-  let variableName = '';
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification by ending with !
-      variableName = child.getText();
-      break;
-    }
-  }
-
+  const variableName = ctx.varName.text;
+  
   debug('Declaring variable:', variableName, 'with type:', dataType);
 
   // Verify variable naming convention (should end with !)
@@ -93,31 +79,18 @@ CustomTrumplangVisitor.prototype.visitVariableDeclaration = function (ctx) {
 
   // Check if this is a deal declaration or a regular expression
   let value;
-  let dealDeclCtx = null;
-  let expressionCtx = null;
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'DealDeclarationContext') {
-      dealDeclCtx = child;
-      break;
-    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      expressionCtx = child;
-      break;
-    }
-  }
-
-  if (dealDeclCtx) {
+  
+  if (ctx.dealDeclaration()) {
     // It's a deal declaration
     if (dataType !== 'DEAL') {
       throw new Error(`BAD DEAL! YOU DECLARED A DEAL BUT SAID IT'S TYPE ${dataType}. SAD!`);
     }
 
-    value = this.visit(dealDeclCtx);
+    value = this.visit(ctx.dealDeclaration());
     debug('  with deal structure:', value);
-  } else if (expressionCtx) {
+  } else if (ctx.expression()) {
     // It's a regular expression
-    value = this.visit(expressionCtx);
+    value = this.visit(ctx.expression());
     debug('  with value:', value);
   } else {
     throw new Error('VARIABLE DECLARATION IS A DISASTER! NEEDS A VALUE, FOLKS!');
@@ -129,81 +102,66 @@ CustomTrumplangVisitor.prototype.visitVariableDeclaration = function (ctx) {
   return value;
 };
 
-CustomTrumplangVisitor.prototype.visitConstantDeclaration = function (ctx) {
-  return this.visitChildren(ctx);
-};
-
-// Expression visitor
-CustomTrumplangVisitor.prototype.visitExpression = function (ctx) {
-  // Log the expression structure for debugging
-  debug(`Expression with ${ctx.getChildCount()} children`);
+CustomTrumplangVisitor.prototype.visitConstantDeclarationContext = function (ctx) {
+  const dataType = this.visit(ctx.dataType());
+  
+  // Get the VARIABLE token manually since it's not using the label yet
+  let variableName = '';
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Expression Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Check if this expression contains an operation
-  let hasOperator = false;
-  let operatorType = null;
-  let operatorIndex = -1;
-
-  // First pass to find any operators
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const text = child.getText ? child.getText() : '';
-
-    if (text === 'WINNING' || text === 'ENDORSING' || text === 'LOSING') {
-      hasOperator = true;
-      operatorType = text;
-      operatorIndex = i;
+    if (child && child.symbol && child.getText().endsWith('!')) {
+      // VARIABLE token identification by ending with !
+      variableName = child.getText();
       break;
     }
   }
+  
+  const value = this.visit(ctx.expression());
+  
+  debug('Declaring constant:', variableName, 'with type:', dataType, 'and value:', value);
+  
+  // Store as constant in the current scope (handle this in environment if needed)
+  this.defineVariable(variableName, dataType, value, true); // True for constant
+  
+  return value;
+};
 
-  // If this is a compound expression with an operator
-  if (hasOperator) {
-    // Identify left and right sides of the operation
-    const leftExpr = ctx.getChild(0);
-    const rightExpr = ctx.getChild(operatorIndex + 1);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitConstantDeclaration = function (ctx) {
+  return this.visitConstantDeclarationContext(ctx);
+};
 
-    // Get values from both sides
-    const leftValue = this.visit(leftExpr);
-    const rightValue = this.visit(rightExpr);
+// Expression visitor
+CustomTrumplangVisitor.prototype.visitExpressionContext = function (ctx) {
+  // Log the expression structure for debugging
+  debug(`Expression with ${ctx.getChildCount()} children`);
 
-    debug(`Operation: ${leftValue} ${operatorType} ${rightValue}`);
-
-    // Perform the operation
-    switch (operatorType) {
-      case 'WINNING':
-        // Addition for numbers
-        return leftValue + rightValue;
-
-      case 'ENDORSING':
-        // String concatenation
-        const leftStr = leftValue !== null && leftValue !== undefined ? leftValue.toString() : '';
-        const rightStr =
-          rightValue !== null && rightValue !== undefined ? rightValue.toString() : '';
-        debug(`String concatenation: "${leftStr}" + "${rightStr}" = "${leftStr + rightStr}"`);
-        return leftStr + rightStr;
-
-      case 'LOSING':
-        // Subtraction
-        return leftValue - rightValue;
-    }
+  // Simple term
+  if (ctx.getChildCount() === 1) {
+    return this.visit(ctx.term(0));
+  }
+  
+  // Has operators
+  if (ctx.PLUS()) {
+    // Addition
+    const left = this.visit(ctx.expression(0));
+    const right = this.visit(ctx.term(0));
+    return left + right;
+  } else if (ctx.STRING_CONCAT()) {
+    // String concatenation
+    const left = this.visit(ctx.expression(0));
+    const right = this.visit(ctx.term(0));
+    const leftStr = left !== null && left !== undefined ? left.toString() : '';
+    const rightStr = right !== null && right !== undefined ? right.toString() : '';
+    return leftStr + rightStr;
+  } else if (ctx.MINUS()) {
+    // Subtraction
+    const left = this.visit(ctx.expression(0));
+    const right = this.visit(ctx.term(0));
+    return left - right;
   }
 
-  // If no operators found, this is a basic expression (single term)
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'TermContext') {
-      debug('Visiting term in expression');
-      return this.visit(child);
-    }
-  }
-
-  // If we reach here, try to visit any child that we can
+  // Fall back to visiting the first child
   for (let i = 0; i < ctx.getChildCount(); i++) {
     const child = ctx.getChild(i);
     if (child && typeof this.visit === 'function') {
@@ -221,280 +179,133 @@ CustomTrumplangVisitor.prototype.visitExpression = function (ctx) {
   return null;
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitExpression = function (ctx) {
+  return this.visitExpressionContext(ctx);
+};
+
 // Print statement visitor
-CustomTrumplangVisitor.prototype.visitPrintStatement = function (ctx) {
-  // 'EVERYONE IS TALKING ABOUT' expression
+CustomTrumplangVisitor.prototype.visitPrintStatementContext = function (ctx) {
   const value = this.visit(ctx.expression());
   debug('Output:', value);
   console.log(`${value}`);
   return value;
 };
 
-// Comment visitor - just ignore
-// added to HIDDEN channel in the grammar
-// TODO remove or catch in other channel?
-CustomTrumplangVisitor.prototype.visitCommentStatement = function (ctx) {
-  // Get the comment text using child tokens
-  let comment = '';
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitPrintStatement = function (ctx) {
+  return this.visitPrintStatementContext(ctx);
+};
 
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.getText) {
-      comment += child.getText() + ' ';
-    }
-  }
-  debug('COMMENT:', comment.trim());
+// Comment visitor - just ignore
+CustomTrumplangVisitor.prototype.visitCommentStatement = function (ctx) {
   return null;
 };
 
-// Comment context visitor
-CustomTrumplangVisitor.prototype.visitCommentStatementContext = function (ctx) {
-  return this.visitCommentStatement(ctx);
+// Visit data type
+CustomTrumplangVisitor.prototype.visitDataTypeContext = function (ctx) {
+  return ctx.getText();
 };
 
-// Visit data type
+// Original data type visitor for backward compatibility
 CustomTrumplangVisitor.prototype.visitDataType = function (ctx) {
-  // Return the type name (first child is the type token)
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol) {
-      return child.getText();
-    }
-  }
-  return 'UNKNOWN_TYPE';
+  return this.visitDataTypeContext(ctx);
 };
 
 // Assert statement visitor
-CustomTrumplangVisitor.prototype.visitAssertStatement = function (ctx) {
-  // 'FACT CHECK' (expression | condition) 'SO TRUE' expression
+CustomTrumplangVisitor.prototype.visitAssertStatementContext = function (ctx) {
   debug(`Assert statement with ${ctx.getChildCount()} children`);
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Assert Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  let actualCtx = null;
-  let expectedExprCtx = null;
-  let isCondition = false;
-  let soTrueIndex = -1;
-
-  // First, find the 'SO TRUE' token to separate actual from expected
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.getText && child.getText() === 'SO TRUE') {
-      soTrueIndex = i;
-      // The next child should be the expected expression
-      if (i + 1 < ctx.getChildCount()) {
-        expectedExprCtx = ctx.getChild(i + 1);
-      }
-      break;
-    }
-  }
-
-  // Now find the actual value/condition (everything before 'SO TRUE')
-  if (soTrueIndex > 0) {
-    // Check for ConditionContext first
-    for (let i = 0; i < soTrueIndex; i++) {
-      const child = ctx.getChild(i);
-      if (child && child.constructor && child.constructor.name === 'ConditionContext') {
-        actualCtx = child;
-        isCondition = true;
-        break;
+  
+  // Get the actual value (could be from expression or condition)
+  let actual;
+  
+  if (ctx.condition()) {
+    // For condition, evaluate the condition
+    actual = this.visit(ctx.condition());
+    debug(`Evaluated condition to: ${actual}`);
+  } else if (ctx.expression().length >= 2) {
+    // For comparison between two expressions
+    // This handles cases like FACT CHECK A! SO TRUE C!
+    actual = this.visit(ctx.expression(0));
+    
+    if (ctx.EQUALS()) {
+      // Direct equality assertion
+      const expected = this.visit(ctx.expression(1));
+      debug(`Asserting direct equality: ${actual} == ${expected}`);
+      
+      if (actual == expected) {
+        return true;
+      } else {
+        throw new Error(`ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`);
       }
     }
-
-    // If no condition found, check for ExpressionContext
-    if (!actualCtx) {
-      for (let i = 0; i < soTrueIndex; i++) {
-        const child = ctx.getChild(i);
-        if (child && child.constructor && child.constructor.name === 'ExpressionContext') {
-          actualCtx = child;
-          break;
-        }
-      }
-    }
-
-    // If still no context found, try to handle special cases like variable and parenthesized conditions
-    if (!actualCtx) {
-      // Special case: handle (TRUE_VALUE! AND IT'S TRUE FALSE_VALUE!) type pattern
-      // Extract the condition expression between FACT CHECK and SO TRUE
-      let conditionText = '';
-      for (let i = 1; i < soTrueIndex; i++) {
-        // Start at 1 to skip 'FACT CHECK'
-        const child = ctx.getChild(i);
-        if (child && child.getText) {
-          conditionText += child.getText() + ' ';
-        }
-      }
-      conditionText = conditionText.trim();
-      debug(`Extracted condition text: ${conditionText}`);
-
-      // Handle different condition patterns
-      if (conditionText.startsWith('(') && conditionText.endsWith(')')) {
-        // Handle parenthesized condition
-        const innerText = conditionText.substring(1, conditionText.length - 1);
-        debug(`Inner condition text: ${innerText}`);
-
-        // Check for variable
-        if (innerText.endsWith('!')) {
-          const varName = innerText;
-          const value = this.getValue(varName);
-          debug(`Evaluating variable in assertion: ${varName} = ${value}`);
-          actual = value;
-        }
-        // Check for boolean operators
-        else if (innerText.includes("AND IT'S TRUE")) {
-          const parts = innerText.split("AND IT'S TRUE");
-          if (parts.length === 2) {
-            const leftVar = parts[0].trim();
-            const rightVar = parts[1].trim();
-
-            const leftVal = leftVar.endsWith('!')
-              ? this.getValue(leftVar)
-              : leftVar === 'VERY TRUE';
-            const rightVal = rightVar.endsWith('!')
-              ? this.getValue(rightVar)
-              : rightVar === 'VERY TRUE';
-
-            debug(`AND operation in assertion: ${leftVal} && ${rightVal}`);
-            actual = leftVal && rightVal;
-          }
-        } else if (innerText.includes('OR MAYBE')) {
-          const parts = innerText.split('OR MAYBE');
-          if (parts.length === 2) {
-            const leftVar = parts[0].trim();
-            const rightVar = parts[1].trim();
-
-            const leftVal = leftVar.endsWith('!')
-              ? this.getValue(leftVar)
-              : leftVar === 'VERY TRUE';
-            const rightVal = rightVar.endsWith('!')
-              ? this.getValue(rightVar)
-              : rightVar === 'VERY TRUE';
-
-            debug(`OR operation in assertion: ${leftVal} || ${rightVal}`);
-            actual = leftVal || rightVal;
-          }
-        }
-      }
-      // Check for WRONG operator (negation)
-      else if (conditionText.startsWith('WRONG')) {
-        const varName = conditionText.substring(5).trim(); // Remove 'WRONG '
-        if (varName.endsWith('!')) {
-          const value = this.getValue(varName);
-          debug(`NOT operation in assertion: !${varName} = ${!value}`);
-          actual = !value;
-        }
-      }
-      // Check for simple variable
-      else if (conditionText.endsWith('!')) {
-        const varName = conditionText;
-        const value = this.getValue(varName);
-        debug(`Variable in assertion: ${varName} = ${value}`);
-        actual = value;
-      }
-    } else {
-      // We have a proper context, visit it
-      actual = this.visit(actualCtx);
-    }
+  } else {
+    throw new Error('ASSERTION IS A DISASTER! NEEDS ACTUAL VALUE, FOLKS!');
   }
 
-  if (actual === undefined || expectedExprCtx === null) {
-    throw new Error('ASSERTION IS A DISASTER! NEEDS ACTUAL AND EXPECTED VALUES, FOLKS!');
-  }
+  // If we get here, we're checking against a boolean expected value
+  // Get the expected value (usually a boolean)
+  const expected = this.visit(ctx.expression(ctx.expression().length - 1));
+  debug(`Asserting boolean: ${actual} == ${expected}`);
 
-  // Get the expected value
-  const expected = this.visit(expectedExprCtx);
-
-  debug(`Asserting: ${actual} ${isCondition ? '(condition result)' : ''} == ${expected}`);
-
-  // Compare values
-  if (actual == expected) {
-    // Loose equality check, just like original Trump comparisons
+  // Compare values with type conversion for booleans
+  if (!!actual === !!expected) {
+    // Loose equality check after boolean conversion
     return true;
   } else {
     throw new Error(`ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`);
   }
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitAssertStatement = function (ctx) {
+  return this.visitAssertStatementContext(ctx);
+};
+
 // Visit term
-CustomTrumplangVisitor.prototype.visitTerm = function (ctx) {
-  // Check for multiplication: term 'BIG LEAGUE TIMES' factor
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child && child.symbol && child.getText() === 'BIG LEAGUE TIMES') {
-      const termCtx = ctx.getChild(0);
-      const factorCtx = ctx.getChild(2);
-
-      const left = this.visit(termCtx);
-      const right = this.visit(factorCtx);
-      debug(`left: ${left}, right: ${right}`);
-      return left * right;
-    }
+CustomTrumplangVisitor.prototype.visitTermContext = function (ctx) {
+  // Simple factor
+  if (ctx.getChildCount() === 1) {
+    return this.visit(ctx.factor(0));
   }
-
-  // Check for division: term 'SAD' factor
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText() === 'SAD') {
-      const termCtx = ctx.getChild(0);
-      const factorCtx = ctx.getChild(2);
-
-      const left = this.visit(termCtx);
-      const right = this.visit(factorCtx);
-
-      if (right === 0) {
-        throw new Error("THAT'S A DISASTER. YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!");
-      }
-      return left / right;
-    }
+  
+  // Multiplication
+  if (ctx.MULTIPLY()) {
+    const left = this.visit(ctx.term(0));
+    const right = this.visit(ctx.factor(0));
+    return left * right;
   }
-
-  // Check for factor (the most common case)
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'FactorContext') {
-      debug('Visiting factor in term');
-      return this.visit(child);
+  
+  // Division
+  if (ctx.DIVIDE()) {
+    const left = this.visit(ctx.term(0));
+    const right = this.visit(ctx.factor(0));
+    
+    if (right === 0) {
+      throw new Error("THAT'S A DISASTER. YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!");
     }
+    return left / right;
   }
 
   return null;
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitTerm = function (ctx) {
+  return this.visitTermContext(ctx);
+};
+
 // Assignment statement visitor
 CustomTrumplangVisitor.prototype.visitAssignmentStatement = function (ctx) {
-  // VARIABLE 'ABSOLUTELY' expression
-  let variableName = '';
-  let exprCtx = null;
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      variableName = child.getText();
-    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      exprCtx = child;
-    }
-  }
-
-  if (!variableName || !exprCtx) {
-    throw new Error('ASSIGNMENT STATEMENT IS A DISASTER! VERY SAD!');
-  }
-
-  const value = this.visit(exprCtx);
+  const variableName = ctx.varName.text;
+  const value = this.visit(ctx.expression());
+  
   debug(`Assigning ${variableName} = ${value}`);
 
   // Ensure variable exists
   const variable = this.getVariable(variableName);
   if (!variable) {
-    throw new Error(
-      `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`
-    );
+    throw new Error(`NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
   }
 
   // Update variable
@@ -503,32 +314,15 @@ CustomTrumplangVisitor.prototype.visitAssignmentStatement = function (ctx) {
   return value;
 };
 
-// Context-specific assignment statement visitor
-CustomTrumplangVisitor.prototype.visitAssignmentStatementContext = function (ctx) {
-  return this.visitAssignmentStatement(ctx);
-};
-
 // Increment visitor
 CustomTrumplangVisitor.prototype.visitIncrementStatement = function (ctx) {
-  // 'MAKE' VARIABLE 'GREATER'
-  let variableName = '';
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      variableName = child.getText();
-      break;
-    }
-  }
-
+  const variableName = ctx.varName.text;
   debug('Incrementing variable:', variableName);
 
   // Ensure variable exists
   const variable = this.getVariable(variableName);
   if (!variable) {
-    throw new Error(
-      `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`
-    );
+    throw new Error(`NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
   }
 
   // Update variable
@@ -537,32 +331,15 @@ CustomTrumplangVisitor.prototype.visitIncrementStatement = function (ctx) {
   return variable.value;
 };
 
-// Context-specific increment visitor
-CustomTrumplangVisitor.prototype.visitIncrementStatementContext = function (ctx) {
-  return this.visitIncrementStatement(ctx);
-};
-
 // Decrement visitor
 CustomTrumplangVisitor.prototype.visitDecrementStatement = function (ctx) {
-  // 'MAKE' VARIABLE 'SMALLER'
-  let variableName = '';
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      variableName = child.getText();
-      break;
-    }
-  }
-
+  const variableName = ctx.varName.text;
   debug('Decrementing variable:', variableName);
 
   // Ensure variable exists
   const variable = this.getVariable(variableName);
   if (!variable) {
-    throw new Error(
-      `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`
-    );
+    throw new Error(`NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
   }
 
   // Update variable
@@ -571,58 +348,31 @@ CustomTrumplangVisitor.prototype.visitDecrementStatement = function (ctx) {
   return variable.value;
 };
 
-// Context-specific decrement visitor
-CustomTrumplangVisitor.prototype.visitDecrementStatementContext = function (ctx) {
-  return this.visitDecrementStatement(ctx);
-};
-
 // Visit factor
-CustomTrumplangVisitor.prototype.visitFactor = function (ctx) {
+CustomTrumplangVisitor.prototype.visitFactorContext = function (ctx) {
   // Parenthesized expression
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      return this.visit(child);
-    }
+  if (ctx.expression()) {
+    return this.visit(ctx.expression());
   }
 
   // Function call
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'FunctionCallContext') {
-      return this.visit(child);
-    }
+  if (ctx.functionCall()) {
+    return this.visit(ctx.functionCall());
   }
 
   // Array access
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ArrayAccessContext') {
-      return this.visit(child);
-    }
+  if (ctx.arrayAccess()) {
+    return this.visit(ctx.arrayAccess());
   }
 
   // Deal access
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'DealAccessContext') {
-      return this.visit(child);
-    }
+  if (ctx.dealAccess()) {
+    return this.visit(ctx.dealAccess());
   }
 
-  // Variable - get the variable token
-  let varToken = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      varToken = child;
-      break;
-    }
-  }
-
-  if (varToken) {
-    const varName = varToken.getText();
+  // Variable
+  if (ctx.VARIABLE()) {
+    const varName = ctx.VARIABLE().getText();
     debug('Looking up variable:', varName);
     // Look up the variable in scope
     const value = this.getValue(varName);
@@ -635,71 +385,38 @@ CustomTrumplangVisitor.prototype.visitFactor = function (ctx) {
     throw new Error(`NOBODY KNOWS WHAT ${varName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
   }
 
-  // Literal string
-  let strToken = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().startsWith('"') && child.getText().endsWith('"')) {
-      strToken = child;
-      break;
-    }
-  }
-
-  if (strToken) {
-    const str = strToken.getText();
+  // String literal
+  if (ctx.STRING()) {
+    const str = ctx.STRING().getText();
     // Remove quotes
     return str.substring(1, str.length - 1);
   }
 
-  // Literal number
-  let numToken = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && /^[0-9]+(\.[0-9]+)?$/.test(child.getText())) {
-      numToken = child;
-      break;
-    }
+  // Number literal
+  if (ctx.NUMBER()) {
+    return parseFloat(ctx.NUMBER().getText());
   }
 
-  if (numToken) {
-    return parseFloat(numToken.getText());
-  }
-
-  // Literal boolean
-  let boolToken = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (
-      child &&
-      child.symbol &&
-      (child.getText() === 'VERY TRUE' || child.getText() === 'FAKE NEWS')
-    ) {
-      boolToken = child;
-      break;
-    }
-  }
-
-  if (boolToken) {
-    return boolToken.getText() === 'VERY TRUE';
+  // Boolean literal
+  if (ctx.BOOLEAN()) {
+    return ctx.BOOLEAN().getText() === 'VERY TRUE';
   }
 
   return null;
 };
 
-// Context-specific factor visitor
-CustomTrumplangVisitor.prototype.visitFactorContext = function (ctx) {
-  return this.visitFactor(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitFactor = function (ctx) {
+  return this.visitFactorContext(ctx);
 };
 
 // BlockStatement visitor
-CustomTrumplangVisitor.prototype.visitBlockStatement = function (ctx) {
+CustomTrumplangVisitor.prototype.visitBlockStatementContext = function (ctx) {
   debug(`Block statement with ${ctx.getChildCount()} children`);
-
-  // A block statement has OPEN_BLOCK (BELIEVE ME) + statements + CLOSE_BLOCK (YOU'RE FIRED)
-  let result;
 
   // Extract all statement nodes
   const statements = ctx.statement();
+  let result;
 
   // Execute each statement
   if (statements && statements.length > 0) {
@@ -716,405 +433,101 @@ CustomTrumplangVisitor.prototype.visitBlockStatement = function (ctx) {
   return result;
 };
 
-// Context-specific block statement visitor
-CustomTrumplangVisitor.prototype.visitBlockStatementContext = function (ctx) {
-  return this.visitBlockStatement(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitBlockStatement = function (ctx) {
+  return this.visitBlockStatementContext(ctx);
 };
 
 // If statement visitor
-CustomTrumplangVisitor.prototype.visitIfStatement = function (ctx) {
-  // 'LISTEN' condition statement elseIfStatement* elseStatement?
+CustomTrumplangVisitor.prototype.visitIfStatementContext = function (ctx) {
   debug(`If statement with ${ctx.getChildCount()} children`);
 
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  If Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Find the condition context
-  let conditionCtx = ctx.condition();
-  if (!conditionCtx) {
-    debug('No condition found in if statement');
-    return null;
-  }
-
-  // Get the statement (which might be a BlockStatement now)
-  let statementCtx = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor) {
-      if (child.constructor.name === 'BlockStatementContext') {
-        statementCtx = child;
-        break;
-      } else if (child.constructor.name === 'StatementContext') {
-        statementCtx = child;
-        break;
-      }
-    }
-  }
-
-  if (!statementCtx) {
-    debug('No statement found in if statement');
-    return null;
-  }
-
-  // Get else-if and else contexts
-  const elseIfContexts = ctx.elseIfStatement ? ctx.elseIfStatement() : [];
-  const elseCtx = ctx.elseStatement ? ctx.elseStatement() : null;
-
-  debug(
-    `Found: condition, statement${
-      elseIfContexts.length > 0 ? `, ${elseIfContexts.length} else-ifs` : ''
-    }${elseCtx ? ', else' : ''}`
-  );
-
   // Evaluate the condition
-  let conditionResult = false;
-
-  // Special handling for boolean operators
-  const conditionText = conditionCtx.getText();
-  debug('Condition text:', conditionText);
-
-  if (conditionText.includes("AND IT'S TRUE")) {
-    const parts = conditionText.split("AND IT'S TRUE");
-    if (parts.length === 2) {
-      const leftVar = parts[0].trim();
-      const rightVar = parts[1].trim();
-
-      let leftVal = null;
-      let rightVal = null;
-
-      // Resolve left part
-      if (leftVar.endsWith('!')) {
-        leftVal = this.getValue(leftVar);
-      } else if (leftVar === 'VERY TRUE') {
-        leftVal = true;
-      } else if (leftVar === 'FAKE NEWS') {
-        leftVal = false;
-      }
-
-      // Resolve right part
-      if (rightVar.endsWith('!')) {
-        rightVal = this.getValue(rightVar);
-      } else if (rightVar === 'VERY TRUE') {
-        rightVal = true;
-      } else if (rightVar === 'FAKE NEWS') {
-        rightVal = false;
-      }
-
-      if (leftVal !== null && rightVal !== null) {
-        conditionResult = leftVal && rightVal;
-        debug(`AND operation result: ${leftVal} && ${rightVal} = ${conditionResult}`);
-      }
-    }
-  } else if (conditionText.includes('OR MAYBE')) {
-    const parts = conditionText.split('OR MAYBE');
-    if (parts.length === 2) {
-      const leftVar = parts[0].trim();
-      const rightVar = parts[1].trim();
-
-      let leftVal = null;
-      let rightVal = null;
-
-      // Resolve left part
-      if (leftVar.endsWith('!')) {
-        leftVal = this.getValue(leftVar);
-      } else if (leftVar === 'VERY TRUE') {
-        leftVal = true;
-      } else if (leftVar === 'FAKE NEWS') {
-        leftVal = false;
-      }
-
-      // Resolve right part
-      if (rightVar.endsWith('!')) {
-        rightVal = this.getValue(rightVar);
-      } else if (rightVar === 'VERY TRUE') {
-        rightVal = true;
-      } else if (rightVar === 'FAKE NEWS') {
-        rightVal = false;
-      }
-
-      if (leftVal !== null && rightVal !== null) {
-        conditionResult = leftVal || rightVal;
-        debug(`OR operation result: ${leftVal} || ${rightVal} = ${conditionResult}`);
-      }
-    }
-  } else if (conditionText.startsWith('WRONG')) {
-    const varName = conditionText.substring(5).trim(); // Remove 'WRONG '
-    if (varName.endsWith('!')) {
-      const value = this.getValue(varName);
-      conditionResult = !value;
-      debug(`NOT operation result: !${varName} = ${conditionResult}`);
-    }
-  } else if (conditionText.endsWith('!')) {
-    // Simple variable as condition
-    const value = this.getValue(conditionText);
-    conditionResult = !!value;
-    debug(`Variable as condition: ${conditionText} = ${conditionResult}`);
-  } else {
-    // Standard visit of condition
-    conditionResult = this.visit(conditionCtx);
-    debug('Standard condition result:', conditionResult);
-  }
+  const conditionResult = this.visit(ctx.condition());
+  debug('Condition result:', conditionResult);
 
   // Execute the appropriate block based on condition result
   if (conditionResult) {
     // Execute the if block
     debug('Condition is TRUE, executing if-block');
-    return this.visit(statementCtx);
+    return this.visit(ctx.statement());
   } else {
     // Check else-if blocks
     debug('Condition is FALSE, checking else-if blocks');
-    for (let i = 0; i < elseIfContexts.length; i++) {
-      const elseIfResult = this.visit(elseIfContexts[i]);
-      if (elseIfResult !== undefined && elseIfResult !== null) {
-        return elseIfResult;
+    const elseIfStatements = ctx.elseIfStatement();
+    if (elseIfStatements) {
+      for (let i = 0; i < elseIfStatements.length; i++) {
+        const elseIfResult = this.visit(elseIfStatements[i]);
+        if (elseIfResult !== undefined && elseIfResult !== null) {
+          return elseIfResult;
+        }
       }
     }
 
     // Check else block
-    if (elseCtx) {
+    const elseStatement = ctx.elseStatement();
+    if (elseStatement) {
       debug('Executing else block');
-      return this.visit(elseCtx);
+      return this.visit(elseStatement);
     }
   }
 
   return null;
 };
 
-// Context-specific if statement visitor
-CustomTrumplangVisitor.prototype.visitIfStatementContext = function (ctx) {
-  return this.visitIfStatement(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitIfStatement = function (ctx) {
+  return this.visitIfStatementContext(ctx);
 };
 
 // Else if statement visitor
-CustomTrumplangVisitor.prototype.visitElseIfStatement = function (ctx) {
-  // 'PEOPLE ARE SAYING' condition statement
-
+CustomTrumplangVisitor.prototype.visitElseIfStatementContext = function (ctx) {
   debug(`Else-if statement with ${ctx.getChildCount()} children`);
 
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Else-if Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Get the condition and statement
-  let conditionCtx = ctx.condition();
-
-  if (!conditionCtx) {
-    debug('No condition found in else-if statement');
-    return null;
-  }
-
-  // Get the statement (which might be a BlockStatement now)
-  let statementCtx = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor) {
-      if (child.constructor.name === 'BlockStatementContext') {
-        statementCtx = child;
-        break;
-      } else if (child.constructor.name === 'StatementContext') {
-        statementCtx = child;
-        break;
-      }
-    }
-  }
-
-  if (!statementCtx) {
-    debug('No statement found in else-if statement');
-    return null;
-  }
-
   // Evaluate the condition
-  const conditionText = conditionCtx.getText();
-  debug('Condition text:', conditionText);
-
-  let conditionResult = false;
-
-  // Parse logic operators from the condition text
-  if (conditionText.includes("AND IT'S TRUE")) {
-    const parts = conditionText.split("AND IT'S TRUE");
-    if (parts.length === 2) {
-      const leftVar = parts[0].trim();
-      const rightVar = parts[1].trim();
-
-      let leftVal = null;
-      let rightVal = null;
-
-      // Resolve left part
-      if (leftVar.endsWith('!')) {
-        leftVal = this.getValue(leftVar);
-      } else if (leftVar === 'VERY TRUE') {
-        leftVal = true;
-      } else if (leftVar === 'FAKE NEWS') {
-        leftVal = false;
-      }
-
-      // Resolve right part
-      if (rightVar.endsWith('!')) {
-        rightVal = this.getValue(rightVar);
-      } else if (rightVar === 'VERY TRUE') {
-        rightVal = true;
-      } else if (rightVar === 'FAKE NEWS') {
-        rightVal = false;
-      }
-
-      if (leftVal !== null && rightVal !== null) {
-        conditionResult = leftVal && rightVal;
-        debug(`AND operation result: ${leftVal} && ${rightVal} = ${conditionResult}`);
-      }
-    }
-  } else if (conditionText.includes('OR MAYBE')) {
-    const parts = conditionText.split('OR MAYBE');
-    if (parts.length === 2) {
-      const leftVar = parts[0].trim();
-      const rightVar = parts[1].trim();
-
-      let leftVal = null;
-      let rightVal = null;
-
-      // Resolve left part
-      if (leftVar.endsWith('!')) {
-        leftVal = this.getValue(leftVar);
-      } else if (leftVar === 'VERY TRUE') {
-        leftVal = true;
-      } else if (leftVar === 'FAKE NEWS') {
-        leftVal = false;
-      }
-
-      // Resolve right part
-      if (rightVar.endsWith('!')) {
-        rightVal = this.getValue(rightVar);
-      } else if (rightVar === 'VERY TRUE') {
-        rightVal = true;
-      } else if (rightVar === 'FAKE NEWS') {
-        rightVal = false;
-      }
-
-      if (leftVal !== null && rightVal !== null) {
-        conditionResult = leftVal || rightVal;
-        debug(`OR operation result: ${leftVal} || ${rightVal} = ${conditionResult}`);
-      }
-    }
-  } else if (conditionText.startsWith('WRONG')) {
-    const varName = conditionText.substring(5).trim(); // Remove 'WRONG '
-    if (varName.endsWith('!')) {
-      const value = this.getValue(varName);
-      conditionResult = !value;
-      debug(`NOT operation result: !${varName} = ${conditionResult}`);
-    }
-  } else if (conditionText.endsWith('!')) {
-    // Simple variable as condition
-    const value = this.getValue(conditionText);
-    conditionResult = !!value;
-    debug(`Variable as condition: ${conditionText} = ${conditionResult}`);
-  } else {
-    // Standard visit of condition
-    conditionResult = this.visit(conditionCtx);
-    debug('Standard condition result:', conditionResult);
-  }
+  const conditionResult = this.visit(ctx.condition());
+  debug('Else-if condition result:', conditionResult);
 
   // Execute the block if condition is true
   if (conditionResult) {
     debug('Condition is TRUE, executing else-if block');
-    return this.visit(statementCtx);
+    return this.visit(ctx.statement());
   }
 
   // No condition matched
   return null;
 };
 
-// Context-specific else-if statement visitor
-CustomTrumplangVisitor.prototype.visitElseIfStatementContext = function (ctx) {
-  return this.visitElseIfStatement(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitElseIfStatement = function (ctx) {
+  return this.visitElseIfStatementContext(ctx);
 };
 
 // Else statement visitor
-CustomTrumplangVisitor.prototype.visitElseStatement = function (ctx) {
-  // 'NOBODY KNEW' statement
+CustomTrumplangVisitor.prototype.visitElseStatementContext = function (ctx) {
   debug(`Else statement with ${ctx.getChildCount()} children`);
 
-  // Get the statement (which might be a BlockStatement now)
-  let statementCtx = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor) {
-      if (child.constructor.name === 'BlockStatementContext') {
-        statementCtx = child;
-        break;
-      } else if (child.constructor.name === 'StatementContext') {
-        statementCtx = child;
-        break;
-      }
-    }
-  }
-
-  if (!statementCtx) {
-    debug('No statement found in else statement');
-    return null;
-  }
-
-  debug('Executing else block');
-
   // Execute the statement
-  return this.visit(statementCtx);
+  return this.visit(ctx.statement());
 };
 
-// Context-specific else statement visitor
-CustomTrumplangVisitor.prototype.visitElseStatementContext = function (ctx) {
-  return this.visitElseStatement(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitElseStatement = function (ctx) {
+  return this.visitElseStatementContext(ctx);
 };
 
 // While loop visitor
-CustomTrumplangVisitor.prototype.visitWhileLoop = function (ctx) {
-  // 'WE\'RE GOING TO WIN IN A LANDSLIDE' condition blockStatement
-
+CustomTrumplangVisitor.prototype.visitWhileLoopContext = function (ctx) {
   debug(`While loop with ${ctx.getChildCount()} children`);
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  While Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Get the condition
-  let conditionCtx = ctx.condition();
-  if (!conditionCtx) {
-    debug('No condition found in while loop');
-    throw new Error('WHILE LOOP IS MISSING CONDITION! SAD!');
-  }
-
-  // Get the block statement
-  let blockCtx = null;
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'BlockStatementContext') {
-      blockCtx = child;
-      break;
-    }
-  }
-
-  if (!blockCtx) {
-    debug('No block statement found in while loop');
-    throw new Error('WHILE LOOP IS MISSING BLOCK! SAD!');
-  }
-
-  debug('Found condition and block statement');
 
   try {
     let result;
     let loopCount = 0;
 
     // Loop while condition is true
-    while (this.visit(conditionCtx)) {
+    while (this.visit(ctx.condition())) {
       debug(`While loop iteration: ${++loopCount}`);
-      result = this.visit(blockCtx);
+      result = this.visit(ctx.blockStatement());
     }
 
     return result;
@@ -1127,75 +540,19 @@ CustomTrumplangVisitor.prototype.visitWhileLoop = function (ctx) {
   }
 };
 
-// Context-specific while loop visitor
-CustomTrumplangVisitor.prototype.visitWhileLoopContext = function (ctx) {
-  return this.visitWhileLoop(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitWhileLoop = function (ctx) {
+  return this.visitWhileLoopContext(ctx);
 };
 
-// For loop visitor
-CustomTrumplangVisitor.prototype.visitForLoop = function (ctx) {
-  // 'WE\'RE GOING TO WIN, WIN, WIN' 'WITH' VARIABLE 'FROM' expression 'TO' expression blockStatement
 
+// For loop visitor
+CustomTrumplangVisitor.prototype.visitForLoopContext = function (ctx) {
   debug(`For loop with ${ctx.getChildCount()} children`);
 
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  For Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Find the loop variable, expressions, and block statement
-  let loopVar = null;
-  let fromExpr = null;
-  let toExpr = null;
-  let blockCtx = null;
-
-  // Find the loop variable
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      loopVar = child.getText();
-      break;
-    }
-  }
-
-  // Find the expressions (FROM and TO)
-  const expressions = [];
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      expressions.push(child);
-    }
-  }
-
-  if (expressions.length >= 2) {
-    fromExpr = expressions[0];
-    toExpr = expressions[1];
-  }
-
-  // Find the block statement
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'BlockStatementContext') {
-      blockCtx = child;
-      break;
-    }
-  }
-
-  debug(`For loop with variable ${loopVar}`);
-
-  if (!loopVar || !fromExpr || !toExpr || !blockCtx) {
-    debug(
-      `Missing components: loopVar=${!!loopVar}, fromExpr=${!!fromExpr}, toExpr=${!!toExpr}, blockCtx=${!!blockCtx}`
-    );
-    throw new Error('FOR LOOP STRUCTURE IS A DISASTER! VERY SAD!');
-  }
-
-  // Get start and end values
-  const startValue = this.visit(fromExpr);
-  const endValue = this.visit(toExpr);
+  const loopVar = ctx.varName.text;
+  const startValue = this.visit(ctx.expression(0));
+  const endValue = this.visit(ctx.expression(1));
 
   debug(`From ${startValue} to ${endValue}`);
 
@@ -1216,7 +573,7 @@ CustomTrumplangVisitor.prototype.visitForLoop = function (ctx) {
       debug(`For loop iteration: ${loopVar} = ${i}`);
 
       // Execute the loop body (block statement)
-      result = this.visit(blockCtx);
+      result = this.visit(ctx.blockStatement());
     }
 
     return result;
@@ -1229,75 +586,18 @@ CustomTrumplangVisitor.prototype.visitForLoop = function (ctx) {
   }
 };
 
-// Context-specific for loop visitor
-CustomTrumplangVisitor.prototype.visitForLoopContext = function (ctx) {
-  return this.visitForLoop(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitForLoop = function (ctx) {
+  return this.visitForLoopContext(ctx);
 };
 
+
 // For each loop visitor
-CustomTrumplangVisitor.prototype.visitForEachLoop = function (ctx) {
-  // 'BILLIONS AND BILLIONS' VARIABLE 'YET' VARIABLE blockStatement
-
-  // Find the variables and block statement
-  let itemVar = null;
-  let arrayVar = null;
-  let blockCtx = null;
-  let foundYet = false;
-
-  debug(`ForEach loop has ${ctx.getChildCount()} children`);
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  ForEach Child ${i}: ${childType} - "${childText}"`);
-
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      if (!foundYet) {
-        itemVar = child.getText();
-      } else {
-        arrayVar = child.getText();
-      }
-    } else if (child && child.getText && child.getText() === 'YET') {
-      foundYet = true;
-    } else if (child.constructor && child.constructor.name === 'BlockStatementContext') {
-      blockCtx = child;
-    }
-  }
-
-  // If we didn't identify the variables directly, try a different approach
-  if (!itemVar || !arrayVar) {
-    for (let i = 0; i < ctx.getChildCount(); i++) {
-      const child = ctx.getChild(i);
-      if (child && child.getText && child.getText() === 'BILLIONS AND BILLIONS') {
-        if (i + 3 < ctx.getChildCount()) {
-          const itemVarChild = ctx.getChild(i + 1);
-          const yetChild = ctx.getChild(i + 2);
-          const arrayVarChild = ctx.getChild(i + 3);
-
-          if (itemVarChild && itemVarChild.getText) {
-            itemVar = itemVarChild.getText();
-          }
-
-          if (arrayVarChild && arrayVarChild.getText) {
-            arrayVar = arrayVarChild.getText();
-          }
-
-          break;
-        }
-      }
-    }
-  }
-
+CustomTrumplangVisitor.prototype.visitForEachLoopContext = function (ctx) {
+  const itemVar = ctx.varName.text;
+  const arrayVar = ctx.listName.text;
+  
   debug(`ForEach loop with item ${itemVar} from array ${arrayVar}`);
-
-  if (!itemVar || !arrayVar || !blockCtx) {
-    debug(
-      `Missing components: itemVar=${!!itemVar}, arrayVar=${!!arrayVar}, blockCtx=${!!blockCtx}`
-    );
-    throw new Error('FOREACH LOOP STRUCTURE IS A DISASTER! VERY SAD!');
-  }
 
   // Get array
   const array = this.getVariable(arrayVar);
@@ -1320,7 +620,7 @@ CustomTrumplangVisitor.prototype.visitForEachLoop = function (ctx) {
       debug(`ForEach iteration: ${itemVar} = ${item}`);
 
       // Execute the loop body (block statement)
-      result = this.visit(blockCtx);
+      result = this.visit(ctx.blockStatement());
     }
 
     return result;
@@ -1333,64 +633,29 @@ CustomTrumplangVisitor.prototype.visitForEachLoop = function (ctx) {
   }
 };
 
-// Context-specific foreach loop visitor
-CustomTrumplangVisitor.prototype.visitForEachLoopContext = function (ctx) {
-  return this.visitForEachLoop(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitForEachLoop = function (ctx) {
+  return this.visitForEachLoopContext(ctx);
 };
 
+
 // Loop break visitor
-CustomTrumplangVisitor.prototype.visitLoopBreak = function (ctx) {
-  // 'I WILL VETO!';
+CustomTrumplangVisitor.prototype.visitLoopBreakContext = function (ctx) {
   throw new Error('BREAK');
 };
 
-// Context-specific loop break visitor
-CustomTrumplangVisitor.prototype.visitLoopBreakContext = function (ctx) {
-  return this.visitLoopBreak(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitLoopBreak = function (ctx) {
+  return this.visitLoopBreakContext(ctx);
 };
 
+
 // Function declaration visitor
-CustomTrumplangVisitor.prototype.visitFunctionDeclaration = function (ctx) {
-  // 'INCREDIBLE' IDENTIFIER 'PEOPLE TELL ME' parameterList? blockStatement
-
-  // Find the identifier, parameters, and block statement
-  let paramListCtx = null;
-  let blockCtx = null;
-
-  debug(`Function declaration with ${ctx.getChildCount()} children`);
-
-  // Debug output to help understand the structure
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Function Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Get function name directly using the labeled element in the grammar
+CustomTrumplangVisitor.prototype.visitFunctionDeclarationContext = function (ctx) {
   const identifier = ctx.funcName.text;
-  debug(`Found function name: ${identifier}`);
-
-  // Find the parameter list
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ParameterListContext') {
-      paramListCtx = child;
-      debug(`Found parameter list`);
-      break;
-    }
-  }
-
-  // Find the block statement
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'BlockStatementContext') {
-      blockCtx = child;
-      debug(`Found block statement`);
-      break;
-    }
-  }
-
+  const paramListCtx = ctx.parameterList();
+  const blockCtx = ctx.blockStatement();
+  
   debug(`Declaring function: ${identifier}`);
 
   if (!identifier) {
@@ -1411,46 +676,22 @@ CustomTrumplangVisitor.prototype.visitFunctionDeclaration = function (ctx) {
   return null;
 };
 
-// Context-specific function declaration visitor
-CustomTrumplangVisitor.prototype.visitFunctionDeclarationContext = function (ctx) {
-  return this.visitFunctionDeclaration(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitFunctionDeclaration = function (ctx) {
+  return this.visitFunctionDeclarationContext(ctx);
 };
 
 // Parameter list visitor
-CustomTrumplangVisitor.prototype.visitParameterList = function (ctx) {
-  // dataType VARIABLE ('AND' dataType VARIABLE)*
+CustomTrumplangVisitor.prototype.visitParameterListContext = function (ctx) {
   const parameters = [];
-
-  debug(`ParameterList with ${ctx.getChildCount()} children`);
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const type = child.symbol
-      ? `Token[${child.symbol.type}]:${child.getText()}`
-      : child.ruleIndex !== undefined
-      ? `Rule[${child.ruleIndex}]`
-      : 'Unknown';
-    debug(`  Child ${i}: ${type}`);
-  }
-
-  // Extract information directly from the token stream
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child && child.ruleIndex === 5) {
-      // DataType rule
-      const dataType = this.visit(child);
-
-      // The next element should be a variable
-      const varNode = ctx.getChild(i + 1);
-      if (varNode && varNode.symbol && varNode.symbol.type === 59) {
-        // VARIABLE token
-        const varName = varNode.getText();
-        parameters.push({ type: dataType, name: varName });
-        debug(`Found parameter: ${varName} of type ${dataType}`);
-
-        // Skip the variable and potentially the 'AND' token
-        i += 2;
-      }
+  
+  // Use the labeled elements paramName from the grammar
+  if (ctx.paramName && ctx.paramName.length > 0) {
+    for (let i = 0; i < ctx.paramName.length; i++) {
+      const paramName = ctx.paramName[i].text;
+      const dataType = this.visit(ctx.dataType(i));
+      parameters.push({ type: dataType, name: paramName });
+      debug(`Found parameter: ${paramName} of type ${dataType}`);
     }
   }
 
@@ -1458,61 +699,25 @@ CustomTrumplangVisitor.prototype.visitParameterList = function (ctx) {
   return parameters;
 };
 
-// Context-specific parameter list visitor
-CustomTrumplangVisitor.prototype.visitParameterListContext = function (ctx) {
-  return this.visitParameterList(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitParameterList = function (ctx) {
+  return this.visitParameterListContext(ctx);
 };
 
 // Return statement visitor
-CustomTrumplangVisitor.prototype.visitReturnStatement = function (ctx) {
-  // 'AND I MEAN THAT' expression
-  let exprCtx = null;
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child.ruleIndex === 28) {
-      // expression rule index
-      exprCtx = child;
-      break;
-    }
-  }
-
-  if (exprCtx) {
-    return { isReturn: true, value: this.visit(exprCtx) };
-  }
-
-  return { isReturn: true, value: null };
-};
-
-// Context-specific return statement visitor
 CustomTrumplangVisitor.prototype.visitReturnStatementContext = function (ctx) {
-  return this.visitReturnStatement(ctx);
+  return { isReturn: true, value: this.visit(ctx.expression()) };
 };
+
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitReturnStatement = function (ctx) {
+  return this.visitReturnStatementContext(ctx);
+};
+
 
 // Function call visitor
-CustomTrumplangVisitor.prototype.visitFunctionCall = function (ctx) {
-  // 'I CALL UPON' IDENTIFIER 'PEOPLE TELL ME' argumentList?
-  let argListCtx = null;
-  let argVars = [];
-
-  // Get function name directly using the labeled element in the grammar
+CustomTrumplangVisitor.prototype.visitFunctionCallContext = function (ctx) {
   const identifier = ctx.funcName.text;
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    debug(child?.constructor?.name);
-
-    if (child && child.constructor && child.constructor.name === 'ArgumentListContext') {
-      // argumentList rule index
-      argListCtx = child;
-    } else if (child && child.symbol && child.symbol.type === 59) {
-      // VARIABLE token type directly in call
-      argVars.push(child.getText());
-    }
-  }
-
   debug(`Calling function: ${identifier}`);
 
   if (!identifier) {
@@ -1534,19 +739,8 @@ CustomTrumplangVisitor.prototype.visitFunctionCall = function (ctx) {
   try {
     // Process arguments
     let args = [];
-    if (argListCtx) {
-      args = this.visitArgumentList(argListCtx);
-    } else if (argVars.length > 0) {
-      // If we have direct variable args but no argListCtx
-      for (const varName of argVars) {
-        const value = envUtils.getValue(previousScope, varName);
-        if (value === null) {
-          throw new Error(
-            `NOBODY KNOWS WHAT ${varName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`
-          );
-        }
-        args.push(value);
-      }
+    if (ctx.argumentList()) {
+      args = this.visitArgumentList(ctx.argumentList());
     }
 
     debug(`Function args:`, args);
@@ -1587,151 +781,68 @@ CustomTrumplangVisitor.prototype.visitFunctionCall = function (ctx) {
   }
 };
 
-// Context-specific function call visitor
-CustomTrumplangVisitor.prototype.visitFunctionCallContext = function (ctx) {
-  return this.visitFunctionCall(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitFunctionCall = function (ctx) {
+  return this.visitFunctionCallContext(ctx);
 };
 
 // Argument list visitor
-CustomTrumplangVisitor.prototype.visitArgumentList = function (ctx) {
-  // expression ('AND' expression)*
+CustomTrumplangVisitor.prototype.visitArgumentListContext = function (ctx) {
   const args = [];
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child.ruleIndex === 27) {
-      // expression rule index
-      args.push(this.visit(child));
+  const expressions = ctx.expression();
+  
+  if (expressions) {
+    for (let i = 0; i < expressions.length; i++) {
+      args.push(this.visit(expressions[i]));
     }
   }
 
   return args;
 };
 
-// Context-specific argument list visitor
-CustomTrumplangVisitor.prototype.visitArgumentListContext = function (ctx) {
-  return this.visitArgumentList(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitArgumentList = function (ctx) {
+  return this.visitArgumentListContext(ctx);
 };
 
 // Condition visitor
-CustomTrumplangVisitor.prototype.visitCondition = function (ctx) {
+CustomTrumplangVisitor.prototype.visitConditionContext = function (ctx) {
   debug(`Condition with ${ctx.getChildCount()} children`);
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Condition Child ${i}: ${childType} - "${childText}"`);
+
+  // NOT operator
+  if (ctx.NOT()) {
+    return !this.visit(ctx.condition(0));
+  }
+  
+  // AND operator
+  if (ctx.AND()) {
+    return this.visit(ctx.condition(0)) && this.visit(ctx.condition(1));
+  }
+  
+  // OR operator
+  if (ctx.OR()) {
+    return this.visit(ctx.condition(0)) || this.visit(ctx.condition(1));
   }
 
-  // Handle negation: 'WRONG' condition
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.getText && child.getText() === 'WRONG') {
-      debug('Found WRONG operator (NOT)');
-      // Get the operand (variable or expression)
-      let operandCtx = null;
-      for (let j = i + 1; j < ctx.getChildCount(); j++) {
-        const nextChild = ctx.getChild(j);
-        if (
-          nextChild &&
-          ((nextChild.symbol && nextChild.getText().endsWith('!')) || // Variable
-            (nextChild.constructor && nextChild.constructor.name === 'ExpressionContext') ||
-            (nextChild.constructor && nextChild.constructor.name === 'ConditionContext'))
-        ) {
-          operandCtx = nextChild;
-          break;
-        }
-      }
-
-      if (operandCtx) {
-        const innerResult = this.visit(operandCtx);
-        debug(`  NOT operation: !${innerResult} = ${!innerResult}`);
-        return !innerResult;
-      }
-    }
+  // Simple variable as condition
+  if (ctx.condVar) {
+    const varName = ctx.condVar.text;
+    const value = this.getValue(varName);
+    debug(`Variable as condition: ${varName} = ${value}`);
+    return !!value;
   }
 
-  // Handle AND: expression 'AND IT\'S TRUE' expression
-  let foundAnd = false;
-  let leftCtx = null;
-  let rightCtx = null;
-
-  // Look for the AND operator
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.getText && child.getText() === "AND IT'S TRUE") {
-      foundAnd = true;
-      // Find left and right operands
-      if (i > 0) leftCtx = ctx.getChild(i - 1);
-      if (i + 1 < ctx.getChildCount()) rightCtx = ctx.getChild(i + 1);
-      break;
-    }
+  // Boolean literal as condition
+  if (ctx.condBool) {
+    return ctx.condBool.text === 'VERY TRUE';
   }
 
-  if (foundAnd && leftCtx && rightCtx) {
-    debug('Found AND operator');
-    const leftResult = this.visit(leftCtx);
-    const rightResult = this.visit(rightCtx);
-    debug(`  AND operation: ${leftResult} && ${rightResult} = ${leftResult && rightResult}`);
-    return leftResult && rightResult;
-  }
-
-  // Handle OR: expression 'OR MAYBE' expression
-  let foundOr = false;
-  leftCtx = null;
-  rightCtx = null;
-
-  // Look for the OR operator
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.getText && child.getText() === 'OR MAYBE') {
-      foundOr = true;
-      // Find left and right operands
-      if (i > 0) leftCtx = ctx.getChild(i - 1);
-      if (i + 1 < ctx.getChildCount()) rightCtx = ctx.getChild(i + 1);
-      break;
-    }
-  }
-
-  if (foundOr && leftCtx && rightCtx) {
-    debug('Found OR operator');
-    const leftResult = this.visit(leftCtx);
-    const rightResult = this.visit(rightCtx);
-    debug(`  OR operation: ${leftResult} || ${rightResult} = ${leftResult || rightResult}`);
-    return leftResult || rightResult;
-  }
-
-  // Handle comparison: expression comparison expression
-  // Look for a comparison operator
-  let exprCount = 0;
-  let comparisonCtx = null;
-  let exprs = [];
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      exprs.push(child);
-      exprCount++;
-    } else if (child.constructor && child.constructor.name === 'ComparisonContext') {
-      comparisonCtx = child;
-    }
-  }
-
-  if (comparisonCtx && exprCount === 2) {
-    const left = this.visit(exprs[0]);
-    const right = this.visit(exprs[1]);
-
-    // Get the comparison operator
-    let operator = null;
-    for (let i = 0; i < comparisonCtx.getChildCount(); i++) {
-      const opChild = comparisonCtx.getChild(i);
-      if (opChild && opChild.symbol) {
-        operator = opChild.getText();
-        break;
-      }
-    }
-
+  // Comparison expression
+  if (ctx.expression() && ctx.expression().length >= 2 && ctx.comparison()) {
+    const left = this.visit(ctx.expression(0));
+    const right = this.visit(ctx.expression(1));
+    const operator = ctx.comparison().getText();
+    
     debug(`Comparing: ${left} ${operator} ${right}`);
 
     switch (operator) {
@@ -1752,208 +863,35 @@ CustomTrumplangVisitor.prototype.visitCondition = function (ctx) {
     }
   }
 
-  // Check if we have a single variable as the condition
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // It's a variable
-      const varName = child.getText();
-      const value = this.getValue(varName);
-      debug(`Variable as condition: ${varName} = ${value}`);
-      return !!value; // Convert to boolean
-    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      // It's an expression
-      const value = this.visit(child);
-      debug(`Expression as condition: ${value}`);
-      return !!value; // Convert to boolean
-    }
-  }
-
-  // If we reach here without finding an operator and operands, let's try
-  // to interpret the entire context as an expression or raw text
-  try {
-    const rawText = ctx.getText();
-    debug(`Raw condition text: ${rawText}`);
-
-    if (rawText === 'VERY TRUE') return true;
-    if (rawText === 'FAKE NEWS') return false;
-
-    // Try to evaluate as a combined text
-    if (rawText.includes('WRONG')) {
-      // Find the variable name after WRONG
-      const variablePart = rawText.split('WRONG')[1].trim();
-      if (variablePart.endsWith('!')) {
-        const varValue = this.getValue(variablePart);
-        debug(`NOT operation on variable: !${variablePart} = ${!varValue}`);
-        return !varValue;
-      }
-    }
-
-    if (rawText.includes("AND IT'S TRUE")) {
-      const parts = rawText.split("AND IT'S TRUE");
-      if (parts.length === 2) {
-        const leftPart = parts[0].trim();
-        const rightPart = parts[1].trim();
-
-        let leftValue = null;
-        let rightValue = null;
-
-        // Try to resolve the left part
-        if (leftPart.endsWith('!')) {
-          leftValue = this.getValue(leftPart);
-        } else if (leftPart === 'VERY TRUE') {
-          leftValue = true;
-        } else if (leftPart === 'FAKE NEWS') {
-          leftValue = false;
-        }
-
-        // Try to resolve the right part
-        if (rightPart.endsWith('!')) {
-          rightValue = this.getValue(rightPart);
-        } else if (rightPart === 'VERY TRUE') {
-          rightValue = true;
-        } else if (rightPart === 'FAKE NEWS') {
-          rightValue = false;
-        }
-
-        if (leftValue !== null && rightValue !== null) {
-          debug(
-            `AND operation from text: ${leftValue} && ${rightValue} = ${leftValue && rightValue}`
-          );
-          return leftValue && rightValue;
-        }
-      }
-    }
-
-    if (rawText.includes('OR MAYBE')) {
-      const parts = rawText.split('OR MAYBE');
-      if (parts.length === 2) {
-        const leftPart = parts[0].trim();
-        const rightPart = parts[1].trim();
-
-        let leftValue = null;
-        let rightValue = null;
-
-        // Try to resolve the left part
-        if (leftPart.endsWith('!')) {
-          leftValue = this.getValue(leftPart);
-        } else if (leftPart === 'VERY TRUE') {
-          leftValue = true;
-        } else if (leftPart === 'FAKE NEWS') {
-          leftValue = false;
-        }
-
-        // Try to resolve the right part
-        if (rightPart.endsWith('!')) {
-          rightValue = this.getValue(rightPart);
-        } else if (rightPart === 'VERY TRUE') {
-          rightValue = true;
-        } else if (rightPart === 'FAKE NEWS') {
-          rightValue = false;
-        }
-
-        if (leftValue !== null && rightValue !== null) {
-          debug(
-            `OR operation from text: ${leftValue} || ${rightValue} = ${leftValue || rightValue}`
-          );
-          return leftValue || rightValue;
-        }
-      }
-    }
-  } catch (e) {
-    debug(`Error trying to interpret raw condition: ${e.message}`);
-  }
-
   return false;
 };
 
-// Context-specific condition visitor
-CustomTrumplangVisitor.prototype.visitConditionContext = function (ctx) {
-  return this.visitCondition(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitCondition = function (ctx) {
+  return this.visitConditionContext(ctx);
 };
 
 // Comparison visitor
-CustomTrumplangVisitor.prototype.visitComparison = function (ctx) {
-  // Return the comparison operator
+CustomTrumplangVisitor.prototype.visitComparisonContext = function (ctx) {
   return ctx.getText();
 };
 
-// Context-specific comparison visitor
-CustomTrumplangVisitor.prototype.visitComparisonContext = function (ctx) {
-  return this.visitComparison(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitComparison = function (ctx) {
+  return this.visitComparisonContext(ctx);
 };
 
 // Array declaration visitor
 CustomTrumplangVisitor.prototype.visitArrayDeclaration = function (ctx) {
-  // 'BUILD THE WALL' VARIABLE 'AND MEXICO WILL PAY FOR IT' arrayElements?
-  let arrayName = null;
-  let arrayElementsCtx = null;
-
-  // Debug the array declaration structure
-  debug(`Array declaration with ${ctx.getChildCount()} children`);
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Array Child ${i}: ${childType} - "${childText}"`);
-  }
-
-  // Find the array name (variable) and elements
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      arrayName = child.getText();
-      debug(`  Found array name: ${arrayName}`);
-    } else if (child.constructor && child.constructor.name === 'ArrayElementsContext') {
-      arrayElementsCtx = child;
-      debug(`  Found array elements context`);
-    }
-  }
-
-  // If we couldn't find the array name directly, look at the raw text
-  if (!arrayName) {
-    const text = ctx.getText();
-    debug(`  Raw array declaration text: ${text}`);
-
-    // Try to extract the variable name using regex
-    const match = /BUILD THE WALL ([A-Z0-9_]+!)/.exec(text);
-    if (match && match[1]) {
-      arrayName = match[1];
-      debug(`  Extracted array name from text: ${arrayName}`);
-    }
-  }
-
+  const arrayName = ctx.arrayName.text;
   debug(`Declaring array: ${arrayName}`);
-
-  if (!arrayName) {
-    throw new Error('ARRAY DECLARATION IS A DISASTER! NEEDS A NAME, FOLKS!');
-  }
 
   // Create empty array
   let arrayValue = [];
 
   // Populate array if elements are provided
-  if (arrayElementsCtx) {
-    arrayValue = this.visit(arrayElementsCtx);
-  } else {
-    // Try to extract elements directly from the text if we can't get them from context
-    const text = ctx.getText();
-    const pattern = /AND MEXICO WILL PAY FOR IT\s+(.+)$/;
-    const match = pattern.exec(text);
-
-    if (match && match[1]) {
-      // Split by PREVAILS to get elements
-      const elements = match[1].split(/PREVAILS/);
-      for (const element of elements) {
-        const trimmed = element.trim();
-        if (/^\d+$/.test(trimmed)) {
-          arrayValue.push(parseInt(trimmed, 10));
-        }
-      }
-      debug(`  Extracted ${arrayValue.length} elements directly from text`);
-    }
+  if (ctx.arrayElements()) {
+    arrayValue = this.visit(ctx.arrayElements());
   }
 
   debug(`Array ${arrayName} has ${arrayValue.length} elements:`, arrayValue);
@@ -1965,96 +903,28 @@ CustomTrumplangVisitor.prototype.visitArrayDeclaration = function (ctx) {
 };
 
 // Array elements visitor
-CustomTrumplangVisitor.prototype.visitArrayElements = function (ctx) {
-  // expression ('PREVAILS' expression)*
+CustomTrumplangVisitor.prototype.visitArrayElementsContext = function (ctx) {
   const elements = [];
-
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-
-    if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      elements.push(this.visit(child));
+  const expressions = ctx.expression();
+  
+  if (expressions) {
+    for (let i = 0; i < expressions.length; i++) {
+      elements.push(this.visit(expressions[i]));
     }
   }
 
   return elements;
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitArrayElements = function (ctx) {
+  return this.visitArrayElementsContext(ctx);
+};
+
 // Array access visitor
-CustomTrumplangVisitor.prototype.visitArrayAccess = function (ctx) {
-  // VARIABLE 'SECTION' expression
-  let arrayName = null;
-  let indexExprCtx = null;
-
-  // Debug the array access structure
-  debug(`Array access with ${ctx.getChildCount()} children`);
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Array access child ${i}: ${childType} - "${childText}"`);
-
-    if (child && child.symbol && child.getText().endsWith('!')) {
-      // VARIABLE token identification
-      arrayName = child.getText();
-      debug(`  Found array name: ${arrayName}`);
-    } else if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      indexExprCtx = child;
-      debug(`  Found array index expression`);
-    }
-  }
-
-  // If we couldn't find the parts directly, try parsing the text
-  if (!arrayName || !indexExprCtx) {
-    const text = ctx.getText();
-    debug(`  Raw array access text: ${text}`);
-
-    // Try to extract the array name and index
-    const match = /^([A-Z0-9_]+!)SECTION(.+)$/.exec(text);
-    if (match) {
-      if (!arrayName && match[1]) {
-        arrayName = match[1];
-        debug(`  Extracted array name from text: ${arrayName}`);
-      }
-
-      // Try to extract the index if it's a simple number
-      if (!indexExprCtx && /^\d+$/.test(match[2])) {
-        const index = parseInt(match[2], 10);
-        // Get the array
-        const array = this.getVariable(arrayName);
-        if (array && Array.isArray(array.value)) {
-          debug(`  Extracted direct index: ${index}`);
-          debug(`Accessing ${arrayName}[${index}] = ${array.value[index]}`);
-          return array.value[index];
-        }
-      }
-    }
-  }
-
-  // Find the index expression directly in the children
-  if (!indexExprCtx) {
-    for (let i = 0; i < ctx.getChildCount(); i++) {
-      const child = ctx.getChild(i);
-      if (child.getText() === 'SECTION' && i + 1 < ctx.getChildCount()) {
-        const nextChild = ctx.getChild(i + 1);
-        if (nextChild && /^\d+$/.test(nextChild.getText())) {
-          const index = parseInt(nextChild.getText(), 10);
-          // Get the array
-          const array = this.getVariable(arrayName);
-          if (array && Array.isArray(array.value)) {
-            debug(`  Found direct index after SECTION: ${index}`);
-            debug(`Accessing ${arrayName}[${index}] = ${array.value[index]}`);
-            return array.value[index];
-          }
-        }
-      }
-    }
-  }
-
-  if (!arrayName || !indexExprCtx) {
-    throw new Error('ARRAY ACCESS IS A DISASTER! NEEDS ARRAY NAME AND INDEX, FOLKS!');
-  }
-
+CustomTrumplangVisitor.prototype.visitArrayAccessContext = function (ctx) {
+  const arrayName = ctx.arrayName.text;
+  
   // Get the array
   const array = this.getVariable(arrayName);
   if (!array || !Array.isArray(array.value)) {
@@ -2062,8 +932,9 @@ CustomTrumplangVisitor.prototype.visitArrayAccess = function (ctx) {
   }
 
   // Get the index
-  const index = this.visit(indexExprCtx);
+  const index = this.visit(ctx.expression());
   debug(`Trying to access array index ${index} of array with length ${array.value.length}`);
+  
   if (typeof index !== 'number' || index < 0 || index >= array.value.length) {
     throw new Error(`ILLEGAL IMMIGRATION ATTEMPT! INDEX ${index} IS OUTSIDE THE WALL BOUNDARIES!`);
   }
@@ -2072,240 +943,46 @@ CustomTrumplangVisitor.prototype.visitArrayAccess = function (ctx) {
   return array.value[index];
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitArrayAccess = function (ctx) {
+  return this.visitArrayAccessContext(ctx);
+};
+
 // Deal field visitor
-CustomTrumplangVisitor.prototype.visitDealField = function (ctx) {
-  // dataType VARIABLE 'ABSOLUTELY' (expression | dealDeclaration)
-  let fieldType = null;
-  let fieldName = null;
-  let valueExprCtx = null;
-  let dealDeclCtx = null;
-
-  debug(`Deal field with ${ctx.getChildCount()} children`); // Debug only
-
-  // First, find the data type and field name
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Field Child ${i}: ${childType} - "${childText}"`);
-    // debug(child);
-
-    if (child.constructor && child.constructor.name === 'DataTypeContext') {
-      fieldType = this.visit(child);
-      debug(`  Found field type: ${fieldType}`);
-    } else if (child && child.symbol && child.symbol.type === 61) {
-      // VARIABLE token type
-      fieldName = child.getText();
-      debug(`  Found field name: ${fieldName}`);
-    }
-  }
+CustomTrumplangVisitor.prototype.visitDealFieldContext = function (ctx) {
+  const fieldType = this.visit(ctx.dataType());
+  const fieldName = ctx.fieldName.text;
+  
+  debug(`Deal field with type ${fieldType} and name ${fieldName}`);
 
   // Make sure we have the required field type and name
   if (!fieldType || !fieldName) {
     throw new Error('DEAL FIELD IS A DISASTER! NEEDS TYPE AND NAME, FOLKS!');
   }
 
-  // Special handling for DEAL type fields with nested structures
-  if (fieldType === 'DEAL') {
-    // For nested deals, we need to construct a simple representation manually
-    // with hardcoded field type mapping for the most common example
-    let nestedDealText = '';
-
-    debug('Creating manual nested deal for field:', fieldName);
-
-    if (fieldName === 'ADDRESS!') {
-      return {
-        name: fieldName,
-        type: fieldType,
-        value: {
-          'STREET!': { type: 'TWEET', value: '1600 PENNSYLVANIA AVE' },
-          'CITY!': { type: 'TWEET', value: 'WASHINGTON' },
-          'STATE!': { type: 'TWEET', value: 'DC' },
-        },
-      };
-    } else if (fieldName === 'CEO!') {
-      return {
-        name: fieldName,
-        type: fieldType,
-        value: {
-          'NAME!': { type: 'TWEET', value: 'DONALD' },
-          'AGE!': { type: 'HUGE', value: 70 },
-        },
-      };
-    } else if (fieldName === 'HQ!') {
-      return {
-        name: fieldName,
-        type: fieldType,
-        value: {
-          'STREET!': { type: 'TWEET', value: '725 5TH AVE' },
-          'CITY!': { type: 'TWEET', value: 'NEW YORK' },
-          'STATE!': { type: 'TWEET', value: 'NY' },
-        },
-      };
-    }
-
-    // Try to parse it more generally (for other nested deals)
-    let openParenCount = 0;
-    let inNestedDeal = false;
-
-    // Find the value text after 'ABSOLUTELY'
-    for (let i = 0; i < ctx.getChildCount(); i++) {
-      const child = ctx.getChild(i);
-      if (child && child.getText && child.getText() === 'ABSOLUTELY') {
-        // Found the start point, now collect all text until the end
-        for (let j = i + 1; j < ctx.getChildCount(); j++) {
-          const valueChild = ctx.getChild(j);
-          if (valueChild && valueChild.getText) {
-            const text = valueChild.getText();
-
-            // Check for a nested deal start
-            if (text.includes('(')) {
-              inNestedDeal = true;
-              openParenCount++;
-            }
-
-            // Add the text to our nested deal
-            nestedDealText += text;
-
-            // Check for nested deal end
-            if (text.includes(')!!')) {
-              openParenCount--;
-              if (openParenCount === 0) {
-                inNestedDeal = false;
-                break;
-              }
-            }
-          }
-        }
-        break;
-      }
-    }
-
-    if (inNestedDeal || nestedDealText === '') {
-      debug('Failed to parse nested deal structure');
-    } else {
-      debug(`Found nested deal: ${nestedDealText}`);
-
-      // Create a mini-parser for the nested deal
-      // Parse fields from the nested deal text
-      const fields = [];
-      let currentField = '';
-      let inDealField = false;
-      let currentType = '';
-      let currentName = '';
-      let currentValue = '';
-      let inValue = false;
-
-      // Strip the outer parentheses and !!
-      const cleanedText = nestedDealText.substring(1, nestedDealText.length - 3);
-
-      // Split by & for multiple fields
-      const fieldTexts = cleanedText.split('&').map(f => f.trim());
-
-      debug(`Parsed ${fieldTexts.length} nested fields:`, fieldTexts);
-
-      // Process each field
-      for (const fieldText of fieldTexts) {
-        // Extract field components
-        const parts = fieldText.split('ABSOLUTELY');
-
-        if (parts.length === 2) {
-          // First part has type and name
-          const typeAndName = parts[0].trim();
-
-          // Find the space between type and name
-          const lastSpace = typeAndName.lastIndexOf(' ');
-          if (lastSpace !== -1) {
-            currentType = typeAndName.substring(0, lastSpace).trim();
-            currentName = typeAndName.substring(lastSpace + 1).trim();
-            currentValue = parts[1].trim();
-
-            debug(
-              `  Nested field ${currentName} of type ${currentType} with value: ${currentValue}`
-            );
-
-            // Process the value based on type
-            let processedValue;
-
-            switch (currentType) {
-              case 'HUGE':
-                processedValue = parseInt(currentValue, 10);
-                break;
-              case 'BIGLY':
-                processedValue = parseFloat(currentValue);
-                break;
-              case 'SUPPORT':
-                processedValue = currentValue === 'VERY TRUE';
-                break;
-              case 'TWEET':
-                // Remove quotes from string
-                processedValue = currentValue.substring(1, currentValue.length - 1);
-                break;
-              default:
-                processedValue = currentValue;
-            }
-
-            fields.push({
-              name: currentName,
-              type: currentType,
-              value: processedValue,
-            });
-          }
-        }
-      }
-
-      // Create the nested deal object
-      const nestedDeal = {};
-      for (const field of fields) {
-        nestedDeal[field.name] = { type: field.type, value: field.value };
-      }
-
-      debug(`Created nested deal with ${fields.length} fields:`, nestedDeal);
-      return { name: fieldName, type: fieldType, value: nestedDeal };
-    }
-  }
-
-  // Regular field processing (for non-DEAL types or if nested deal parsing failed)
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child.constructor && child.constructor.name === 'ExpressionContext') {
-      valueExprCtx = child;
-      debug(`  Found value expression`);
-    }
-  }
-
-  if (!valueExprCtx && fieldType !== 'DEAL') {
-    throw new Error('DEAL FIELD IS A DISASTER! NEEDS A VALUE, FOLKS!');
-  }
-
-  // It's a regular value
-  if (valueExprCtx) {
-    const value = this.visit(valueExprCtx);
-    debug(`  Field ${fieldName} has value: ${value}`);
-    return { name: fieldName, type: fieldType, value: value };
-  }
-
-  // If we reach here, we failed to parse the field properly
-  throw new Error(`BAD DEAL FIELD! COULDN'T PARSE ${fieldName}. SAD!`);
+  // Get the value
+  const value = this.visit(ctx.expression());
+  debug(`Field ${fieldName} has value: ${value}`);
+  
+  return { name: fieldName, type: fieldType, value: value };
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitDealField = function (ctx) {
+  return this.visitDealFieldContext(ctx);
+};
+
+
 // Deal declaration visitor
-CustomTrumplangVisitor.prototype.visitDealDeclaration = function (ctx) {
-  // '(' dealField ('&' dealField)* ')!!'
+CustomTrumplangVisitor.prototype.visitDealDeclarationContext = function (ctx) {
+  const dealFields = ctx.dealField();
   const fields = [];
+  
+  debug(`Deal declaration with ${dealFields ? dealFields.length : 0} fields`);
 
-  debug(`Deal declaration with ${ctx.getChildCount()} children`); // Debug only
-
-  // Debug dump of all child types
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    const childType = child.constructor ? child.constructor.name : 'unknown';
-    const childText = child.getText ? child.getText() : 'no text';
-    debug(`  Child ${i}: ${childType} - "${childText}"`);
-
-    if (child.constructor && child.constructor.name === 'DealFieldContext') {
-      debug(`  Processing deal field at index ${i}`);
-      fields.push(this.visit(child));
+  if (dealFields) {
+    for (let i = 0; i < dealFields.length; i++) {
+      fields.push(this.visit(dealFields[i]));
     }
   }
 
@@ -2313,7 +990,7 @@ CustomTrumplangVisitor.prototype.visitDealDeclaration = function (ctx) {
   const dealObj = {};
   for (const field of fields) {
     const fieldName = field.name;
-    debug(`  Adding field ${fieldName} with value:`, field.value);
+    debug(`Adding field ${fieldName} with value:`, field.value);
     dealObj[fieldName] = { type: field.type, value: field.value };
   }
 
@@ -2321,198 +998,162 @@ CustomTrumplangVisitor.prototype.visitDealDeclaration = function (ctx) {
   return dealObj;
 };
 
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitDealDeclaration = function (ctx) {
+  return this.visitDealDeclarationContext(ctx);
+};
+
+
 // Deal access visitor
-CustomTrumplangVisitor.prototype.visitDealAccess = function (ctx) {
-  // VARIABLE 'FOLLOW' VARIABLE
-  let dealName = null;
-  let fieldName = null;
-
-  debug(`Deal access with ${ctx.getChildCount()} children`); // Debug only
-
-  // Parse the VARIABLE tokens
-  let variables = [];
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child && child.symbol && child.symbol.type === 61) {
-      // VARIABLE token type
-      variables.push(child.getText());
-    }
-  }
-
-  if (variables.length < 2) {
-    throw new Error('DEAL ACCESS IS A DISASTER! NEEDS DEAL NAME AND FIELD, FOLKS!');
-  }
-
-  // First variable is the deal name
-  dealName = variables[0];
-  // Second variable is the field name
-  fieldName = variables[1];
-
+CustomTrumplangVisitor.prototype.visitDealAccessContext = function (ctx) {
+  const dealName = ctx.dealName.text;
+  const fieldName = ctx.fieldName.text;
+  
   debug(`Looking for deal ${dealName} with field ${fieldName}`);
 
   // Get the deal structure
   const deal = this.getVariable(dealName);
-  debug(`Deal variable:`, deal);
-
+  
   if (!deal || typeof deal.value !== 'object') {
     throw new Error(`${dealName} IS NOT A DEAL STRUCTURE. BAD DEAL!`);
   }
 
   // Get the field
-  debug(`Deal value:`, deal.value);
-  debug(`Available fields:`, Object.keys(deal.value));
-
   if (!deal.value[fieldName]) {
     throw new Error(`THE DEAL DOESN'T HAVE THIS TERM: ${fieldName}. WORST DEAL EVER!`);
   }
 
-  let result = deal.value[fieldName].value;
-
-  // Handle nested deal field access (e.g., PERSON! FOLLOW ADDRESS! FOLLOW CITY!)
-  // Check if the field is itself a deal structure
-  if (deal.value[fieldName] && deal.value[fieldName].type === 'DEAL') {
-    // We have a deal field, check if we need to access a field within it
-    // Get the raw text to see if there's a chain of FOLLOW tokens
-    let fullText = '';
-    try {
-      // Try to get the full text from the token stream
-      fullText = ctx.start.getInputStream().getText(ctx.start.start, ctx.stop.stop);
-    } catch (e) {
-      // If that fails, use another method
-      fullText = ctx.getText();
-    }
-
-    debug(`Full access text: ${fullText}`);
-    let followCount = (fullText.match(/FOLLOW/g) || []).length;
-
-    if (followCount > 1 || variables.length > 2) {
-      // We have a nested field access pattern
-
-      // First check if we have a special access pattern: PERSON! FOLLOW ADDRESS! FOLLOW CITY!
-      if (fieldName === 'ADDRESS!' && variables.length > 2) {
-        let nestedFieldName = variables[2];
-
-        // Check if the nested field exists in our structure
-        const nestedDeal = deal.value[fieldName].value;
-
-        if (nestedDeal && nestedDeal[nestedFieldName]) {
-          result = nestedDeal[nestedFieldName].value;
-          debug(`Accessing nested field ${nestedFieldName} in ${fieldName} = ${result}`);
-        } else {
-          throw new Error(
-            `THE NESTED DEAL ${fieldName} DOESN'T HAVE THIS TERM: ${nestedFieldName}. WORST DEAL EVER!`
-          );
-        }
-      }
-      // Handle other nested deal structures similarly
-      else if (fieldName === 'CEO!' && variables.length > 2) {
-        let nestedFieldName = variables[2];
-
-        // Check if the nested field exists in our structure
-        const nestedDeal = deal.value[fieldName].value;
-
-        if (nestedDeal && nestedDeal[nestedFieldName]) {
-          result = nestedDeal[nestedFieldName].value;
-          debug(`Accessing nested field ${nestedFieldName} in ${fieldName} = ${result}`);
-        } else {
-          throw new Error(
-            `THE NESTED DEAL ${fieldName} DOESN'T HAVE THIS TERM: ${nestedFieldName}. WORST DEAL EVER!`
-          );
-        }
-      } else if (fieldName === 'HQ!' && variables.length > 2) {
-        let nestedFieldName = variables[2];
-
-        // Check if the nested field exists in our structure
-        const nestedDeal = deal.value[fieldName].value;
-
-        if (nestedDeal && nestedDeal[nestedFieldName]) {
-          result = nestedDeal[nestedFieldName].value;
-          debug(`Accessing nested field ${nestedFieldName} in ${fieldName} = ${result}`);
-        } else {
-          throw new Error(
-            `THE NESTED DEAL ${fieldName} DOESN'T HAVE THIS TERM: ${nestedFieldName}. WORST DEAL EVER!`
-          );
-        }
-      }
-    }
-  }
-
-  debug(`Final access result:`, result);
+  const result = deal.value[fieldName].value;
+  debug(`Field access result:`, result);
+  
   return result;
 };
 
-// Add missing visitor methods
-CustomTrumplangVisitor.prototype.visitStatementContext = function (ctx) {
-  // Visit the first child (which is the actual statement type)
-  for (let i = 0; i < ctx.getChildCount(); i++) {
-    const child = ctx.getChild(i);
-    if (child) {
-      const result = this.visit(child);
-      if (result !== undefined) {
-        return result;
-      }
-    }
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitDealAccess = function (ctx) {
+  return this.visitDealAccessContext(ctx);
+};
+
+// Input statement visitor
+CustomTrumplangVisitor.prototype.visitInputStatementContext = function (ctx) {
+  const variableName = ctx.varName.text;
+  
+  // In a real implementation, this would get input from the user
+  // For now, just return a placeholder
+  const value = "USER INPUT PLACEHOLDER";
+  
+  // Ensure variable exists
+  const variable = this.getVariable(variableName);
+  if (!variable) {
+    throw new Error(`NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`);
   }
+  
+  // Update variable with input
+  variable.value = value;
+  
+  return value;
+};
+
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitInputStatement = function (ctx) {
+  return this.visitInputStatementContext(ctx);
+};
+
+
+// Import statement visitor
+CustomTrumplangVisitor.prototype.visitImportStatementContext = function (ctx) {
+  const filePath = ctx.filePath.text;
+  // Remove quotes from file path
+  const cleanPath = filePath.substring(1, filePath.length - 1);
+  
+  debug(`Importing from file: ${cleanPath}`);
+  
+  // Implementation would load the file and execute it
   return null;
 };
 
-// Access the specific rule context objects
-CustomTrumplangVisitor.prototype.visitVariableDeclarationContext = function (ctx) {
-  // Reuse the existing visitVariableDeclaration method
-  return this.visitVariableDeclaration(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitImportStatement = function (ctx) {
+  return this.visitImportStatementContext(ctx);
 };
 
-CustomTrumplangVisitor.prototype.visitConstantDeclarationContext = function (ctx) {
-  return this.visitVariableDeclaration(ctx);
+
+// Selective import visitor
+CustomTrumplangVisitor.prototype.visitSelectiveImportContext = function (ctx) {
+  const filePath = ctx.filePath.text;
+  // Remove quotes from file path
+  const cleanPath = filePath.substring(1, filePath.length - 1);
+  
+  // Get the imported names using the labeled element
+  const importNames = [];
+  for (let i = 0; i < ctx.importName.length; i++) {
+    importNames.push(ctx.importName[i].text);
+  }
+  
+  debug(`Selectively importing ${importNames.join(', ')} from ${cleanPath}`);
+  
+  // Implementation would selectively load the functions from the file
+  return null;
 };
 
-CustomTrumplangVisitor.prototype.visitPrintStatementContext = function (ctx) {
-  // Reuse the existing visitPrintStatement method
-  return this.visitPrintStatement(ctx);
+// For backward compatibility
+CustomTrumplangVisitor.prototype.visitSelectiveImport = function (ctx) {
+  return this.visitSelectiveImportContext(ctx);
 };
 
-CustomTrumplangVisitor.prototype.visitDataTypeContext = function (ctx) {
-  // Reuse the existing visitDataType method
-  return this.visitDataType(ctx);
-};
 
-CustomTrumplangVisitor.prototype.visitExpressionContext = function (ctx) {
-  // Reuse the existing visitExpression method
-  return this.visitExpression(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitTermContext = function (ctx) {
-  // Reuse the existing visitTerm method
-  return this.visitTerm(ctx);
-};
-
-// Array and Deal structure visitor contexts
-CustomTrumplangVisitor.prototype.visitArrayDeclarationContext = function (ctx) {
-  return this.visitArrayDeclaration(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitArrayElementsContext = function (ctx) {
-  return this.visitArrayElements(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitArrayAccessContext = function (ctx) {
-  return this.visitArrayAccess(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitDealFieldContext = function (ctx) {
-  return this.visitDealField(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitDealDeclarationContext = function (ctx) {
-  return this.visitDealDeclaration(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitDealAccessContext = function (ctx) {
-  return this.visitDealAccess(ctx);
-};
-
-CustomTrumplangVisitor.prototype.visitAssertStatementContext = function (ctx) {
-  return this.visitAssertStatement(ctx);
+// Add explicit statement visitor that was missing
+CustomTrumplangVisitor.prototype.visitStatementContext = function (ctx) {
+  // Check if we have specific statement types
+  if (ctx.variableDeclaration()) {
+    return this.visitVariableDeclaration(ctx.variableDeclaration());
+  } else if (ctx.constantDeclaration()) {
+    return this.visitConstantDeclaration(ctx.constantDeclaration());
+  } else if (ctx.printStatement()) {
+    return this.visitPrintStatement(ctx.printStatement());
+  } else if (ctx.assertStatement()) {
+    return this.visitAssertStatement(ctx.assertStatement());
+  } else if (ctx.ifStatement()) {
+    return this.visitIfStatement(ctx.ifStatement());
+  } else if (ctx.whileLoop()) {
+    return this.visitWhileLoop(ctx.whileLoop());
+  } else if (ctx.forLoop()) {
+    return this.visitForLoop(ctx.forLoop());
+  } else if (ctx.forEachLoop()) {
+    return this.visitForEachLoop(ctx.forEachLoop());
+  } else if (ctx.functionDeclaration()) {
+    return this.visitFunctionDeclaration(ctx.functionDeclaration());
+  } else if (ctx.functionCall()) {
+    return this.visitFunctionCall(ctx.functionCall());
+  } else if (ctx.returnStatement()) {
+    return this.visitReturnStatement(ctx.returnStatement());
+  } else if (ctx.assignmentStatement()) {
+    return this.visitAssignmentStatement(ctx.assignmentStatement());
+  } else if (ctx.incrementStatement()) {
+    return this.visitIncrementStatement(ctx.incrementStatement());
+  } else if (ctx.decrementStatement()) {
+    return this.visitDecrementStatement(ctx.decrementStatement());
+  } else if (ctx.arrayDeclaration()) {
+    return this.visitArrayDeclaration(ctx.arrayDeclaration());
+  } else if (ctx.commentStatement()) {
+    return this.visitCommentStatement(ctx.commentStatement());
+  } else if (ctx.loopBreak()) {
+    return this.visitLoopBreak(ctx.loopBreak());
+  } else if (ctx.importStatement()) {
+    return this.visitImportStatement(ctx.importStatement());
+  } else if (ctx.selectiveImport()) {
+    return this.visitSelectiveImport(ctx.selectiveImport());
+  } else if (ctx.inputStatement()) {
+    return this.visitInputStatement(ctx.inputStatement());
+  } else if (ctx.blockStatement()) {
+    return this.visitBlockStatement(ctx.blockStatement());
+  }
+  
+  // If no specific statement type matches, visit the first child as fallback
+  if (ctx.getChildCount() > 0) {
+    return this.visit(ctx.getChild(0));
+  }
+  return null;
 };
 
 // Fallback visitor that logs
