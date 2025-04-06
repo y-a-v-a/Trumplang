@@ -40,7 +40,7 @@ class TestRunner {
       const result = this.interpreter.interpret(input);
 
       if (result === 'PASSED BIGLY') {
-        console.log(`${path.basename(filePath)} PASSED BIGLY! TREMENDOUS!`);
+        console.log(`${path.basename(filePath)} PASSED BIGLY! TREMENDOUS SUCCESS!`);
         this.passedTests++;
         return true;
       } else {
