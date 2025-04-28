@@ -186,8 +186,26 @@ TrumplangVisitor.prototype.visitExpression = function(ctx) {
 };
 
 
+// Visit a parse tree produced by TrumplangParser#bitwiseExpression.
+TrumplangVisitor.prototype.visitBitwiseExpression = function(ctx) {
+  return this.visitChildren(ctx);
+};
+
+
+// Visit a parse tree produced by TrumplangParser#shiftExpression.
+TrumplangVisitor.prototype.visitShiftExpression = function(ctx) {
+  return this.visitChildren(ctx);
+};
+
+
 // Visit a parse tree produced by TrumplangParser#term.
 TrumplangVisitor.prototype.visitTerm = function(ctx) {
+  return this.visitChildren(ctx);
+};
+
+
+// Visit a parse tree produced by TrumplangParser#powerExpression.
+TrumplangVisitor.prototype.visitPowerExpression = function(ctx) {
   return this.visitChildren(ctx);
 };
 

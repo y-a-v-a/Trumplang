@@ -272,12 +272,39 @@ TrumplangListener.prototype.exitExpression = function(ctx) {
 };
 
 
+// Enter a parse tree produced by TrumplangParser#bitwiseExpression.
+TrumplangListener.prototype.enterBitwiseExpression = function(ctx) {
+};
+
+// Exit a parse tree produced by TrumplangParser#bitwiseExpression.
+TrumplangListener.prototype.exitBitwiseExpression = function(ctx) {
+};
+
+
+// Enter a parse tree produced by TrumplangParser#shiftExpression.
+TrumplangListener.prototype.enterShiftExpression = function(ctx) {
+};
+
+// Exit a parse tree produced by TrumplangParser#shiftExpression.
+TrumplangListener.prototype.exitShiftExpression = function(ctx) {
+};
+
+
 // Enter a parse tree produced by TrumplangParser#term.
 TrumplangListener.prototype.enterTerm = function(ctx) {
 };
 
 // Exit a parse tree produced by TrumplangParser#term.
 TrumplangListener.prototype.exitTerm = function(ctx) {
+};
+
+
+// Enter a parse tree produced by TrumplangParser#powerExpression.
+TrumplangListener.prototype.enterPowerExpression = function(ctx) {
+};
+
+// Exit a parse tree produced by TrumplangParser#powerExpression.
+TrumplangListener.prototype.exitPowerExpression = function(ctx) {
 };
 
 
