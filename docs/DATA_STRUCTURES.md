@@ -15,11 +15,13 @@ BUILD THE WALL ARRAY_NAME! AND MEXICO WILL PAY FOR IT value1 PREVAILS value2 PRE
 ```
 
 Where:
+
 - `ARRAY_NAME!` is the variable name for the array (must end with `!`)
 - `value1`, `value2`, etc. are expressions that evaluate to the array elements
 - `PREVAILS` is the keyword that separates array elements
 
 Example:
+
 ```
 BUILD THE WALL NUMBERS! AND MEXICO WILL PAY FOR IT 10 PREVAILS 20 PREVAILS 30
 ```
@@ -35,10 +37,12 @@ ARRAY_NAME! SECTION index
 ```
 
 Where:
+
 - `ARRAY_NAME!` is the array variable
 - `index` is a zero-based index expression for the element to access
 
 Example:
+
 ```
 EVERYONE IS TALKING ABOUT NUMBERS! SECTION 0  // Accesses the first element (10)
 EVERYONE IS TALKING ABOUT NUMBERS! SECTION 1  // Accesses the second element (20)
@@ -51,14 +55,15 @@ Arrays can be iterated using the "BILLIONS AND BILLIONS" syntax for foreach loop
 ```
 BILLIONS AND BILLIONS ITEM_NAME! YET ARRAY_NAME! BELIEVE ME
     // Statements to execute for each element
-YOU'RE FIRED
+I TOLD YOU SO
 ```
 
 Example:
+
 ```
 BILLIONS AND BILLIONS ITEM! YET NUMBERS! BELIEVE ME
     EVERYONE IS TALKING ABOUT ITEM!
-YOU'RE FIRED
+I TOLD YOU SO
 ```
 
 ## 2. Deal Structures (Objects)
@@ -78,6 +83,7 @@ I HAVE THE BEST DEAL DEAL_NAME! ABSOLUTELY (
 ```
 
 Where:
+
 - `DEAL_NAME!` is the variable name for the deal structure
 - `TYPE1`, `TYPE2`, etc. are data types for each field
 - `FIELD1!`, `FIELD2!`, etc. are field names
@@ -85,6 +91,7 @@ Where:
 - `&` separates the fields
 
 Example:
+
 ```
 I HAVE THE BEST DEAL PERSON! ABSOLUTELY (
     HUGE AGE! ABSOLUTELY 70 &
@@ -104,6 +111,7 @@ DEAL_NAME! FOLLOW FIELD_NAME!
 ```
 
 Example:
+
 ```
 EVERYONE IS TALKING ABOUT PERSON! FOLLOW NAME!  // Accesses the NAME! field ("DONALD")
 EVERYONE IS TALKING ABOUT PERSON! FOLLOW AGE!   // Accesses the AGE! field (70)
@@ -114,6 +122,7 @@ EVERYONE IS TALKING ABOUT PERSON! FOLLOW AGE!   // Accesses the AGE! field (70)
 Nested deal structures can be created by defining separate deal structures and composing them. While the grammar supports nested declarations, the current implementation requires using a workaround approach:
 
 1. Define child deal structures separately:
+
 ```
 I HAVE THE BEST DEAL ADDRESS! ABSOLUTELY (
     TWEET STREET! ABSOLUTELY "1600 PENNSYLVANIA AVE" &
@@ -123,6 +132,7 @@ I HAVE THE BEST DEAL ADDRESS! ABSOLUTELY (
 ```
 
 2. Use them individually:
+
 ```
 EVERYONE IS TALKING ABOUT ADDRESS! FOLLOW CITY!
 ```

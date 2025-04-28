@@ -14,6 +14,7 @@ Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The 
 - Development of new language features should maintain this tone throughout
 
 ## Running Commands
+
 - Run Trumplang program: `npm start [filename.MAGA]`
 - Run legacy simplified interpreter: `node src/simplified-interpreter.js [filename.MAGA]`
 - Run ANTLR-based interpreter directly: `node src/cli/index.js [filename.MAGA]`
@@ -22,6 +23,7 @@ Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The 
 - Run tests in directory: `EXTREME VETTING DIRECTORY [directory]`
 
 ## Project Setup
+
 - Generate ANTLR4 parser: `npm run generate-parser`
 - Build project: `npm run build`
 - Debug tokens: `node src/debug-tokenizer.js [filename]`
@@ -31,6 +33,7 @@ Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The 
 ## Implementation Achievements
 
 We've successfully implemented the complete Trumplang language with all features from the grammar:
+
 - Transformed the grammar into a fully working interpreter
 - Resolved challenging tokenization issues with ANTLR4
 - Implemented a visitor pattern for AST traversal
@@ -46,13 +49,15 @@ We've successfully implemented the complete Trumplang language with all features
 ## Code Style Guidelines
 
 ### Basic Syntax
+
 - ALL KEYWORDS AND VARIABLES MUST BE IN UPPERCASE
 - Files use `.MAGA` extension (`.TEST.MAGA` for tests)
 - Programs start with `BELIEVE ME` and end with `MAKE AMERICA GREAT AGAIN`
-- Blocks begin with `BELIEVE ME` and end with `YOU'RE FIRED`
+- Blocks begin with `BELIEVE ME` and end with `I TOLD YOU SO`
 - Comments begin with `A LOT OF PEOPLE ARE SAYING`
 
 ### Variables and Data Types
+
 - Variables: `COUNT!` (UPPERCASE with exclamation mark)
 - Variable declaration: `I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0`
 - Variable assignment: `COUNT! ABSOLUTELY 0`
@@ -66,6 +71,7 @@ We've successfully implemented the complete Trumplang language with all features
   - `DEAL` - Object/Structure
 
 ### Operations
+
 - Increment variable: `MAKE COUNT! GREATER`
 - Decrement variable: `MAKE COUNT! SMALLER`
 - String concatenation: `TEXT! ENDORSING "MORE TEXT"` (Use `ENDORSING` for strings)
@@ -74,16 +80,18 @@ We've successfully implemented the complete Trumplang language with all features
 - Division: `value SAD factor`
 
 ### Control Structures
-- While loop: `WE'RE GOING TO WIN IN A LANDSLIDE CONDITION BELIEVE ME ... YOU'RE FIRED`
-- For loop: `WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 0 TO 10 BELIEVE ME ... YOU'RE FIRED`
-- For each loop: `BILLIONS AND BILLIONS ITEM! YET ARRAY! BELIEVE ME ... YOU'RE FIRED`
-- If statement: `LISTEN condition BELIEVE ME ... YOU'RE FIRED`
+
+- While loop: `WE'RE GOING TO WIN IN A LANDSLIDE CONDITION BELIEVE ME ... I TOLD YOU SO`
+- For loop: `WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 0 TO 10 BELIEVE ME ... I TOLD YOU SO`
+- For each loop: `BILLIONS AND BILLIONS ITEM! YET ARRAY! BELIEVE ME ... I TOLD YOU SO`
+- If statement: `LISTEN condition BELIEVE ME ... I TOLD YOU SO`
 - Else if: `PEOPLE ARE SAYING condition BELIEVE ME ...`
 - Else: `NOBODY KNEW ...`
 
 ### Functions and Imports
+
 - Functions: `GET_FIBONACCI` (UPPERCASE without !)
-- Function declaration: `INCREDIBLE FUNCTION_NAME PEOPLE TELL ME PARAMETERS BELIEVE ME ... YOU'RE FIRED`
+- Function declaration: `INCREDIBLE FUNCTION_NAME PEOPLE TELL ME PARAMETERS BELIEVE ME ... I TOLD YOU SO`
 - Function call: `I CALL UPON FUNCTION_NAME PEOPLE TELL ME ARGUMENTS`
 - Return statement: `AND I MEAN THAT expression`
 - Import files: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"`
@@ -92,14 +100,16 @@ We've successfully implemented the complete Trumplang language with all features
 ### Complex Data Structures
 
 #### Arrays
+
 - Array declaration: `BUILD THE WALL NUMBERS! AND MEXICO WILL PAY FOR IT 1 PREVAILS 2 PREVAILS 3`
 - Array access: `ARRAY! SECTION 1` (0-indexed)
 - Empty array: `BUILD THE WALL EMPTY_ARRAY! AND MEXICO WILL PAY FOR IT`
-- Array iteration: `BILLIONS AND BILLIONS ITEM! YET ARRAY! BELIEVE ME ... YOU'RE FIRED`
+- Array iteration: `BILLIONS AND BILLIONS ITEM! YET ARRAY! BELIEVE ME ... I TOLD YOU SO`
 - Array bounds checking: Accessing elements beyond array bounds produces error
 - Expressions as elements: `BUILD THE WALL NUMBERS! AND MEXICO WILL PAY FOR IT COUNT! PREVAILS 2 BIG LEAGUE TIMES 3`
 
 #### Deal Structures (Objects)
+
 - Deal structure declaration: End deal structures with `!!` to differentiate them from regular parentheses: `(HUGE AGE! ABSOLUTELY 42 & TWEET NAME! ABSOLUTELY "DONALD")!!`
 - Deal field access: `PERSON! FOLLOW NAME!`
 - Deal fields must have a type: `HUGE`, `BIGLY`, `FAKE NEWS`, `TWEET`, `WALL`, or `DEAL`
@@ -107,15 +117,18 @@ We've successfully implemented the complete Trumplang language with all features
 - Nested deal workaround: Create separate deal structures and reference them by variable
 
 ## Testing
+
 - Name test files after original file: `FILENAME.TEST.MAGA`
 - Use assertion: `FACT CHECK [actual] SO TRUE [expected]`
 - Tests should return either `PASSED BIGLY` or `TOTALLY RIGGED`
 
 ## VS Code Integration
+
 - Language support available in trumplang-vscode extension
 - Syntax highlighting uses Trump-inspired colors: red, gold, navy blue
 
 ## Implementation Status
+
 - ANTLR4-based interpreter fully operational
 - Previous simplified interpreter superseded by full implementation
 - Current implementation supports:
@@ -136,6 +149,7 @@ We've successfully implemented the complete Trumplang language with all features
 - Advanced features fully implemented through the ANTLR4 parser and visitor pattern
 
 ## Project Structure
+
 - `/src/simplified-interpreter.js` - Original simplified interpreter (legacy)
 - `/src/interpreter/` - ANTLR4-based interpreter (fully implemented)
   - `/src/interpreter/index.js` - Main interpreter class
@@ -165,12 +179,14 @@ We've successfully implemented the complete Trumplang language with all features
 - `/test/` - Test files and test framework
 
 ## Debugging
+
 - For parser issues, use the debug-parser.js tool: `node src/debug-parser.js [file]`
 - For tokenization issues, use debug-tokenizer.js: `node src/debug-tokenizer.js [file]`
 - For parse tree visualization, use debug-tree.js: `node src/debug-tree.js [file]`
 - Error messages are Trump-styled (e.g., "NOBODY KNOWS WHAT THIS VARIABLE IS")
 
 ## Development Progress
+
 - **Initial Phase**: Implemented simplified RegEx-based interpreter with basic functionality
 - **Grammar Development**: Created comprehensive ANTLR4 grammar for the full Trumplang syntax
 - **Parser Integration**: Resolved tokenization challenges and integrated ANTLR4 parser

@@ -116,7 +116,12 @@ arrayDeclaration:
 arrayElements: expression (ARRAY_CHAIN expression)*;
 
 // Assignment statement - updated to "ABSOLUTELY" (was "IT IS YET", which was "IS YET", which was "JUST HIRED")
-assignmentStatement: varName = VARIABLE ASSIGNMENT expression;
+assignmentStatement: 
+    varName = VARIABLE ASSIGNMENT expression          // Basic assignment (=)
+    | varName = VARIABLE COMPOUND_ADD expression      // Add and assign (+=)
+    | varName = VARIABLE COMPOUND_SUBTRACT expression // Subtract and assign (-=)
+    | varName = VARIABLE COMPOUND_MULTIPLY expression // Multiply and assign (*=)
+    | varName = VARIABLE COMPOUND_DIVIDE expression;  // Divide and assign (/=)
 
 // Print statement - "EVERYONE IS TALKING ABOUT"
 printStatement: PRINT expression;
@@ -155,11 +160,28 @@ expression:
 	| expression STRING_CONCAT term // String concatenation
 	| expression MINUS term; // Subtraction
 
+bitwiseExpression:
+	shiftExpression
+	| bitwiseExpression BITWISE_AND shiftExpression  // Bitwise AND
+	| bitwiseExpression BITWISE_OR shiftExpression   // Bitwise OR
+	| bitwiseExpression BITWISE_XOR shiftExpression; // Bitwise XOR
+
+// New level for bitwise shifts
+shiftExpression:
+	term
+	| shiftExpression SHIFT_LEFT term   // Left shift
+	| shiftExpression SHIFT_RIGHT term; // Right shift
+
 // Terms - updated "TREMENDOUS" to "BIG LEAGUE TIMES" for multiplication
 term:
-	factor
+	powerExpression
 	| term MULTIPLY factor // Multiplication (was "TREMENDOUS")
-	| term DIVIDE factor; // Division
+	| term DIVIDE factor // Division
+	| term MODULO factor; // Modulo (new)
+
+powerExpression:
+    factor
+    | factor POWER factor;  // Exponentiation (right-associative)
 
 // Factors
 factor:
@@ -282,11 +304,33 @@ MINUS: 'LOSING';
 
 ASSIGNMENT: 'ABSOLUTELY';
 
+COMPOUND_ADD: 'WINNING MASSIVELY'; // +=
+
+COMPOUND_SUBTRACT: 'LOOSING MASSIVELY'; // -=
+
+COMPOUND_MULTIPLY: 'MANY TIMES HIGHER'; // *=
+
+COMPOUND_DIVIDE: 'MANY TIMES LOWER'; // /=
+
+BITWISE_AND: 'ALLIANCE WITH'; // &
+
+BITWISE_OR: 'COMBINED FORCES WITH'; // |
+
+BITWISE_XOR: 'EXCLUSIVE DEAL WITH'; // ^
+
+SHIFT_LEFT: 'PROMOTE';   // <<
+
+SHIFT_RIGHT: 'DEMOTE';   // >>
+
 STRING_CONCAT: 'ENDORSING';
+
+MULTIPLY: 'BIG LEAGUE TIMES';
 
 DIVIDE: 'SAD';
 
-MULTIPLY: 'BIG LEAGUE TIMES';
+MODULO: 'LEFTOVER FROM';
+
+POWER: 'HUGELY MULTIPLIED BY';
 
 INTEGER_TYPE: 'HUGE'; // Integer
 
@@ -302,7 +346,7 @@ STRUCTUR_TYPE: 'DEAL'; // Object/Structure
 
 OPEN_BLOCK: 'BELIEVE ME';
 
-CLOSE_BLOCK: 'YOU\'RE FIRED';
+CLOSE_BLOCK: 'I TOLD YOU SO';
 
 AMPERSAND: '&';
 

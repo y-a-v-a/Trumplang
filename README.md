@@ -7,7 +7,7 @@ Trumplang is an esoteric programming language inspired by Donald Trump's speech 
 - ALL KEYWORDS IN UPPERCASE
 - Variables end with exclamation mark (!) and are in UPPERCASE
 - Programs start with `BELIEVE ME` and end with `MAKE AMERICA GREAT AGAIN`
-- Blocks begin with `BELIEVE ME` and end with `YOU'RE FIRED`
+- Blocks begin with `BELIEVE ME` and end with `I TOLD YOU SO`
 - Trump-inspired error messages and runtime behavior
 
 ## Installation
@@ -42,7 +42,7 @@ npm test
 ### Simple Counter
 
 ```
-GOD BLESS THE USA!!!
+THE TIME FOR EMPTY TALK IS OVER!!!
 A LOT OF PEOPLE ARE SAYING THIS IS A SIMPLE COUNTER PROGRAM
 
 I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0
@@ -84,7 +84,7 @@ EVERYONE IS TALKING ABOUT "FIBONACCI SEQUENCE - VERY TREMENDOUS NUMBERS!"
 EVERYONE IS TALKING ABOUT FIRST!
 WE'RE GOING TO WIN IN A LANDSLIDE COUNT! NOT AS GOOD AS TERMS! BELIEVE ME
     COUNT! ABSOLUTELY COUNT! WINNING 1
-    
+
     LISTEN COUNT! SO TRUE 1 BELIEVE ME
         EVERYONE IS TALKING ABOUT SECOND!
     NOBODY KNEW
@@ -92,8 +92,8 @@ WE'RE GOING TO WIN IN A LANDSLIDE COUNT! NOT AS GOOD AS TERMS! BELIEVE ME
         EVERYONE IS TALKING ABOUT NEXT!
         FIRST! ABSOLUTELY SECOND!
         SECOND! ABSOLUTELY NEXT!
-    YOU'RE FIRED
-YOU'RE FIRED
+    I TOLD YOU SO
+I TOLD YOU SO
 MAKE AMERICA GREAT AGAIN
 ```
 
@@ -126,6 +126,7 @@ Control structures and advanced features are in development.
 ## Language Reference
 
 For full language documentation, see:
+
 - [Implementation Notes](docs/IMPLEMENTATION_NOTES.md)
 - [Testing Framework](docs/TESTING_FRAMEWORK.md)
 
@@ -146,7 +147,6 @@ For full language documentation, see:
 - MAGA LOVES YOU!!!
 - TOTALLY UNFIT
 - a COMPLETE AND TOTAL DISASTER
-
 
 ## License
 

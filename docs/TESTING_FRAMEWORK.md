@@ -7,6 +7,7 @@ The Trumplang Testing Framework provides a way to write and execute tests for Tr
 ## Test File Structure
 
 ### File Naming
+
 - Test files must be named in ALL UPPERCASE
 - Test files must use the `.TEST.MAGA` extension
 - Test files should be named after the file they are testing, e.g., `FIBONACCI.MAGA` is tested by `FIBONACCI.TEST.MAGA`
@@ -32,29 +33,30 @@ Each test case follows this structure:
 TREMENDOUS TEST "TEST_DESCRIPTION" BELIEVE ME
     [test code]
     [assertions]
-YOU'RE FIRED
+I TOLD YOU SO
 ```
 
 Where:
+
 - `TEST_DESCRIPTION` is a string description of what the test verifies
 - `[test code]` is Trumplang code that sets up the test
 - `[assertions]` are statements that verify expected outcomes
-- Each test case ends with `YOU'RE FIRED`
+- Each test case ends with `I TOLD YOU SO`
 
 ## Assertion Statements
 
 The framework provides several types of assertions:
 
-| Assertion Type | Syntax | Purpose |
-|----------------|--------|---------|
-| Equal | `FACT CHECK [actual] SO TRUE [expected]` | Asserts that actual equals expected |
-| Not Equal | `NOT EVEN CLOSE THAT [actual] SO TRUE [expected]` | Asserts that actual does not equal expected |
-| True | `NO DOUBT THAT [expression]` | Asserts that expression is true |
-| False | `FAKE NEWS THAT [expression]` | Asserts that expression is false |
-| Greater Than | `ABSOLUTELY TREMENDOUS THAT [actual] BETTER THAN [expected]` | Asserts that actual > expected |
-| Less Than | `TOTAL DISASTER THAT [actual] NOT AS GOOD AS [expected]` | Asserts that actual < expected |
-| Greater/Equal | `AT LEAST AS GOOD THAT [actual] AT LEAST AS GOOD AS [expected]` | Asserts that actual >= expected |
-| Less/Equal | `NO BETTER THAT [actual] NO BETTER THAN [expected]` | Asserts that actual <= expected |
+| Assertion Type | Syntax                                                          | Purpose                                     |
+| -------------- | --------------------------------------------------------------- | ------------------------------------------- |
+| Equal          | `FACT CHECK [actual] SO TRUE [expected]`                        | Asserts that actual equals expected         |
+| Not Equal      | `NOT EVEN CLOSE THAT [actual] SO TRUE [expected]`               | Asserts that actual does not equal expected |
+| True           | `NO DOUBT THAT [expression]`                                    | Asserts that expression is true             |
+| False          | `FAKE NEWS THAT [expression]`                                   | Asserts that expression is false            |
+| Greater Than   | `ABSOLUTELY TREMENDOUS THAT [actual] BETTER THAN [expected]`    | Asserts that actual > expected              |
+| Less Than      | `TOTAL DISASTER THAT [actual] NOT AS GOOD AS [expected]`        | Asserts that actual < expected              |
+| Greater/Equal  | `AT LEAST AS GOOD THAT [actual] AT LEAST AS GOOD AS [expected]` | Asserts that actual >= expected             |
+| Less/Equal     | `NO BETTER THAT [actual] NO BETTER THAN [expected]`             | Asserts that actual <= expected             |
 
 ## Test Execution
 
@@ -83,6 +85,7 @@ EXTREME VETTING DIRECTORY [directory]    # Run all test files in specific direct
 ### Test Case Results
 
 Each test case will have one of the following results:
+
 - `PASSED BIGLY` - All assertions in the test case passed
 - `TOTALLY RIGGED` - One or more assertions in the test case failed
 
@@ -107,6 +110,7 @@ SUMMARY: [passed count] PASSED, [failed count] FAILED - [OVERALL ASSESSMENT]
 ### Failure Details
 
 When an assertion fails, the following details are provided:
+
 ```
 EXPECTED: [expected value]
 ACTUAL: [actual value]
@@ -121,11 +125,11 @@ For test setup and teardown, use:
 ```
 PREPARE THE STAGE BELIEVE ME
     [setup code]
-YOU'RE FIRED
+I TOLD YOU SO
 
 CLEAN UP THE MESS BELIEVE ME
     [teardown code]
-YOU'RE FIRED
+I TOLD YOU SO
 ```
 
 Setup code runs before each test case. Teardown code runs after each test case.
@@ -137,11 +141,11 @@ The framework provides hooks for specific test events:
 ```
 BEFORE ALL TESTS BELIEVE ME
     [code to run once before all tests]
-YOU'RE FIRED
+I TOLD YOU SO
 
 AFTER ALL TESTS BELIEVE ME
     [code to run once after all tests]
-YOU'RE FIRED
+I TOLD YOU SO
 ```
 
 ## Example Test File
@@ -152,32 +156,32 @@ THE BEST TESTS FOR FIBONACCI BELIEVE ME
 BEFORE ALL TESTS BELIEVE ME
     I HAVE THE BEST HUGE MAX_FIB! SO TRUE 10
     EVERYONE IS TALKING ABOUT "TESTING FIBONACCI UP TO " WINNING MAX_FIB!
-YOU'RE FIRED
+I TOLD YOU SO
 
 TREMENDOUS TEST "FIRST FIBONACCI IS ZERO" BELIEVE ME
     I HAVE THE BEST HUGE RESULT! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 0
     FACT CHECK RESULT! SO TRUE 0
-YOU'RE FIRED
+I TOLD YOU SO
 
 TREMENDOUS TEST "SECOND FIBONACCI IS ONE" BELIEVE ME
     I HAVE THE BEST HUGE RESULT! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 1
     FACT CHECK RESULT! SO TRUE 1
-YOU'RE FIRED
+I TOLD YOU SO
 
 TREMENDOUS TEST "FIFTH FIBONACCI IS THREE" BELIEVE ME
     I HAVE THE BEST HUGE RESULT! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 4
     FACT CHECK RESULT! SO TRUE 3
-YOU'RE FIRED
+I TOLD YOU SO
 
 TREMENDOUS TEST "SEQUENCE GROWS BIGLY" BELIEVE ME
     I HAVE THE BEST HUGE FIRST! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 7
     I HAVE THE BEST HUGE SECOND! SO TRUE I CALL UPON GET_FIBONACCI PEOPLE TELL ME 8
     ABSOLUTELY TREMENDOUS THAT SECOND! BETTER THAN FIRST!
-YOU'RE FIRED
+I TOLD YOU SO
 
 AFTER ALL TESTS BELIEVE ME
     EVERYONE IS TALKING ABOUT "ALL FIBONACCI TESTS COMPLETE!"
-YOU'RE FIRED
+I TOLD YOU SO
 
 MAKE AMERICA GREAT AGAIN
 ```

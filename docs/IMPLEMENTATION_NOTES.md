@@ -5,19 +5,23 @@ This document outlines additional implementation notes and considerations for de
 ## Error Messages and Compiler Warnings
 
 - **Variable Declaration Errors**
+
   - When variables don't end with an exclamation mark: "There's no enthusiasm here, folks! Variables need energy! BIG ENERGY!"
   - Lowercase in variable names: "We only use CAPITAL LETTERS for our TREMENDOUS variables!"
 
 - **String Formatting Errors**
+
   - Lowercase letters in strings: "We don't whisper in this language. SPEAK UP!"
   - Missing quotes around strings: "Fake quotes! Very dishonest! All TWEET values need proper quotation marks!"
 
 - **Syntax Errors**
+
   - Missing keywords: "YOUR STATEMENT IS INCOMPLETE. SAD!"
   - Incorrect keyword sequence: "THIS DOESN'T MAKE SENSE, EVEN BY MY STANDARDS!"
   - Mismatched blocks: "YOU NEVER FIRED ANYONE! Every block needs to end properly."
 
 - **Runtime Errors**
+
   - Division by zero: "THAT'S A DISASTER. You can't divide by zero, that's for losers!"
   - Array index out of bounds: "YOU'RE TRYING TO CLIMB OVER THE WALL! Stay within the boundaries!"
   - Undefined variable: "NOBODY KNOWS WHAT THIS IS. You need to declare it first, believe me!"
@@ -36,7 +40,7 @@ This document outlines additional implementation notes and considerations for de
       // error handling code
     BUT THE TRUTH IS
       // code that always executes
-    YOU'RE FIRED
+    I TOLD YOU SO
     ```
 
 ## Implementation Features
@@ -48,23 +52,26 @@ This document outlines additional implementation notes and considerations for de
     - Access specific arguments with: `IMMIGRANTS! SECTION 0` (first argument)
     - Get number of arguments with: `COUNT IMMIGRANTS!`
     - Every program has access to this without declaration
-    
 - **Console Operations**
+
   - Console logging: `LIBERATE expression` (outputs to console for debugging)
   - Similar to "print" but formatted for debugging purposes
   - Intended for developers to monitor program execution
 
 - **Import System**
+
   - Import statement: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"`
   - Error for missing imports: "I CAN'T FIND THESE PEOPLE. Very sad!"
 
 - **Debugging Features**
+
   - Debug mode called "EXTREME VETTING"
   - Stack trace titled "THE FAILING PATH"
   - Performance profiler called "WINNING METRICS"
   - Syntax checker called "LAW & ORDER"
 
 - **File System**
+
   - All filenames must be in uppercase with `.MAGA` extension
   - Import files are referred to as "DEALS"
   - Directory listing feature called "SHOW ME THE PEOPLE"
@@ -77,6 +84,7 @@ This document outlines additional implementation notes and considerations for de
     - File check exists: `DO WE HAVE "FILENAME.MAGA"? BELIEVE ME, PEOPLE ARE ASKING`
 
 - **Documentation**
+
   - All documentation should be written in Trump's voice
     - Documentation should be written as if Trump himself is explaining how to use the language.
   - Examples should reflect genuine Trump quotes where possible
@@ -89,17 +97,20 @@ This document outlines additional implementation notes and considerations for de
 ## Compiler/Interpreter Design
 
 - **Error Recovery**
+
   - Try to continue parsing after errors when possible
   - Display multiple errors in a single run rather than stopping at the first one
 
 - **Optimization**
+
   - Optimization level called "MAKE IT TREMENDOUS"
   - Performance warnings: "THIS CODE IS RUNNING LIKE A DEMOCRAT. Let me show you how to make it faster!"
 
 - **IDE Integration**
+
   - Syntax highlighting: Keywords in gold color
   - Auto-completion suggestions in Trump voice
-  - Code folding for blocks between `BELIEVE ME` and `YOU'RE FIRED`
+  - Code folding for blocks between `BELIEVE ME` and `I TOLD YOU SO`
 
 - **Testing Framework**
   - Test runner called "EXTREME VETTING PROCESS"
