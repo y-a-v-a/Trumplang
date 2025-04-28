@@ -243,7 +243,7 @@ var sharedContextCache = new antlr4.PredictionContextCache();
 var literalNames = [ null, "'MAKE'", "'GREATER'", "'SMALLER'", "'('", "')'", 
                      "'I ONLY WANT'", "'LISTEN'", "'PEOPLE ARE SAYING'", 
                      "'NOBODY KNEW'", "'BUILD THE WALL'", "'AND MEXICO WILL PAY FOR IT'", 
-                     "'SECTION'", "'PREVAILS'", "'GOD BLESS THE USA!!!'", 
+                     "'SECTION'", "'PREVAILS'", "'THE TIME FOR EMPTY TALK IS OVER!!!'", 
                      "'MAKE AMERICA GREAT AGAIN'", "'INCREDIBLE'", "'I HAVE THE BEST'", 
                      "'I HAVE A VERY GOOD BRAIN FOR'", "'PEOPLE TELL ME'", 
                      "'AND'", "'AND I MEAN THAT'", "'I CALL UPON'", "'I WILL VETO!'", 

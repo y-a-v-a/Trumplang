@@ -70,7 +70,9 @@ blockStatement: OPEN_BLOCK statement* CLOSE_BLOCK;
 
 // Function parameters
 parameterList:
-	dataType paramName += VARIABLE (PARAMS_ARGS_CHAIN dataType paramName += VARIABLE)*;
+	dataType paramName += VARIABLE (
+		PARAMS_ARGS_CHAIN dataType paramName += VARIABLE
+	)*;
 
 // Return statement - "AND I MEAN THAT"
 returnStatement: RETURN expression;
@@ -181,7 +183,8 @@ dealDeclaration:
 	'(' dealField (AMPERSAND dealField)* ')' DEAL_DECLARE;
 
 // Deal field access
-dealAccess: dealName = VARIABLE DEAL_ACCESS_KEYWORD fieldName = VARIABLE;
+dealAccess:
+	dealName = VARIABLE DEAL_ACCESS_KEYWORD fieldName = VARIABLE;
 
 // Assert statement - "FACT CHECK"
 assertStatement:
@@ -192,7 +195,9 @@ importStatement: IMPORT filePath = FILEPATH;
 
 // Selective import - specific "people"
 selectiveImport:
-	'I ONLY WANT' importName += IDENTIFIER (PARAMS_ARGS_CHAIN importName += IDENTIFIER)* 'FROM' filePath = FILEPATH;
+	'I ONLY WANT' importName += IDENTIFIER (
+		PARAMS_ARGS_CHAIN importName += IDENTIFIER
+	)* 'FROM' filePath = FILEPATH;
 
 // Lexer Rules
 IF_DECL: 'LISTEN';
@@ -209,7 +214,7 @@ ARRAY_ACCESS: 'SECTION';
 
 ARRAY_CHAIN: 'PREVAILS';
 
-PROG_START: 'GOD BLESS THE USA!!!';
+PROG_START: 'THE TIME FOR EMPTY TALK IS OVER!!!';
 
 PROG_END: 'MAKE AMERICA GREAT AGAIN';
 
