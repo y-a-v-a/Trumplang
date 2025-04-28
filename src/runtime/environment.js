@@ -55,6 +55,6 @@ class Environment {
     }
 }
 
-module.exports = {
+export {
     Environment
 };

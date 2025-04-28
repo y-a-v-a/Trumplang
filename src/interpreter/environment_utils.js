@@ -3,7 +3,7 @@
  */
 
 // Import the Environment class
-const { Environment } = require('../runtime/environment');
+import { Environment } from '../runtime/environment.js';
 
 // Create a new environment
 function createEnvironment(parent = null) {
@@ -45,7 +45,7 @@ function defineVariable(env, name, type, value) {
   return value;
 }
 
-module.exports = {
+export {
   createEnvironment,
   getVariable,
   getValue,

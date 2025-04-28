@@ -1,13 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-const { TrumplangInterpreter } = require('./interpreter');
+import fs from 'fs';
+import path from 'path';
+import { TrumplangInterpreter } from './interpreter/index.js';
+import debugModule from 'debug';
+const debug = debugModule('trumplang:test-runner');
 
 /**
  * Test runner for Trumplang - the "EXTREME VETTING" process
  */
 class TestRunner {
   constructor() {
+    debug('Creating test runner');
     this.interpreter = new TrumplangInterpreter();
+    debug('Interpreter created');
     this.passedTests = 0;
     this.failedTests = 0;
   }
@@ -40,7 +44,9 @@ class TestRunner {
       const result = this.interpreter.interpret(input);
 
       if (result === 'PASSED BIGLY') {
-        console.log(`${path.basename(filePath)} PASSED BIGLY! TREMENDOUS SUCCESS!`);
+        console.log(
+          `${path.basename(filePath)} PASSED BIGLY! TREMENDOUS SUCCESS!`,
+        );
         this.passedTests++;
         return true;
       } else {
@@ -49,6 +55,7 @@ class TestRunner {
         return false;
       }
     } catch (error) {
+      debug(error);
       console.error(`TEST FAILED BADLY: ${error.message}`);
       this.failedTests++;
       return false;
@@ -71,8 +78,8 @@ class TestRunner {
       // Get all test files
       const files = fs
         .readdirSync(dirPath)
-        .filter(file => file.endsWith('.TEST.MAGA'))
-        .map(file => path.join(dirPath, file));
+        .filter((file) => file.endsWith('.TEST.MAGA'))
+        .map((file) => path.join(dirPath, file));
 
       if (files.length === 0) {
         console.log(`NO TESTS FOUND IN ${dirPath}. SAD!`);
@@ -88,6 +95,7 @@ class TestRunner {
 
       return allPassed;
     } catch (error) {
+      debug(error);
       console.error(`DIRECTORY VETTING FAILED: ${error.message}`);
       return false;
     }
@@ -109,11 +117,11 @@ class TestRunner {
       this.runTestDirectory(testDir);
 
       // Recursively get subdirectories
-      const getSubdirs = dir => {
+      const getSubdirs = (dir) => {
         return fs
           .readdirSync(dir, { withFileTypes: true })
-          .filter(dirent => dirent.isDirectory())
-          .map(dirent => path.join(dir, dirent.name));
+          .filter((dirent) => dirent.isDirectory())
+          .map((dirent) => path.join(dir, dirent.name));
       };
 
       // Run tests in all subdirectories
@@ -129,12 +137,11 @@ class TestRunner {
 
       return this.failedTests === 0;
     } catch (error) {
+      debug(error);
       console.error(`ALL TESTS VETTING FAILED: ${error.message}`);
       return false;
     }
   }
 }
 
-module.exports = {
-  TestRunner,
-};
+export { TestRunner };

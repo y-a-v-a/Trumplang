@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import debugModule from 'debug';
+const debug = debugModule('trumplang:test-runner');
+
 // Use the full ANTLR4-based interpreter
-const { TrumplangInterpreter } = require('../interpreter');
-const { TestRunner } = require('../test-runner');
+import { TrumplangInterpreter } from '../interpreter/index.js';
+import { TestRunner } from '../test-runner.js';
 
 // Get the filename from command line arguments
 const args = process.argv.slice(2);
@@ -64,6 +67,7 @@ try {
 
   process.exit(0);
 } catch (error) {
+  debug(error);
   console.error(`THIS CODE IS A DISASTER! VERY SAD CODE!\n${error.message}`);
   process.exit(1);
 }

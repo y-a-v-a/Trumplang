@@ -1,384 +1,377 @@
-// Generated from Trumplang.g4 by ANTLR 4.8
 // jshint ignore: start
-var antlr4 = require('antlr4/index');
+import antlr4 from 'antlr4';
 
 // This class defines a complete listener for a parse tree produced by TrumplangParser.
-function TrumplangListener() {
-	antlr4.tree.ParseTreeListener.call(this);
-	return this;
+export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
+
+	// Enter a parse tree produced by TrumplangParser#program.
+	enterProgram(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#program.
+	exitProgram(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#statement.
+	enterStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#statement.
+	exitStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#commentStatement.
+	enterCommentStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#commentStatement.
+	exitCommentStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#variableDeclaration.
+	enterVariableDeclaration(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#variableDeclaration.
+	exitVariableDeclaration(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#constantDeclaration.
+	enterConstantDeclaration(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#constantDeclaration.
+	exitConstantDeclaration(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#dataType.
+	enterDataType(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#dataType.
+	exitDataType(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#functionDeclaration.
+	enterFunctionDeclaration(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#functionDeclaration.
+	exitFunctionDeclaration(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#blockStatement.
+	enterBlockStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#blockStatement.
+	exitBlockStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#parameterList.
+	enterParameterList(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#parameterList.
+	exitParameterList(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#returnStatement.
+	enterReturnStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#returnStatement.
+	exitReturnStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#functionCall.
+	enterFunctionCall(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#functionCall.
+	exitFunctionCall(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#argumentList.
+	enterArgumentList(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#argumentList.
+	exitArgumentList(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#ifStatement.
+	enterIfStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#ifStatement.
+	exitIfStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#elseIfStatement.
+	enterElseIfStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#elseIfStatement.
+	exitElseIfStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#elseStatement.
+	enterElseStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#elseStatement.
+	exitElseStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#whileLoop.
+	enterWhileLoop(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#whileLoop.
+	exitWhileLoop(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#forLoop.
+	enterForLoop(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#forLoop.
+	exitForLoop(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#forEachLoop.
+	enterForEachLoop(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#forEachLoop.
+	exitForEachLoop(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#loopBreak.
+	enterLoopBreak(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#loopBreak.
+	exitLoopBreak(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#arrayDeclaration.
+	enterArrayDeclaration(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#arrayDeclaration.
+	exitArrayDeclaration(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#arrayElements.
+	enterArrayElements(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#arrayElements.
+	exitArrayElements(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#assignmentStatement.
+	enterAssignmentStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#assignmentStatement.
+	exitAssignmentStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#printStatement.
+	enterPrintStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#printStatement.
+	exitPrintStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#inputStatement.
+	enterInputStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#inputStatement.
+	exitInputStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#incrementStatement.
+	enterIncrementStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#incrementStatement.
+	exitIncrementStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#decrementStatement.
+	enterDecrementStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#decrementStatement.
+	exitDecrementStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#condition.
+	enterCondition(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#condition.
+	exitCondition(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#comparison.
+	enterComparison(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#comparison.
+	exitComparison(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#expression.
+	enterExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#expression.
+	exitExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#bitwiseExpression.
+	enterBitwiseExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#bitwiseExpression.
+	exitBitwiseExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#shiftExpression.
+	enterShiftExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#shiftExpression.
+	exitShiftExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#term.
+	enterTerm(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#term.
+	exitTerm(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#powerExpression.
+	enterPowerExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#powerExpression.
+	exitPowerExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#factor.
+	enterFactor(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#factor.
+	exitFactor(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#arrayAccess.
+	enterArrayAccess(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#arrayAccess.
+	exitArrayAccess(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#dealField.
+	enterDealField(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#dealField.
+	exitDealField(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#dealDeclaration.
+	enterDealDeclaration(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#dealDeclaration.
+	exitDealDeclaration(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#dealAccess.
+	enterDealAccess(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#dealAccess.
+	exitDealAccess(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#assertStatement.
+	enterAssertStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#assertStatement.
+	exitAssertStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#importStatement.
+	enterImportStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#importStatement.
+	exitImportStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#selectiveImport.
+	enterSelectiveImport(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#selectiveImport.
+	exitSelectiveImport(ctx) {
+	}
+
+
+
 }
-
-TrumplangListener.prototype = Object.create(antlr4.tree.ParseTreeListener.prototype);
-TrumplangListener.prototype.constructor = TrumplangListener;
-
-// Enter a parse tree produced by TrumplangParser#program.
-TrumplangListener.prototype.enterProgram = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#program.
-TrumplangListener.prototype.exitProgram = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#statement.
-TrumplangListener.prototype.enterStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#statement.
-TrumplangListener.prototype.exitStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#commentStatement.
-TrumplangListener.prototype.enterCommentStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#commentStatement.
-TrumplangListener.prototype.exitCommentStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#variableDeclaration.
-TrumplangListener.prototype.enterVariableDeclaration = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#variableDeclaration.
-TrumplangListener.prototype.exitVariableDeclaration = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#constantDeclaration.
-TrumplangListener.prototype.enterConstantDeclaration = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#constantDeclaration.
-TrumplangListener.prototype.exitConstantDeclaration = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#dataType.
-TrumplangListener.prototype.enterDataType = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#dataType.
-TrumplangListener.prototype.exitDataType = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#functionDeclaration.
-TrumplangListener.prototype.enterFunctionDeclaration = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#functionDeclaration.
-TrumplangListener.prototype.exitFunctionDeclaration = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#blockStatement.
-TrumplangListener.prototype.enterBlockStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#blockStatement.
-TrumplangListener.prototype.exitBlockStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#parameterList.
-TrumplangListener.prototype.enterParameterList = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#parameterList.
-TrumplangListener.prototype.exitParameterList = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#returnStatement.
-TrumplangListener.prototype.enterReturnStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#returnStatement.
-TrumplangListener.prototype.exitReturnStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#functionCall.
-TrumplangListener.prototype.enterFunctionCall = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#functionCall.
-TrumplangListener.prototype.exitFunctionCall = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#argumentList.
-TrumplangListener.prototype.enterArgumentList = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#argumentList.
-TrumplangListener.prototype.exitArgumentList = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#ifStatement.
-TrumplangListener.prototype.enterIfStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#ifStatement.
-TrumplangListener.prototype.exitIfStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#elseIfStatement.
-TrumplangListener.prototype.enterElseIfStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#elseIfStatement.
-TrumplangListener.prototype.exitElseIfStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#elseStatement.
-TrumplangListener.prototype.enterElseStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#elseStatement.
-TrumplangListener.prototype.exitElseStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#whileLoop.
-TrumplangListener.prototype.enterWhileLoop = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#whileLoop.
-TrumplangListener.prototype.exitWhileLoop = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#forLoop.
-TrumplangListener.prototype.enterForLoop = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#forLoop.
-TrumplangListener.prototype.exitForLoop = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#forEachLoop.
-TrumplangListener.prototype.enterForEachLoop = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#forEachLoop.
-TrumplangListener.prototype.exitForEachLoop = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#loopBreak.
-TrumplangListener.prototype.enterLoopBreak = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#loopBreak.
-TrumplangListener.prototype.exitLoopBreak = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#arrayDeclaration.
-TrumplangListener.prototype.enterArrayDeclaration = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#arrayDeclaration.
-TrumplangListener.prototype.exitArrayDeclaration = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#arrayElements.
-TrumplangListener.prototype.enterArrayElements = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#arrayElements.
-TrumplangListener.prototype.exitArrayElements = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#assignmentStatement.
-TrumplangListener.prototype.enterAssignmentStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#assignmentStatement.
-TrumplangListener.prototype.exitAssignmentStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#printStatement.
-TrumplangListener.prototype.enterPrintStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#printStatement.
-TrumplangListener.prototype.exitPrintStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#inputStatement.
-TrumplangListener.prototype.enterInputStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#inputStatement.
-TrumplangListener.prototype.exitInputStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#incrementStatement.
-TrumplangListener.prototype.enterIncrementStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#incrementStatement.
-TrumplangListener.prototype.exitIncrementStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#decrementStatement.
-TrumplangListener.prototype.enterDecrementStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#decrementStatement.
-TrumplangListener.prototype.exitDecrementStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#condition.
-TrumplangListener.prototype.enterCondition = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#condition.
-TrumplangListener.prototype.exitCondition = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#comparison.
-TrumplangListener.prototype.enterComparison = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#comparison.
-TrumplangListener.prototype.exitComparison = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#expression.
-TrumplangListener.prototype.enterExpression = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#expression.
-TrumplangListener.prototype.exitExpression = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#bitwiseExpression.
-TrumplangListener.prototype.enterBitwiseExpression = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#bitwiseExpression.
-TrumplangListener.prototype.exitBitwiseExpression = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#shiftExpression.
-TrumplangListener.prototype.enterShiftExpression = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#shiftExpression.
-TrumplangListener.prototype.exitShiftExpression = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#term.
-TrumplangListener.prototype.enterTerm = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#term.
-TrumplangListener.prototype.exitTerm = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#powerExpression.
-TrumplangListener.prototype.enterPowerExpression = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#powerExpression.
-TrumplangListener.prototype.exitPowerExpression = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#factor.
-TrumplangListener.prototype.enterFactor = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#factor.
-TrumplangListener.prototype.exitFactor = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#arrayAccess.
-TrumplangListener.prototype.enterArrayAccess = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#arrayAccess.
-TrumplangListener.prototype.exitArrayAccess = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#dealField.
-TrumplangListener.prototype.enterDealField = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#dealField.
-TrumplangListener.prototype.exitDealField = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#dealDeclaration.
-TrumplangListener.prototype.enterDealDeclaration = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#dealDeclaration.
-TrumplangListener.prototype.exitDealDeclaration = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#dealAccess.
-TrumplangListener.prototype.enterDealAccess = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#dealAccess.
-TrumplangListener.prototype.exitDealAccess = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#assertStatement.
-TrumplangListener.prototype.enterAssertStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#assertStatement.
-TrumplangListener.prototype.exitAssertStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#importStatement.
-TrumplangListener.prototype.enterImportStatement = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#importStatement.
-TrumplangListener.prototype.exitImportStatement = function(ctx) {
-};
-
-
-// Enter a parse tree produced by TrumplangParser#selectiveImport.
-TrumplangListener.prototype.enterSelectiveImport = function(ctx) {
-};
-
-// Exit a parse tree produced by TrumplangParser#selectiveImport.
-TrumplangListener.prototype.exitSelectiveImport = function(ctx) {
-};
-
-
-
-exports.TrumplangListener = TrumplangListener;

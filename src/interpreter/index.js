@@ -1,20 +1,24 @@
-const antlr4 = require('antlr4/index');
-const { TrumplangVisitor } = require('./visitor');
+import * as antlr4 from 'antlr4';
+import { TrumplangVisitor } from './visitor.js';
+import debugModule from 'debug';
+const debug = debugModule('trumplang:interpreter');
 
-// These will be available after running npm run generate-parser
+// Import parser components directly
 let TrumplangLexer, TrumplangParser;
 
 try {
-  const TrumplangLexerModule = require('../parser/TrumplangLexer');
-  const TrumplangParserModule = require('../parser/TrumplangParser');
-  TrumplangLexer = TrumplangLexerModule.TrumplangLexer;
-  TrumplangParser = TrumplangParserModule.TrumplangParser;
+  // Direct imports from parser files
+  const lexerImport = await import('../parser/TrumplangLexer.js');
+  const parserImport = await import('../parser/TrumplangParser.js');
+  TrumplangLexer = lexerImport.default;
+  TrumplangParser = parserImport.default;
 } catch (error) {
+  debug(error);
   console.warn('Parser not generated yet. Run npm run generate-parser first.');
 }
 
 // Import environment utilities
-const envUtils = require('./environment_utils');
+import * as envUtils from './environment_utils.js';
 
 class TrumplangInterpreter {
   constructor() {
@@ -33,9 +37,13 @@ class TrumplangInterpreter {
 
       // ANTLR setup
       const chars = new antlr4.InputStream(input);
+      debug('Creating lexer...');
       const lexer = new TrumplangLexer(chars);
+      debug('Lexer created');
       const tokens = new antlr4.CommonTokenStream(lexer);
+      debug('Creating parser...');
       const parser = new TrumplangParser(tokens);
+      debug('Parser created');
       parser.buildParseTrees = true;
 
       // Get the root of the parse tree
@@ -45,12 +53,13 @@ class TrumplangInterpreter {
       const visitor = new TrumplangVisitor(this.environment);
       return visitor.visitProgram(tree);
     } catch (error) {
-      console.error(`THIS CODE IS A DISASTER! VERY SAD CODE!\n${error.message}`);
+      debug(error);
+      console.error(
+        `THIS CODE IS A DISASTER! VERY SAD CODE!\n${error.message}`,
+      );
       throw error;
     }
   }
 }
 
-module.exports = {
-  TrumplangInterpreter,
-};
+export { TrumplangInterpreter };

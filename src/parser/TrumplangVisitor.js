@@ -1,262 +1,218 @@
 // Generated from Trumplang.g4 by ANTLR 4.8
 // jshint ignore: start
-var antlr4 = require('antlr4/index');
+import antlr4 from 'antlr4';
 
 // This class defines a complete generic visitor for a parse tree produced by TrumplangParser.
 
-function TrumplangVisitor() {
-	antlr4.tree.ParseTreeVisitor.call(this);
-	return this;
+class TrumplangVisitor extends antlr4.tree.ParseTreeVisitor {
+  constructor() {
+    super();
+  }
+
+  // Visit a parse tree produced by TrumplangParser#program.
+  visitProgram(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#statement.
+  visitStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#commentStatement.
+  visitCommentStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#variableDeclaration.
+  visitVariableDeclaration(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#constantDeclaration.
+  visitConstantDeclaration(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#dataType.
+  visitDataType(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#functionDeclaration.
+  visitFunctionDeclaration(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#blockStatement.
+  visitBlockStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#parameterList.
+  visitParameterList(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#returnStatement.
+  visitReturnStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#functionCall.
+  visitFunctionCall(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#argumentList.
+  visitArgumentList(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#ifStatement.
+  visitIfStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#elseIfStatement.
+  visitElseIfStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#elseStatement.
+  visitElseStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#whileLoop.
+  visitWhileLoop(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#forLoop.
+  visitForLoop(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#forEachLoop.
+  visitForEachLoop(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#loopBreak.
+  visitLoopBreak(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#arrayDeclaration.
+  visitArrayDeclaration(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#arrayElements.
+  visitArrayElements(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#assignmentStatement.
+  visitAssignmentStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#printStatement.
+  visitPrintStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#inputStatement.
+  visitInputStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#incrementStatement.
+  visitIncrementStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#decrementStatement.
+  visitDecrementStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#condition.
+  visitCondition(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#comparison.
+  visitComparison(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#expression.
+  visitExpression(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#bitwiseExpression.
+  visitBitwiseExpression(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#shiftExpression.
+  visitShiftExpression(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#term.
+  visitTerm(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#powerExpression.
+  visitPowerExpression(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#factor.
+  visitFactor(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#arrayAccess.
+  visitArrayAccess(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#dealField.
+  visitDealField(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#dealDeclaration.
+  visitDealDeclaration(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#dealAccess.
+  visitDealAccess(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#assertStatement.
+  visitAssertStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#importStatement.
+  visitImportStatement(ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  // Visit a parse tree produced by TrumplangParser#selectiveImport.
+  visitSelectiveImport(ctx) {
+    return this.visitChildren(ctx);
+  }
 }
 
-TrumplangVisitor.prototype = Object.create(antlr4.tree.ParseTreeVisitor.prototype);
-TrumplangVisitor.prototype.constructor = TrumplangVisitor;
-
-// Visit a parse tree produced by TrumplangParser#program.
-TrumplangVisitor.prototype.visitProgram = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#statement.
-TrumplangVisitor.prototype.visitStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#commentStatement.
-TrumplangVisitor.prototype.visitCommentStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#variableDeclaration.
-TrumplangVisitor.prototype.visitVariableDeclaration = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#constantDeclaration.
-TrumplangVisitor.prototype.visitConstantDeclaration = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#dataType.
-TrumplangVisitor.prototype.visitDataType = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#functionDeclaration.
-TrumplangVisitor.prototype.visitFunctionDeclaration = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#blockStatement.
-TrumplangVisitor.prototype.visitBlockStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#parameterList.
-TrumplangVisitor.prototype.visitParameterList = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#returnStatement.
-TrumplangVisitor.prototype.visitReturnStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#functionCall.
-TrumplangVisitor.prototype.visitFunctionCall = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#argumentList.
-TrumplangVisitor.prototype.visitArgumentList = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#ifStatement.
-TrumplangVisitor.prototype.visitIfStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#elseIfStatement.
-TrumplangVisitor.prototype.visitElseIfStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#elseStatement.
-TrumplangVisitor.prototype.visitElseStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#whileLoop.
-TrumplangVisitor.prototype.visitWhileLoop = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#forLoop.
-TrumplangVisitor.prototype.visitForLoop = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#forEachLoop.
-TrumplangVisitor.prototype.visitForEachLoop = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#loopBreak.
-TrumplangVisitor.prototype.visitLoopBreak = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#arrayDeclaration.
-TrumplangVisitor.prototype.visitArrayDeclaration = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#arrayElements.
-TrumplangVisitor.prototype.visitArrayElements = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#assignmentStatement.
-TrumplangVisitor.prototype.visitAssignmentStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#printStatement.
-TrumplangVisitor.prototype.visitPrintStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#inputStatement.
-TrumplangVisitor.prototype.visitInputStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#incrementStatement.
-TrumplangVisitor.prototype.visitIncrementStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#decrementStatement.
-TrumplangVisitor.prototype.visitDecrementStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#condition.
-TrumplangVisitor.prototype.visitCondition = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#comparison.
-TrumplangVisitor.prototype.visitComparison = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#expression.
-TrumplangVisitor.prototype.visitExpression = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#bitwiseExpression.
-TrumplangVisitor.prototype.visitBitwiseExpression = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#shiftExpression.
-TrumplangVisitor.prototype.visitShiftExpression = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#term.
-TrumplangVisitor.prototype.visitTerm = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#powerExpression.
-TrumplangVisitor.prototype.visitPowerExpression = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#factor.
-TrumplangVisitor.prototype.visitFactor = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#arrayAccess.
-TrumplangVisitor.prototype.visitArrayAccess = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#dealField.
-TrumplangVisitor.prototype.visitDealField = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#dealDeclaration.
-TrumplangVisitor.prototype.visitDealDeclaration = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#dealAccess.
-TrumplangVisitor.prototype.visitDealAccess = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#assertStatement.
-TrumplangVisitor.prototype.visitAssertStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#importStatement.
-TrumplangVisitor.prototype.visitImportStatement = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-// Visit a parse tree produced by TrumplangParser#selectiveImport.
-TrumplangVisitor.prototype.visitSelectiveImport = function(ctx) {
-  return this.visitChildren(ctx);
-};
-
-
-
-exports.TrumplangVisitor = TrumplangVisitor;
+export { TrumplangVisitor };
