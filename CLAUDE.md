@@ -45,6 +45,8 @@ We've successfully implemented the complete Trumplang language with all features
 - Improved parser precision with BlockStatement structure for all code blocks
 - Enhanced grammar with labeled elements for direct access in visitor code
 - Optimized visitor implementation to use labeled elements with `.text` property
+- Converted codebase from CommonJS to ES Modules for modern JavaScript support
+- Updated visitor pattern to use ES6 classes rather than prototype-based inheritance
 
 ## Code Style Guidelines
 
@@ -203,10 +205,14 @@ We've successfully implemented the complete Trumplang language with all features
 - **Visitor Implementation**: Updated visitor pattern to handle BlockStatement contexts across all control structures
 - **Grammar Labels**: Added ANTLR4 labels and label lists to grammar for cleaner visitor access
 - **Visitor Optimization**: Simplified visitor code by accessing labeled elements directly via `.text` property
+- **ES Module Migration**: Converted codebase from CommonJS to ES Modules format
+- **Modern JavaScript**: Updated visitor implementation to use ES6 classes instead of prototype-based inheritance
 
 The implementation now fully supports all the core language features specified in the grammar, with a properly designed visitor-based interpreter architecture. The transition from the simplified interpreter to the full ANTLR4-based implementation is complete, and all example programs can be executed using the new interpreter. With the addition of BlockStatement structure in the grammar and corresponding visitors, the parser now generates more precise error messages and handles code blocks more consistently across different control structures and functions.
 
 The most recent optimization involves using ANTLR4 labels in the grammar (e.g., `varName = VARIABLE`) and accessing them directly in the visitor via the `.text` property (e.g., `ctx.varName.text`). This approach significantly simplifies the visitor code by eliminating the need to manually search through child nodes using `getChild()` and checking token types. When working with the visitor code, always use the `.text` property to access labeled elements, rather than calling `.getText()` which would be incorrect.
+
+The codebase has been fully migrated from CommonJS to ES Modules format, with proper use of `import`/`export` statements instead of `require()`/`module.exports`. This modernization also includes converting the visitor implementation from prototype-based inheritance to ES6 classes with proper extension using the `extends` keyword and `super()` constructor calls. All places using `__dirname` have been updated to use `import.meta.url` with the URL API for path resolution, making the codebase fully compatible with Node.js ES modules.
 
 ## Error Messages
 

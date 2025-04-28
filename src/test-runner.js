@@ -113,7 +113,10 @@ class TestRunner {
       this.failedTests = 0;
 
       // Get all test directories - assumes test files are in test/ and its subdirectories
-      const testDir = path.join(__dirname, '..', 'test');
+      // Use import.meta.url instead of __dirname for ES modules
+      const currentFilePath = new URL(import.meta.url).pathname;
+      const currentDir = path.dirname(currentFilePath);
+      const testDir = path.join(currentDir, '..', 'test');
       this.runTestDirectory(testDir);
 
       // Recursively get subdirectories
