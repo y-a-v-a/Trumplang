@@ -214,7 +214,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Log the expression structure for debugging
     debug(`Expression with ${ctx.getChildCount()} children`);
 
-    // Simple term
+    // Simple bitwiseExpression
     if (ctx.getChildCount() === 1) {
       const result = this.visit(ctx.term(0));
       debug(`Simple term expression result: ${result}`);
@@ -437,10 +437,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   // Assignment statement visitor
   visitAssignmentStatement(ctx) {
     const variableName = ctx.varName.text;
-    const value = this.visit(ctx.expression());
-
-    debug(`Assigning ${variableName} = ${value}`);
-
+    
     // Ensure variable exists
     const variable = this.getVariable(variableName);
     if (!variable) {
@@ -448,11 +445,113 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`,
       );
     }
+    
+    const expressionValue = this.visit(ctx.expression());
+    let newValue;
+    
+    // Check for compound assignment types
+    if (ctx.COMPOUND_ADD()) {
+      debug(`Compound add: ${variableName} += ${expressionValue}`);
+      newValue = variable.value + expressionValue;
+    } else if (ctx.COMPOUND_SUBTRACT()) {
+      debug(`Compound subtract: ${variableName} -= ${expressionValue}`);
+      newValue = variable.value - expressionValue;
+    } else if (ctx.COMPOUND_MULTIPLY()) {
+      debug(`Compound multiply: ${variableName} *= ${expressionValue}`);
+      newValue = variable.value * expressionValue;
+    } else if (ctx.COMPOUND_DIVIDE()) {
+      debug(`Compound divide: ${variableName} /= ${expressionValue}`);
+      if (expressionValue === 0) {
+        throw new Error(
+          "THAT'S A DISASTER. YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!",
+        );
+      }
+      newValue = variable.value / expressionValue;
+    } else {
+      // Regular assignment
+      debug(`Regular assignment: ${variableName} = ${expressionValue}`);
+      newValue = expressionValue;
+    }
 
     // Update variable
-    variable.value = value;
+    variable.value = newValue;
+    debug(`Variable ${variableName} updated to: ${newValue}`);
 
-    return value;
+    return newValue;
+  }
+  
+  // BitwiseExpression visitor
+  visitBitwiseExpressionContext(ctx) {
+    debug(`Bitwise expression with ${ctx.getChildCount()} children`);
+    
+    // Simple shift expression
+    if (ctx.getChildCount() === 1) {
+      return this.visit(ctx.shiftExpression(0));
+    }
+    
+    // Bitwise AND
+    if (ctx.BITWISE_AND()) {
+      const left = this.visit(ctx.bitwiseExpression(0));
+      const right = this.visit(ctx.shiftExpression(0));
+      debug(`Bitwise AND: ${left} & ${right}`);
+      return left & right;
+    }
+    
+    // Bitwise OR
+    if (ctx.BITWISE_OR()) {
+      const left = this.visit(ctx.bitwiseExpression(0));
+      const right = this.visit(ctx.shiftExpression(0));
+      debug(`Bitwise OR: ${left} | ${right}`);
+      return left | right;
+    }
+    
+    // Bitwise XOR
+    if (ctx.BITWISE_XOR()) {
+      const left = this.visit(ctx.bitwiseExpression(0));
+      const right = this.visit(ctx.shiftExpression(0));
+      debug(`Bitwise XOR: ${left} ^ ${right}`);
+      return left ^ right;
+    }
+    
+    return null;
+  }
+  
+  // For backward compatibility
+  visitBitwiseExpression(ctx) {
+    return this.visitBitwiseExpressionContext(ctx);
+  }
+  
+  // ShiftExpression visitor
+  visitShiftExpressionContext(ctx) {
+    debug(`Shift expression with ${ctx.getChildCount()} children`);
+    
+    // Simple term
+    if (ctx.getChildCount() === 1) {
+      return this.visit(ctx.term(0));
+    }
+    
+    // Left shift
+    if (ctx.SHIFT_LEFT()) {
+      const left = this.visit(ctx.shiftExpression(0));
+      const right = this.visit(ctx.term(0));
+      debug(`Left shift: ${left} << ${right}`);
+      return left << right;
+    }
+    
+    // Right shift
+    if (ctx.SHIFT_RIGHT()) {
+      const left = this.visit(ctx.shiftExpression(0));
+      const right = this.visit(ctx.term(0));
+      debug(`Right shift: ${left} >> ${right}`);
+      return left >> right;
+    }
+    
+    return null;
+  }
+  
+  // For backward compatibility
+  visitShiftExpression(ctx) {
+    return this.visitShiftExpressionContext(ctx);
   }
 
   // Increment visitor
@@ -1335,6 +1434,10 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {
       return this.visitBlockStatement(ctx.blockStatement());
+    } else if (ctx.bitwiseExpression && ctx.bitwiseExpression()) {
+      return this.visitBitwiseExpression(ctx.bitwiseExpression());
+    } else if (ctx.shiftExpression && ctx.shiftExpression()) {
+      return this.visitShiftExpression(ctx.shiftExpression());
     }
 
     // If no specific statement type matches, visit the first child as fallback

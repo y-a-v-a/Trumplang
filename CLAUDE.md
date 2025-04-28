@@ -80,6 +80,17 @@ We've successfully implemented the complete Trumplang language with all features
 - Mathematical addition: `NUMBER! WINNING 5` (Use `WINNING` for numbers)
 - Multiplication: `value BIG LEAGUE TIMES factor`
 - Division: `value SAD factor`
+- Modulo: `value LEFTOVER FROM factor` (remainder after division)
+- Exponentiation: `base HUGELY MULTIPLIED BY exponent` (power operation)
+- Compound addition: `NUMBER! WINNING MASSIVELY 5` (equivalent to `NUMBER! += 5`)
+- Compound subtraction: `NUMBER! LOOSING MASSIVELY 5` (equivalent to `NUMBER! -= 5`)
+- Compound multiplication: `NUMBER! MANY TIMES HIGHER 5` (equivalent to `NUMBER! *= 5`)
+- Compound division: `NUMBER! MANY TIMES LOWER 5` (equivalent to `NUMBER! /= 5`)
+- Bitwise AND (simulated): `value ALLIANCE WITH other` (equivalent to `value & other`)
+- Bitwise OR (simulated): `value COMBINED FORCES WITH other` (equivalent to `value | other`)
+- Bitwise XOR (simulated): `value EXCLUSIVE DEAL WITH other` (equivalent to `value ^ other`)
+- Bitwise left shift (simulated): `value PROMOTE amount` (equivalent to `value << amount`)
+- Bitwise right shift (simulated): `value DEMOTE amount` (equivalent to `value >> amount`)
 
 ### Control Structures
 
@@ -140,6 +151,10 @@ We've successfully implemented the complete Trumplang language with all features
   - Comments with `A LOT OF PEOPLE ARE SAYING`
   - All arithmetic operations: `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`
   - Power expressions with `HUGELY MULTIPLIED BY`
+  - Modulo operation with `LEFTOVER FROM`
+  - Compound assignments: `WINNING MASSIVELY`, `LOOSING MASSIVELY`, `MANY TIMES HIGHER`, `MANY TIMES LOWER`
+  - Simulated bitwise operations: `ALLIANCE WITH`, `COMBINED FORCES WITH`, `EXCLUSIVE DEAL WITH`
+  - Shift operations: `PROMOTE`, `DEMOTE`
   - Increment/decrement with `MAKE ... GREATER` and `MAKE ... SMALLER`
   - String and number literals
   - Conditional statements (if/else-if/else)
@@ -159,9 +174,13 @@ We've successfully implemented the complete Trumplang language with all features
   - `DEAL` (object) variables default to empty object ({})
 - Comprehensive expression parsing hierarchy:
   - Expressions use terms for arithmetic
-  - Terms use power expressions for multiplication/division
-  - Power expressions use factors for exponentiation
+  - Terms use power expressions for multiplication/division/modulo
+  - Power expressions handle exponentiation operations
+  - Bitwise expressions handle AND, OR, and XOR operations
+  - Shift expressions handle left and right bit shifts
   - Factors handle literals, variables, and parenthesized expressions
+- Compound assignments for more concise syntax and operations
+- Full support for the entire expression hierarchy described in the grammar
 
 ## Project Structure
 
@@ -221,8 +240,12 @@ We've successfully implemented the complete Trumplang language with all features
 - **ES Module Migration**: Converted codebase from CommonJS to ES Modules format
 - **Modern JavaScript**: Updated visitor implementation to use ES6 classes instead of prototype-based inheritance
 - **Expression Hierarchy**: Added support for a proper expression hierarchy with powerExpression, term, and factor
+- **Extended Operations**: Implemented bitwise, shift, modulo, and power operations
+- **Compound Assignments**: Added support for compound assignment operators
 - **Type Initialization**: Implemented sensible default values for all variable types
 - **Test Framework**: Ensured all tests pass with the enhanced expression parser implementation
+- **Grammar Extensions**: Added new expression types (bitwise and shift operations) to grammar
+- **Enhanced Operators**: Added Trump-style syntax for new operator types
 
 The implementation now fully supports all the core language features specified in the grammar, with a properly designed visitor-based interpreter architecture. The transition from the simplified interpreter to the full ANTLR4-based implementation is complete, and all example programs can be executed using the new interpreter. With the addition of BlockStatement structure in the grammar and corresponding visitors, the parser now generates more precise error messages and handles code blocks more consistently across different control structures and functions.
 
@@ -230,7 +253,9 @@ The most recent optimization involves using ANTLR4 labels in the grammar (e.g., 
 
 The codebase has been fully migrated from CommonJS to ES Modules format, with proper use of `import`/`export` statements instead of `require()`/`module.exports`. This modernization also includes converting the visitor implementation from prototype-based inheritance to ES6 classes with proper extension using the `extends` keyword and `super()` constructor calls. All places using `__dirname` have been updated to use `import.meta.url` with the URL API for path resolution, making the codebase fully compatible with Node.js ES modules.
 
-The latest updates include implementing proper support for the expression hierarchy introduced in the grammar. This includes adding a visitor for the `powerExpression` rule that handles exponentiation operations, correctly linking the term visitor to use powerExpressions, and updating the factor visitor to properly process literals and variables. Additionally, default values for uninitialized variables have been implemented in a type-safe manner, providing appropriate defaults based on the variable's data type (e.g., 0 for integers, empty string for text).
+The latest updates include implementing proper support for the extended expression hierarchy introduced in the grammar. This includes adding visitors for the `bitwiseExpression`, `shiftExpression`, and `powerExpression` rules that handle bitwise operations, bit shifts, and exponentiation operations respectively. The `term` visitor has been enhanced to support modulo operations with the `LEFTOVER FROM` syntax. Additionally, compound assignment operators have been implemented for more concise code. 
+
+The language now supports a rich set of operations with Trump-style syntax, including bitwise operations (`ALLIANCE WITH`, `COMBINED FORCES WITH`, `EXCLUSIVE DEAL WITH`), shift operations (`PROMOTE`, `DEMOTE`), and mathematics operations like modulo (`LEFTOVER FROM`) and exponentiation (`HUGELY MULTIPLIED BY`). Default values for uninitialized variables have been implemented in a type-safe manner, providing appropriate defaults based on the variable's data type (e.g., 0 for integers, empty string for text).
 
 ## Error Messages
 
