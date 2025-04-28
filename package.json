@@ -12,8 +12,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node src/cli/index.js EXTREME VETTING test/basic/VERY_BASIC.TEST.MAGA",
-    "debug-test": "DEBUG=* node src/cli/index.js EXTREME VETTING",
+    "test": "node src/cli/index.js EXTREME VETTING test/basic/VARIABLES.TEST.MAGA",
+    "debug-test": "DEBUG=* node src/cli/index.js EXTREME VETTING test/basic/VARIABLES.TEST.MAGA",
     "test-all": "node src/cli/index.js EXTREME VETTING ALL",
     "start": "node src/cli/index.js",
     "generate-parser": "npx antlr-ng -o ./src/parser -Dlanguage=JavaScript -Dmodule=esm ./grammar/Trumplang.g4",

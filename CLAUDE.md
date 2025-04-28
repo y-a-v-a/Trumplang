@@ -139,6 +139,7 @@ We've successfully implemented the complete Trumplang language with all features
   - Print statements with `EVERYONE IS TALKING ABOUT`
   - Comments with `A LOT OF PEOPLE ARE SAYING`
   - All arithmetic operations: `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`
+  - Power expressions with `HUGELY MULTIPLIED BY`
   - Increment/decrement with `MAKE ... GREATER` and `MAKE ... SMALLER`
   - String and number literals
   - Conditional statements (if/else-if/else)
@@ -149,6 +150,18 @@ We've successfully implemented the complete Trumplang language with all features
   - Deal structures (objects) with field declaration and `FOLLOW` access
   - Iteration over arrays using foreach loops with `BILLIONS AND BILLIONS`
 - Advanced features fully implemented through the ANTLR4 parser and visitor pattern
+- Proper type initialization with sensible defaults:
+  - `HUGE` (integer) variables default to 0
+  - `BIGLY` (float) variables default to 0.0
+  - `SUPPORT` (boolean) variables default to `FAKE NEWS` (false)
+  - `TWEET` (string) variables default to empty string ("")
+  - `WALL` (array) variables default to empty array ([])
+  - `DEAL` (object) variables default to empty object ({})
+- Comprehensive expression parsing hierarchy:
+  - Expressions use terms for arithmetic
+  - Terms use power expressions for multiplication/division
+  - Power expressions use factors for exponentiation
+  - Factors handle literals, variables, and parenthesized expressions
 
 ## Project Structure
 
