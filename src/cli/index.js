@@ -20,21 +20,21 @@ if (args.length === 0) {
 // Handle special commands
 if (args[0] === 'EXTREME-VETTING') {
   // Implement test runner
-  if (args[2] === 'ALL') {
+  if (args[1] === 'ALL') {
     console.log('VETTING ALL TESTS! TREMENDOUS!');
     const testRunner = new TestRunner();
     const success = testRunner.runAllTests();
     process.exit(success ? 0 : 1);
-  } else if (args[2] === 'DIRECTORY') {
-    console.log(`VETTING DIRECTORY ${args[3]}! GREAT TESTS!`);
+  } else if (args[1] === 'DIRECTORY') {
+    console.log(`VETTING DIRECTORY ${args[2]}! GREAT TESTS!`);
     const testRunner = new TestRunner();
-    const success = testRunner.runTestDirectory(args[3]);
+    const success = testRunner.runTestDirectory(args[2]);
     process.exit(success ? 0 : 1);
   } else {
     // Run specific test
-    console.log(`VETTING ${args[2]}! VERY GOOD TEST!`);
+    console.log(`VETTING ${args[1]}! VERY GOOD TEST!`);
     const testRunner = new TestRunner();
-    const success = testRunner.runTestFile(args[2]);
+    const success = testRunner.runTestFile(args[1]);
     process.exit(success ? 0 : 1);
   }
 }

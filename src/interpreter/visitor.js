@@ -120,7 +120,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     } else if (ctx.expression()) {
       // It's a regular expression (with ABSOLUTELY keyword)
       debug(`Visiting variable declaration expression for ${variableName}`);
-      
+
       // Log context for better understanding
       if (ctx.expression().term) {
         debug(`Has term with ${ctx.expression().term().length} terms`);
@@ -128,14 +128,16 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       if (ctx.expression().getChildCount) {
         debug(`Expression has ${ctx.expression().getChildCount()} children`);
       }
-      
+
       value = this.visit(ctx.expression());
-      debug(`Variable ${variableName} initialized with expression value: ${value}`);
-      
+      debug(
+        `Variable ${variableName} initialized with expression value: ${value}`,
+      );
+
       // Default values if expression evaluation gives null
       if (value === null || value === undefined) {
-        switch(dataType) {
-          case 'HUGE': 
+        switch (dataType) {
+          case 'HUGE':
             debug(`Setting default HUGE value to 0 for ${variableName}`);
             value = 0;
             break;
@@ -149,7 +151,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
             break;
           case 'TWEET':
             debug(`Setting default TWEET value to "" for ${variableName}`);
-            value = "";
+            value = '';
             break;
           case 'WALL':
             debug(`Setting default WALL value to [] for ${variableName}`);
@@ -366,7 +368,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Multiplication
     if (ctx.MULTIPLY()) {
       const left = this.visit(ctx.term(0));
-      const right = this.visit(ctx.factor(0));
+      const right = this.visit(ctx.primaryExpression(0));
       debug(`Multiplication: ${left} * ${right}`);
       return left * right;
     }
@@ -374,7 +376,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Division
     if (ctx.DIVIDE()) {
       const left = this.visit(ctx.term(0));
-      const right = this.visit(ctx.factor(0));
+      const right = this.visit(ctx.primaryExpression(0));
       debug(`Division: ${left} / ${right}`);
 
       if (right === 0) {
@@ -388,7 +390,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Modulo
     if (ctx.MODULO()) {
       const left = this.visit(ctx.term(0));
-      const right = this.visit(ctx.factor(0));
+      const right = this.visit(ctx.primaryExpression(0));
       debug(`Modulo: ${left} % ${right}`);
 
       if (right === 0) {
@@ -401,29 +403,29 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     return null;
   }
-  
+
   // Power expression visitor
   visitPowerExpressionContext(ctx) {
     debug(`Power expression with ${ctx.getChildCount()} children`);
-    
+
     // Simple factor
     if (ctx.getChildCount() === 1) {
-      const result = this.visit(ctx.factor(0));
+      const result = this.visit(ctx.primaryExpression(0));
       debug(`Simple factor power expression result: ${result}`);
       return result;
     }
-    
+
     // Exponentiation
     if (ctx.POWER()) {
-      const base = this.visit(ctx.factor(0));
-      const exponent = this.visit(ctx.factor(1));
+      const base = this.visit(ctx.primaryExpression(0));
+      const exponent = this.visit(ctx.primaryExpression(1));
       debug(`Exponentiation: ${base} ^ ${exponent}`);
       return Math.pow(base, exponent);
     }
-    
+
     return null;
   }
-  
+
   // For backward compatibility
   visitPowerExpression(ctx) {
     return this.visitPowerExpressionContext(ctx);
@@ -437,7 +439,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   // Assignment statement visitor
   visitAssignmentStatement(ctx) {
     const variableName = ctx.varName.text;
-    
+
     // Ensure variable exists
     const variable = this.getVariable(variableName);
     if (!variable) {
@@ -445,10 +447,10 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`,
       );
     }
-    
+
     const expressionValue = this.visit(ctx.expression());
     let newValue;
-    
+
     // Check for compound assignment types
     if (ctx.COMPOUND_ADD()) {
       debug(`Compound add: ${variableName} += ${expressionValue}`);
@@ -479,16 +481,16 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     return newValue;
   }
-  
+
   // BitwiseExpression visitor
   visitBitwiseExpressionContext(ctx) {
     debug(`Bitwise expression with ${ctx.getChildCount()} children`);
-    
+
     // Simple shift expression
     if (ctx.getChildCount() === 1) {
       return this.visit(ctx.shiftExpression(0));
     }
-    
+
     // Bitwise AND
     if (ctx.BITWISE_AND()) {
       const left = this.visit(ctx.bitwiseExpression(0));
@@ -496,7 +498,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       debug(`Bitwise AND: ${left} & ${right}`);
       return left & right;
     }
-    
+
     // Bitwise OR
     if (ctx.BITWISE_OR()) {
       const left = this.visit(ctx.bitwiseExpression(0));
@@ -504,7 +506,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       debug(`Bitwise OR: ${left} | ${right}`);
       return left | right;
     }
-    
+
     // Bitwise XOR
     if (ctx.BITWISE_XOR()) {
       const left = this.visit(ctx.bitwiseExpression(0));
@@ -512,24 +514,24 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       debug(`Bitwise XOR: ${left} ^ ${right}`);
       return left ^ right;
     }
-    
+
     return null;
   }
-  
+
   // For backward compatibility
   visitBitwiseExpression(ctx) {
     return this.visitBitwiseExpressionContext(ctx);
   }
-  
+
   // ShiftExpression visitor
   visitShiftExpressionContext(ctx) {
     debug(`Shift expression with ${ctx.getChildCount()} children`);
-    
+
     // Simple term
     if (ctx.getChildCount() === 1) {
       return this.visit(ctx.term(0));
     }
-    
+
     // Left shift
     if (ctx.SHIFT_LEFT()) {
       const left = this.visit(ctx.shiftExpression(0));
@@ -537,7 +539,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       debug(`Left shift: ${left} << ${right}`);
       return left << right;
     }
-    
+
     // Right shift
     if (ctx.SHIFT_RIGHT()) {
       const left = this.visit(ctx.shiftExpression(0));
@@ -545,10 +547,10 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       debug(`Right shift: ${left} >> ${right}`);
       return left >> right;
     }
-    
+
     return null;
   }
-  
+
   // For backward compatibility
   visitShiftExpression(ctx) {
     return this.visitShiftExpressionContext(ctx);
@@ -593,7 +595,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   }
 
   // Visit factor
-  visitFactorContext(ctx) {
+  visitPrimaryExpressionContext(ctx) {
     debug(`Visiting factor with ${ctx.getChildCount()} children`);
 
     // Parenthesized expression
@@ -670,8 +672,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   }
 
   // For backward compatibility
-  visitFactor(ctx) {
-    return this.visitFactorContext(ctx);
+  visitPrimaryExpression(ctx) {
+    return this.visitPrimaryExpressionContext(ctx);
   }
 
   // BlockStatement visitor

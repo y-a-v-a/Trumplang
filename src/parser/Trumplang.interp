@@ -202,7 +202,7 @@ bitwiseExpression
 shiftExpression
 term
 powerExpression
-factor
+primaryExpression
 arrayAccess
 dealField
 dealDeclaration

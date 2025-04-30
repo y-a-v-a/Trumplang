@@ -301,12 +301,12 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
-	// Enter a parse tree produced by TrumplangParser#factor.
-	enterFactor(ctx) {
+	// Enter a parse tree produced by TrumplangParser#primaryExpression.
+	enterPrimaryExpression(ctx) {
 	}
 
-	// Exit a parse tree produced by TrumplangParser#factor.
-	exitFactor(ctx) {
+	// Exit a parse tree produced by TrumplangParser#primaryExpression.
+	exitPrimaryExpression(ctx) {
 	}
 
 

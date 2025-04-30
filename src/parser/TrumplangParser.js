@@ -202,7 +202,7 @@ export default class TrumplangParser extends antlr4.Parser {
                          "arrayElements", "assignmentStatement", "printStatement", 
                          "inputStatement", "incrementStatement", "decrementStatement", 
                          "condition", "comparison", "expression", "bitwiseExpression", 
-                         "shiftExpression", "term", "powerExpression", "factor", 
+                         "shiftExpression", "term", "powerExpression", "primaryExpression", 
                          "arrayAccess", "dealField", "dealDeclaration", 
                          "dealAccess", "assertStatement", "importStatement", 
                          "selectiveImport" ];
@@ -1719,7 +1719,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	                    this.state = 336;
 	                    this.match(TrumplangParser.MULTIPLY);
 	                    this.state = 337;
-	                    this.factor();
+	                    this.primaryExpression();
 	                    break;
 
 	                case 2:
@@ -1732,7 +1732,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	                    this.state = 339;
 	                    this.match(TrumplangParser.DIVIDE);
 	                    this.state = 340;
-	                    this.factor();
+	                    this.primaryExpression();
 	                    break;
 
 	                case 3:
@@ -1745,7 +1745,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	                    this.state = 342;
 	                    this.match(TrumplangParser.MODULO);
 	                    this.state = 343;
-	                    this.factor();
+	                    this.primaryExpression();
 	                    break;
 
 	                } 
@@ -1782,17 +1782,17 @@ export default class TrumplangParser extends antlr4.Parser {
 	        case 1:
 	            this.enterOuterAlt(localctx, 1);
 	            this.state = 349;
-	            this.factor();
+	            this.primaryExpression();
 	            break;
 
 	        case 2:
 	            this.enterOuterAlt(localctx, 2);
 	            this.state = 350;
-	            this.factor();
+	            this.primaryExpression();
 	            this.state = 351;
 	            this.match(TrumplangParser.POWER);
 	            this.state = 352;
-	            this.factor();
+	            this.primaryExpression();
 	            break;
 
 	        }
@@ -1812,9 +1812,9 @@ export default class TrumplangParser extends antlr4.Parser {
 
 
 
-	factor() {
-	    let localctx = new FactorContext(this, this._ctx, this.state);
-	    this.enterRule(localctx, 66, TrumplangParser.RULE_factor);
+	primaryExpression() {
+	    let localctx = new PrimaryExpressionContext(this, this._ctx, this.state);
+	    this.enterRule(localctx, 66, TrumplangParser.RULE_primaryExpression);
 	    try {
 	        this.state = 367;
 	        this._errHandler.sync(this);
@@ -2243,7 +2243,7 @@ TrumplangParser.RULE_bitwiseExpression = 29;
 TrumplangParser.RULE_shiftExpression = 30;
 TrumplangParser.RULE_term = 31;
 TrumplangParser.RULE_powerExpression = 32;
-TrumplangParser.RULE_factor = 33;
+TrumplangParser.RULE_primaryExpression = 33;
 TrumplangParser.RULE_arrayAccess = 34;
 TrumplangParser.RULE_dealField = 35;
 TrumplangParser.RULE_dealDeclaration = 36;
@@ -3886,8 +3886,8 @@ class TermContext extends antlr4.ParserRuleContext {
 	    return this.getToken(TrumplangParser.MULTIPLY, 0);
 	};
 
-	factor() {
-	    return this.getTypedRuleContext(FactorContext,0);
+	primaryExpression() {
+	    return this.getTypedRuleContext(PrimaryExpressionContext,0);
 	};
 
 	DIVIDE() {
@@ -3929,14 +3929,14 @@ class PowerExpressionContext extends antlr4.ParserRuleContext {
         this.ruleIndex = TrumplangParser.RULE_powerExpression;
     }
 
-	factor = function(i) {
+	primaryExpression = function(i) {
 	    if(i===undefined) {
 	        i = null;
 	    }
 	    if(i===null) {
-	        return this.getTypedRuleContexts(FactorContext);
+	        return this.getTypedRuleContexts(PrimaryExpressionContext);
 	    } else {
-	        return this.getTypedRuleContext(FactorContext,i);
+	        return this.getTypedRuleContext(PrimaryExpressionContext,i);
 	    }
 	};
 
@@ -3961,7 +3961,7 @@ class PowerExpressionContext extends antlr4.ParserRuleContext {
 
 
 
-class FactorContext extends antlr4.ParserRuleContext {
+class PrimaryExpressionContext extends antlr4.ParserRuleContext {
 
     constructor(parser, parent, invokingState) {
         if(parent===undefined) {
@@ -3972,7 +3972,7 @@ class FactorContext extends antlr4.ParserRuleContext {
         }
         super(parent, invokingState);
         this.parser = parser;
-        this.ruleIndex = TrumplangParser.RULE_factor;
+        this.ruleIndex = TrumplangParser.RULE_primaryExpression;
     }
 
 	expression() {
@@ -4009,13 +4009,13 @@ class FactorContext extends antlr4.ParserRuleContext {
 
 	enterRule(listener) {
 	    if(listener instanceof TrumplangListener ) {
-	        listener.enterFactor(this);
+	        listener.enterPrimaryExpression(this);
 		}
 	}
 
 	exitRule(listener) {
 	    if(listener instanceof TrumplangListener ) {
-	        listener.exitFactor(this);
+	        listener.exitPrimaryExpression(this);
 		}
 	}
 
@@ -4417,7 +4417,7 @@ TrumplangParser.BitwiseExpressionContext = BitwiseExpressionContext;
 TrumplangParser.ShiftExpressionContext = ShiftExpressionContext; 
 TrumplangParser.TermContext = TermContext; 
 TrumplangParser.PowerExpressionContext = PowerExpressionContext; 
-TrumplangParser.FactorContext = FactorContext; 
+TrumplangParser.PrimaryExpressionContext = PrimaryExpressionContext; 
 TrumplangParser.ArrayAccessContext = ArrayAccessContext; 
 TrumplangParser.DealFieldContext = DealFieldContext; 
 TrumplangParser.DealDeclarationContext = DealDeclarationContext; 
