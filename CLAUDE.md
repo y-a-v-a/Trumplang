@@ -18,9 +18,9 @@ Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The 
 - Run Trumplang program: `npm start [filename.MAGA]`
 - Run legacy simplified interpreter: `node src/simplified-interpreter.js [filename.MAGA]`
 - Run ANTLR-based interpreter directly: `node src/cli/index.js [filename.MAGA]`
-- Run tests: `EXTREME VETTING [filename.TEST.MAGA]`
-- Run all tests: `EXTREME VETTING ALL`
-- Run tests in directory: `EXTREME VETTING DIRECTORY [directory]`
+- Run tests: `EXTREME-VETTING [filename.TEST.MAGA]`
+- Run all tests: `EXTREME-VETTING ALL`
+- Run tests in directory: `EXTREME-VETTING DIRECTORY [directory]`
 
 ## Project Setup
 
@@ -253,7 +253,7 @@ The most recent optimization involves using ANTLR4 labels in the grammar (e.g., 
 
 The codebase has been fully migrated from CommonJS to ES Modules format, with proper use of `import`/`export` statements instead of `require()`/`module.exports`. This modernization also includes converting the visitor implementation from prototype-based inheritance to ES6 classes with proper extension using the `extends` keyword and `super()` constructor calls. All places using `__dirname` have been updated to use `import.meta.url` with the URL API for path resolution, making the codebase fully compatible with Node.js ES modules.
 
-The latest updates include implementing proper support for the extended expression hierarchy introduced in the grammar. This includes adding visitors for the `bitwiseExpression`, `shiftExpression`, and `powerExpression` rules that handle bitwise operations, bit shifts, and exponentiation operations respectively. The `term` visitor has been enhanced to support modulo operations with the `LEFTOVER FROM` syntax. Additionally, compound assignment operators have been implemented for more concise code. 
+The latest updates include implementing proper support for the extended expression hierarchy introduced in the grammar. This includes adding visitors for the `bitwiseExpression`, `shiftExpression`, and `powerExpression` rules that handle bitwise operations, bit shifts, and exponentiation operations respectively. The `term` visitor has been enhanced to support modulo operations with the `LEFTOVER FROM` syntax. Additionally, compound assignment operators have been implemented for more concise code.
 
 The language now supports a rich set of operations with Trump-style syntax, including bitwise operations (`ALLIANCE WITH`, `COMBINED FORCES WITH`, `EXCLUSIVE DEAL WITH`), shift operations (`PROMOTE`, `DEMOTE`), and mathematics operations like modulo (`LEFTOVER FROM`) and exponentiation (`HUGELY MULTIPLIED BY`). Default values for uninitialized variables have been implemented in a type-safe manner, providing appropriate defaults based on the variable's data type (e.g., 0 for integers, empty string for text).
 

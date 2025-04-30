@@ -12,9 +12,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node src/cli/index.js EXTREME VETTING test/basic/VARIABLES.TEST.MAGA",
-    "debug-test": "DEBUG=* node src/cli/index.js EXTREME VETTING test/basic/VARIABLES.TEST.MAGA",
-    "test-all": "node src/cli/index.js EXTREME VETTING ALL",
+    "test": "node src/cli/index.js EXTREME-VETTING test/basic/VARIABLES.TEST.MAGA",
+    "debug-test": "DEBUG=* npm run test",
+    "test-all": "node src/cli/index.js EXTREME-VETTING ALL",
     "start": "node src/cli/index.js",
     "generate-parser": "npx antlr-ng -o ./src/parser -Dlanguage=JavaScript -Dmodule=esm ./grammar/Trumplang.g4",
     "build": "npm run generate-parser"
@@ -24,7 +24,7 @@
     "url": "git+https://github.com/y-a-v-a/Trumplang.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vincent Bruijn <vebruijn@gmail.com>",
   "license": "ISC",
   "type": "module",
   "bugs": {

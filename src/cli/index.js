@@ -18,7 +18,7 @@ if (args.length === 0) {
 }
 
 // Handle special commands
-if (args[0] === 'EXTREME' && args[1] === 'VETTING') {
+if (args[0] === 'EXTREME-VETTING') {
   // Implement test runner
   if (args[2] === 'ALL') {
     console.log('VETTING ALL TESTS! TREMENDOUS!');

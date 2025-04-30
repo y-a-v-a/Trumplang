@@ -65,9 +65,9 @@ The framework provides several types of assertions:
 To run tests, use the following commands:
 
 ```
-EXTREME VETTING [filename.TEST.MAGA]    # Run specific test file
-EXTREME VETTING ALL                      # Run all test files in directory
-EXTREME VETTING DIRECTORY [directory]    # Run all test files in specific directory
+EXTREME-VETTING [filename.TEST.MAGA]    # Run specific test file
+EXTREME-VETTING ALL                      # Run all test files in directory
+EXTREME-VETTING DIRECTORY [directory]    # Run all test files in specific directory
 ```
 
 ### Execution Flow

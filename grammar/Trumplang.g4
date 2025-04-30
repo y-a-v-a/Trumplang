@@ -175,16 +175,16 @@ shiftExpression:
 // Terms - updated "TREMENDOUS" to "BIG LEAGUE TIMES" for multiplication
 term:
 	powerExpression
-	| term MULTIPLY factor // Multiplication (was "TREMENDOUS")
-	| term DIVIDE factor // Division
-	| term MODULO factor; // Modulo (new)
+	| term MULTIPLY primaryExpression // Multiplication (was "TREMENDOUS")
+	| term DIVIDE primaryExpression // Division
+	| term MODULO primaryExpression; // Modulo (new)
 
 powerExpression:
-    factor
-    | factor POWER factor;  // Exponentiation (right-associative)
+    primaryExpression
+    | primaryExpression POWER primaryExpression;  // Exponentiation (right-associative)
 
 // Factors
-factor:
+primaryExpression:
 	'(' expression ')'
 	| VARIABLE
 	| STRING
@@ -280,29 +280,29 @@ DEAL_ACCESS_KEYWORD: 'FOLLOW';
 
 ASSERT_CALL: 'FACT CHECK';
 
-EQUALS: 'SO TRUE';
+EQUALS: 'SO TRUE'; // ==
 
-NOT_EQUALS: 'TOTAL DISASTER';
+NOT_EQUALS: 'TOTAL DISASTER'; // !==
 
-GREATER_THAN: 'BETTER THAN';
+GREATER_THAN: 'BETTER THAN'; // >
 
-GREATER_THAN_OR_EQUALS: 'AT LEAST AS GOOD AS';
+GREATER_THAN_OR_EQUALS: 'AT LEAST AS GOOD AS'; // >=
 
-LESS_THAN: 'NOT AS GOOD AS';
+LESS_THAN: 'NOT AS GOOD AS'; // <
 
-LESS_THAN_OR_EQUALS: 'NO BETTER THAN';
+LESS_THAN_OR_EQUALS: 'NO BETTER THAN'; // <=
 
-NOT: 'WRONG';
+NOT: 'WRONG'; // !
 
-AND: 'AND IT\'S TRUE';
+AND: 'AND IT\'S TRUE'; // &&
 
-OR: 'OR MAYBE';
+OR: 'OR MAYBE'; // ||
 
-PLUS: 'WINNING';
+PLUS: 'WINNING'; // +
 
-MINUS: 'LOSING';
+MINUS: 'LOSING'; // -
 
-ASSIGNMENT: 'ABSOLUTELY';
+ASSIGNMENT: 'ABSOLUTELY'; // =
 
 COMPOUND_ADD: 'WINNING MASSIVELY'; // +=
 

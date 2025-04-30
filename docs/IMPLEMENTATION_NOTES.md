@@ -65,7 +65,7 @@ This document outlines additional implementation notes and considerations for de
 
 - **Debugging Features**
 
-  - Debug mode called "EXTREME VETTING"
+  - Debug mode called "EXTREME-VETTING"
   - Stack trace titled "THE FAILING PATH"
   - Performance profiler called "WINNING METRICS"
   - Syntax checker called "LAW & ORDER"
@@ -113,6 +113,6 @@ This document outlines additional implementation notes and considerations for de
   - Code folding for blocks between `BELIEVE ME` and `I TOLD YOU SO`
 
 - **Testing Framework**
-  - Test runner called "EXTREME VETTING PROCESS"
+  - Test runner called "EXTREME-VETTING PROCESS"
   - Assertions like `THIS SHOULD BE TREMENDOUS` and `NO COLLUSION WITH BUGS`
   - Test results described as either "WINNING" or "FAKE RESULTS"

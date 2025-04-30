@@ -3,6 +3,7 @@
 ## What We Have
 
 ### Project Structure
+
 - Complete grammar definition (`/grammar/Trumplang.g4`)
 - Working simplified interpreter for basic language features
 - CLI for running Trumplang programs
@@ -11,6 +12,7 @@
 - Error handling with Trump-style messages
 
 ### Features Implemented in Simplified Interpreter
+
 - Variable declarations with `I HAVE THE BEST`
 - Variable assignment with `ABSOLUTELY`
 - Print statements with `EVERYONE IS TALKING ABOUT`
@@ -20,6 +22,7 @@
 - String and number literals
 
 ### Test Programs
+
 - Simple variable and print example (`SIMPLE.MAGA`)
 - Counter example (`COUNTER.MAGA`)
 - Simplified Fibonacci sequence (`FIBONACCI_SIMPLE.MAGA`)
@@ -27,6 +30,7 @@
 ## What We Need
 
 ### Core Features to Implement
+
 - Control structures:
   - While loops (`WE'RE GOING TO WIN IN A LANDSLIDE`)
   - For loops (`WE'RE GOING TO WIN, WIN, WIN`)
@@ -50,11 +54,13 @@
   - Comparison operators
 
 ### Infrastructure
+
 - Complete ANTLR visitor implementation
-- Robust test framework (`EXTREME VETTING`)
+- Robust test framework (`EXTREME-VETTING`)
 - Integration with CLI
 
 ### Example Programs to Implement
+
 - Full Fibonacci sequence with loops (`FIBONACCI.MAGA`)
 - Prime number checker (`PRIME_CHECKER.MAGA`)
 - Function examples (`FUNCTION.MAGA`)

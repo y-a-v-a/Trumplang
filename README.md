@@ -1,12 +1,12 @@
 # Trumplang - A Trump-inspired Programming Language
 
-Trumplang is an esoteric programming language inspired by Donald Trump's speech patterns, famous quotes, and tweet style. The language is designed to look like Trump prose while functioning as a proper programming language.
+Trumplang stands as a tremendous tribute to Donald J. Trump's unique communication style. This big league programming language—many people are saying it's the best, believe me—captures the very powerful, very special way our 45th President speaks and tweets. What we've done—and it's really quite amazing when you think about it—is create a language that not only looks and sounds like authentic Trump, but also functions as a complete programming language. It's going to be huge for developers, absolutely huge. Nobody creates esoteric programming languages better than us, that I can tell you!
 
 ## Features
 
 - ALL KEYWORDS IN UPPERCASE
 - Variables end with exclamation mark (!) and are in UPPERCASE
-- Programs start with `BELIEVE ME` and end with `MAKE AMERICA GREAT AGAIN`
+- Programs start with `THE TIME FOR EMPTY TALK IS OVER!!!` and end with `MAKE AMERICA GREAT AGAIN`
 - Blocks begin with `BELIEVE ME` and end with `I TOLD YOU SO`
 - Trump-inspired error messages and runtime behavior
 
@@ -70,7 +70,7 @@ EVERYONE IS TALKING ABOUT COUNT!
 MAKE AMERICA GREAT AGAIN
 ```
 
-### Fibonacci Sequence (Full Language - in development)
+### Fibonacci Sequence
 
 ```
 THE TIME FOR EMPTY TALK IS OVER!!!
