@@ -99,7 +99,7 @@ whileLoop: WHILE_LOOP_DECL condition blockStatement;
 
 // For loop - "WE'RE GOING TO WIN, WIN, WIN"
 forLoop:
-	FOR_LOOP_WITH varName = VARIABLE FOR_LOOP_FROM expression FOR_LOOP_TO expression blockStatement;
+	FOR_LOOP_DECL FOR_LOOP_WITH varName = VARIABLE FOR_LOOP_FROM expression FOR_LOOP_TO expression blockStatement;
 
 // Loop item iteration - "BILLIONS AND BILLIONS"
 forEachLoop:

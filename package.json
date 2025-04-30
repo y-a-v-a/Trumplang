@@ -4,7 +4,8 @@
   "description": "```Trumplang I HAVE THE BEST DEAL POTUS! ABSOLUTELY (HUGE AGE! ABSOLUTELY 42 & TWEET HIM! ABSOLUTELY \"DONALD\")!! I HAVE THE BEST TWEET GUY! ABSOLUTELY POTUS! FOLLOW HIM! ```",
   "main": "src/index.js",
   "bin": {
-    "trumplang": "src/cli/index.js"
+    "trumplang": "src/cli/index.js",
+    "MAGA": "bin/maga.js"
   },
   "directories": {
     "doc": "docs",
