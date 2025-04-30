@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import debugModule from 'debug';
-const debug = debugModule('trumplang:test-runner');
+const debug = debugModule('trumplang:runner');
 
 // Use the full ANTLR4-based interpreter
 import { TrumplangInterpreter } from '../interpreter/index.js';
