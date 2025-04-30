@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 import { TrumplangInterpreter } from './interpreter/index.js';
 import debugModule from 'debug';
 const debug = debugModule('trumplang:test-runner');
@@ -20,7 +21,7 @@ class TestRunner {
    * Run a single test file
    */
   runTestFile(filePath) {
-    console.log(`\nEXTREME VETTING: ${filePath}`);
+    console.log(chalk.yellow(`EXTREME VETTING: ${filePath}`));
 
     try {
       // Check if the file exists
@@ -45,7 +46,12 @@ class TestRunner {
 
       if (result === 'PASSED BIGLY') {
         console.log(
-          `${path.basename(filePath)} PASSED BIGLY! TREMENDOUS SUCCESS!`,
+          chalk.blue(
+            `${chalk.bold(
+              path.basename(filePath),
+            )} PASSED BIGLY! TREMENDOUS SUCCESS!
+            `,
+          ),
         );
         this.passedTests++;
         return true;
@@ -134,9 +140,12 @@ class TestRunner {
       }
 
       // Print summary
-      console.log('\nTEST SUMMARY:');
-      console.log(`PASSED: ${this.passedTests} - TREMENDOUS!`);
-      console.log(`FAILED: ${this.failedTests} - SAD!`);
+      console.log('');
+      console.log(chalk.bgBlue.bold('TEST SUMMARY:'));
+      console.log(
+        chalk.bgWhite.red(`PASSED: ${this.passedTests} - TREMENDOUS!`),
+      );
+      console.log(chalk.bgRed.white(`FAILED: ${this.failedTests} - SAD!`));
 
       return this.failedTests === 0;
     } catch (error) {

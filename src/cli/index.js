@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 import debugModule from 'debug';
 const debug = debugModule('trumplang:runner');
 
@@ -21,18 +22,20 @@ if (args.length === 0) {
 if (args[0] === 'EXTREME-VETTING') {
   // Implement test runner
   if (args[1] === 'ALL') {
-    console.log('VETTING ALL TESTS! TREMENDOUS!');
+    console.log(chalk.yellowBright('VETTING ALL TESTS! TREMENDOUS!'));
     const testRunner = new TestRunner();
     const success = testRunner.runAllTests();
     process.exit(success ? 0 : 1);
   } else if (args[1] === 'DIRECTORY') {
-    console.log(`VETTING DIRECTORY ${args[2]}! GREAT TESTS!`);
+    console.log(
+      chalk.yellowBright(`VETTING DIRECTORY ${args[2]}! GREAT TESTS!`),
+    );
     const testRunner = new TestRunner();
     const success = testRunner.runTestDirectory(args[2]);
     process.exit(success ? 0 : 1);
   } else {
     // Run specific test
-    console.log(`VETTING ${args[1]}! VERY GOOD TEST!`);
+    console.log(chalk.yellowBright(`VETTING ${args[1]}! VERY GOOD TEST!`));
     const testRunner = new TestRunner();
     const success = testRunner.runTestFile(args[1]);
     process.exit(success ? 0 : 1);

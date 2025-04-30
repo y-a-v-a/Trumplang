@@ -1,4 +1,5 @@
 import debugModule from 'debug';
+import chalk from 'chalk';
 const debug = debugModule('trumplang:visitor');
 
 // Load the generated visitor
@@ -59,7 +60,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Visit all statements
     const statements = ctx.statement();
     let result;
-    let allAssertsPassed = true;
+    // let allAssertsPassed = true;
 
     for (let i = 0; i < statements.length; i++) {
       try {
@@ -68,12 +69,11 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         // Keep track of print statements that signal test passed
         if (statements[i].printStatement && result === 'PASSED BIGLY') {
           debug('Found PASSED BIGLY print statement');
-          return 'PASSED BIGLY';
+          return result;
         }
       } catch (error) {
         // If any assertion fails, mark the test as failed
         if (error.message && error.message.includes('ASSERTION FAILED')) {
-          allAssertsPassed = false;
           throw error; // Re-throw assertion errors to halt execution
         }
         // For other errors, just re-throw them
@@ -81,13 +81,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       }
     }
 
-    // If we reach the end and all assertions passed, consider the test passing
-    if (allAssertsPassed) {
-      debug('All assertions passed, returning PASSED BIGLY');
-      return 'PASSED BIGLY';
-    }
-
-    return result;
+    return '';
   }
 
   // Variable declaration visitor
@@ -327,7 +321,9 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
           return true;
         } else {
           throw new Error(
-            `ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`,
+            chalk.red(
+              `ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`,
+            ),
           );
         }
       }
@@ -346,7 +342,9 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return true;
     } else {
       throw new Error(
-        `ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`,
+        chalk.red(
+          `ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`,
+        ),
       );
     }
   }
