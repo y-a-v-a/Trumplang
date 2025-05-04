@@ -1,153 +1,30 @@
-# Trumplang - A Trump-inspired Programming Language
+# Trumplang Programming Language
 
-Trumplang stands as a tremendous tribute to Donald J. Trump's unique communication style. This big league programming language—many people are saying it's the best, believe me—captures the very powerful, very special way our 45th President speaks and tweets. What we've done—and it's really quite amazing when you think about it—is create a language that not only looks and sounds like authentic Trump, but also functions as a complete programming language. It's going to be huge for developers, absolutely huge. Nobody creates esoteric programming languages better than us, that I can tell you!
-
-## Features
-
-- ALL KEYWORDS IN UPPERCASE
-- Variables end with exclamation mark (!) and are in UPPERCASE
-- Programs start with `THE TIME FOR EMPTY TALK IS OVER!!!` and end with `MAKE AMERICA GREAT AGAIN`
-- Blocks begin with `BELIEVE ME` and end with `I TOLD YOU SO`
-- Trump-inspired error messages and runtime behavior
-
-## Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/trumplang.git
-cd trumplang
-
-# Install dependencies
-npm install
-
-# Link the CLI command globally (optional)
-npm link
-```
-
-## Usage
-
-```bash
-# Run a Trumplang program
-npm start examples/FIBONACCI.MAGA
-
-# Or if globally linked:
-trumplang examples/FIBONACCI.MAGA
-
-# Run tests
-npm test
-```
-
-## Example Programs
-
-### Simple Counter
-
-```
-THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THIS IS A SIMPLE COUNTER PROGRAM
-
-I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0
-I HAVE THE BEST HUGE MAX! ABSOLUTELY 5
-I HAVE THE BEST TWEET MESSAGE! ABSOLUTELY "COUNTING UP - TREMENDOUS NUMBERS!"
-
-EVERYONE IS TALKING ABOUT MESSAGE!
-EVERYONE IS TALKING ABOUT COUNT!
-
-MAKE COUNT! GREATER
-EVERYONE IS TALKING ABOUT COUNT!
-
-MAKE COUNT! GREATER
-EVERYONE IS TALKING ABOUT COUNT!
-
-MAKE COUNT! GREATER
-EVERYONE IS TALKING ABOUT COUNT!
-
-MAKE COUNT! GREATER
-EVERYONE IS TALKING ABOUT COUNT!
-
-MAKE COUNT! GREATER
-EVERYONE IS TALKING ABOUT COUNT!
-
-MAKE AMERICA GREAT AGAIN
-```
-
-### Fibonacci Sequence
-
-```
-THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THIS PROGRAM CALCULATES THE FIBONACCI SEQUENCE
-I HAVE THE BEST HUGE TERMS! ABSOLUTELY 10
-I HAVE THE BEST HUGE FIRST! ABSOLUTELY 0
-I HAVE THE BEST HUGE SECOND! ABSOLUTELY 1
-I HAVE THE BEST HUGE NEXT! ABSOLUTELY 0
-I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0
-EVERYONE IS TALKING ABOUT "FIBONACCI SEQUENCE - VERY TREMENDOUS NUMBERS!"
-EVERYONE IS TALKING ABOUT FIRST!
-WE'RE GOING TO WIN IN A LANDSLIDE COUNT! NOT AS GOOD AS TERMS! BELIEVE ME
-    COUNT! ABSOLUTELY COUNT! WINNING 1
-
-    LISTEN COUNT! SO TRUE 1 BELIEVE ME
-        EVERYONE IS TALKING ABOUT SECOND!
-    NOBODY KNEW
-        NEXT! ABSOLUTELY (FIRST! WINNING SECOND!)
-        EVERYONE IS TALKING ABOUT NEXT!
-        FIRST! ABSOLUTELY SECOND!
-        SECOND! ABSOLUTELY NEXT!
-    I TOLD YOU SO
-I TOLD YOU SO
-MAKE AMERICA GREAT AGAIN
-```
-
-## Current Implementation Status
-
-The current interpreter implementation supports:
-
-- Variable declarations with `I HAVE THE BEST`
-- Variable assignment with `ABSOLUTELY`
-- String and number literals
-- Basic arithmetic with `WINNING` (addition)
-- Increment with `MAKE ... GREATER`
-- Decrement with `MAKE ... SMALLER`
-- Print statements with `EVERYONE IS TALKING ABOUT`
-- Comments with `A LOT OF PEOPLE ARE SAYING`
-
-Control structures and advanced features are in development.
+This monorepo contains the Trumplang programming language implementation and related packages.
 
 ## Project Structure
 
-- `/grammar` - ANTLR4 grammar definitions
-- `/src` - Source code for the interpreter
-  - `/cli` - Command-line interface
-  - `/interpreter` - The core interpreter
-  - `/parser` - Generated parser from ANTLR4
-  - `/runtime` - Runtime environment
-- `/examples` - Example Trumplang programs
-- `/test` - Test files
+- **docs/**: Documentation for Trumplang language
+- **packages/**: 
+  - **trumplang-core/**: Main implementation of the Trumplang language
 
-## Language Reference
+## Getting Started
 
-For full language documentation, see:
+To run a Trumplang program:
 
-- [Implementation Notes](docs/IMPLEMENTATION_NOTES.md)
-- [Testing Framework](docs/TESTING_FRAMEWORK.md)
+```
+cd packages/trumplang-core
+npm start [filename.MAGA]
+```
 
-## Inspiration
+For more detailed information, see:
+- [Language Documentation](docs/README.md)
+- [Core Implementation](packages/trumplang-core/README.md)
 
-- https://www.thetrumparchive.com/
-- https://www.rev.com/category/donald-trump
-- TOTALLY RIGGED
-- THEY ARE REALLY LATE, VERY DISRESPECTFUL TO OUR COUNTRY!
-- GREAT VOTER ENTHUSIASM TODAY. THAT IS A VERY GOOD THING! (CODER?)
-- WITCH HUNT
-- THE BEST IS YET TO COME...
-- BUT FEAR NOT, WE WILL WIN BIG ON NOVEMBER 5TH, AND MAKE AMERICA GREAT AGAIN!!!
-- “TRUMP” WILL FIX IT!
-- I WILL NEVER LET YOU DOWN!
-- ALL LIES
-- STONE COLD LOSER
-- MAGA LOVES YOU!!!
-- TOTALLY UNFIT
-- a COMPLETE AND TOTAL DISASTER
+## Future Development
 
-## License
-
-ISC
+This monorepo is structured to accommodate additional subpackages such as:
+- Language server
+- VS Code extension
+- Web playground
+- Additional tools and utilities

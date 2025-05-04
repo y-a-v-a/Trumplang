@@ -1,42 +1,15 @@
 {
-  "name": "Trumplang",
+  "name": "trumplang-monorepo",
   "version": "1.0.0",
-  "description": "```Trumplang I HAVE THE BEST DEAL POTUS! ABSOLUTELY (HUGE AGE! ABSOLUTELY 42 & TWEET HIM! ABSOLUTELY \"DONALD\")!! I HAVE THE BEST TWEET GUY! ABSOLUTELY POTUS! FOLLOW HIM! ```",
-  "main": "src/index.js",
-  "bin": {
-    "trumplang": "src/cli/index.js",
-    "MAGA": "bin/maga.js"
-  },
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "test": "test"
-  },
+  "description": "Monorepo for Trumplang programming language and related packages",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "node src/cli/index.js EXTREME-VETTING test/basic/VARIABLES.TEST.MAGA",
-    "debug-test": "DEBUG=* npm run test",
-    "test-all": "node src/cli/index.js EXTREME-VETTING ALL",
-    "start": "node src/cli/index.js",
-    "generate-parser": "npx antlr-ng -o ./src/parser -Dlanguage=JavaScript -Dmodule=esm ./grammar/Trumplang.g4",
-    "build": "npm run generate-parser"
+    "test": "cd packages/trumplang-core && npm test",
+    "start": "cd packages/trumplang-core && npm start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/y-a-v-a/Trumplang.git"
-  },
-  "keywords": [],
-  "author": "Vincent Bruijn <vebruijn@gmail.com>",
-  "license": "ISC",
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/y-a-v-a/Trumplang/issues"
-  },
-  "homepage": "https://github.com/y-a-v-a/Trumplang#readme",
-  "dependencies": {
-    "antlr-ng": "^1.0.9",
-    "antlr4": "^4.13.2",
-    "antlr4ts": "^0.5.0-alpha.4",
-    "chalk": "^5.4.1",
-    "debug": "^4.4.0"
-  }
+  "author": "",
+  "license": "ISC"
 }
