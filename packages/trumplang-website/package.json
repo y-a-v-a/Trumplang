@@ -1,0 +1,23 @@
+{
+  "name": "trumplang-website",
+  "version": "1.0.0",
+  "description": "The official website for Trumplang - THE MOST TREMENDOUS Programming Language",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve public",
+    "dev": "serve public"
+  },
+  "keywords": [
+    "trumplang",
+    "website",
+    "programming",
+    "language"
+  ],
+  "dependencies": {
+    "serve": "^14.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,210 @@
+/* TRUMPLANG Website - THE MOST BEAUTIFUL STYLES */
+
+:root {
+    --trump-red: #B22234;
+    --trump-blue: #3C3B6E;
+    --trump-gold: #D4AF37;
+    --light-gray: #f8f8f8;
+    --dark-gray: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--dark-gray);
+    background-color: var(--light-gray);
+}
+
+header {
+    background-color: var(--trump-red);
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-bottom: 0.5rem solid var(--trump-gold);
+}
+
+header h1 {
+    font-size: 3.5rem;
+    letter-spacing: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+
+header h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+h2 {
+    color: var(--trump-blue);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 2rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Syntax section */
+.syntax-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.syntax-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.syntax-item h3 {
+    color: var(--trump-red);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+pre {
+    background-color: var(--dark-gray);
+    color: white;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    line-height: 1.4;
+}
+
+code {
+    font-family: 'Courier New', monospace;
+}
+
+/* Playground section */
+.editor-container {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#code-editor {
+    width: 100%;
+    height: 300px;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+    line-height: 1.4;
+    background-color: var(--dark-gray);
+    color: white;
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+button {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+#run-button {
+    background-color: var(--trump-blue);
+    color: white;
+}
+
+#run-button:hover {
+    background-color: #2d2a52;
+}
+
+#clear-button {
+    background-color: var(--trump-red);
+    color: white;
+}
+
+#clear-button:hover {
+    background-color: #8e1b29;
+}
+
+#output-container {
+    margin-top: 1.5rem;
+}
+
+#output-container h3 {
+    color: var(--trump-blue);
+    margin-bottom: 0.5rem;
+}
+
+#output {
+    background-color: var(--light-gray);
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 4px;
+    min-height: 150px;
+}
+
+/* Footer */
+footer {
+    background-color: var(--trump-blue);
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    border-top: 0.5rem solid var(--trump-gold);
+    margin-top: 2rem;
+}
+
+footer p {
+    margin-bottom: 0.5rem;
+}
+
+footer small {
+    opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5rem;
+    }
+    
+    header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .syntax-container {
+        grid-template-columns: 1fr;
+    }
+    
+    main {
+        padding: 1.5rem;
+    }
+}

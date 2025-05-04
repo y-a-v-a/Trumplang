@@ -54,7 +54,7 @@ We've successfully implemented the complete Trumplang language with all features
 
 - ALL KEYWORDS AND VARIABLES MUST BE IN UPPERCASE
 - Files use `.MAGA` extension (`.TEST.MAGA` for tests)
-- Programs start with `BELIEVE ME` and end with `MAKE AMERICA GREAT AGAIN`
+- Programs start with `THE TIME FOR EMPTY TALK IS OVER!!!` and end with `MAKE AMERICA GREAT AGAIN`
 - Blocks begin with `BELIEVE ME` and end with `I TOLD YOU SO`
 - Comments begin with `A LOT OF PEOPLE ARE SAYING`
 
@@ -100,6 +100,7 @@ We've successfully implemented the complete Trumplang language with all features
 - If statement: `LISTEN condition BELIEVE ME ... I TOLD YOU SO`
 - Else if: `PEOPLE ARE SAYING condition BELIEVE ME ...`
 - Else: `NOBODY KNEW ...`
+- Break from loop: `I WILL VETO!`
 
 ### Functions and Imports
 
@@ -125,7 +126,7 @@ We've successfully implemented the complete Trumplang language with all features
 
 - Deal structure declaration: End deal structures with `!!` to differentiate them from regular parentheses: `(HUGE AGE! ABSOLUTELY 42 & TWEET NAME! ABSOLUTELY "DONALD")!!`
 - Deal field access: `PERSON! FOLLOW NAME!`
-- Deal fields must have a type: `HUGE`, `BIGLY`, `FAKE NEWS`, `TWEET`, `WALL`, or `DEAL`
+- Deal fields must have a type: `HUGE`, `BIGLY`, `SUPPORT`, `TWEET`, `WALL`, or `DEAL`
 - Multiple fields: Use `&` to separate fields in a deal structure
 - Nested deal workaround: Create separate deal structures and reference them by variable
 
@@ -164,6 +165,7 @@ We've successfully implemented the complete Trumplang language with all features
   - Arrays with `BUILD THE WALL` declaration and `SECTION` access
   - Deal structures (objects) with field declaration and `FOLLOW` access
   - Iteration over arrays using foreach loops with `BILLIONS AND BILLIONS`
+  - Loop breaking with `I WILL VETO!`
 - Advanced features fully implemented through the ANTLR4 parser and visitor pattern
 - Proper type initialization with sensible defaults:
   - `HUGE` (integer) variables default to 0
