@@ -1,6 +1,6 @@
 # Trumplang Programming Language
 
-This monorepo contains the Trumplang programming language implementation and related packages.
+Trumplang stands as a tremendous tribute to Donald J. Trump's unique communication style. This big league programming language—many people are saying it's the best, believe me—captures the very powerful, very special way our 45th President speaks and tweets. What we've done—and it's really quite amazing when you think about it—is create a language that not only looks and sounds like authentic Trump, but also functions as a complete programming language. It's going to be huge for developers, absolutely huge. Nobody creates esoteric programming languages better than us, that I can tell you!
 
 ## Project Structure
 
