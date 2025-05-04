@@ -2,6 +2,16 @@
 
 This document contains information about the Trumplang programming language, its syntax, and implementation details.
 
+## Monorepo Structure
+
+Trumplang is organized as a monorepo with multiple packages:
+
+- **packages/trumplang-core/**: Main implementation of the Trumplang language and interpreter
+- **packages/trumplang-vscode/**: VS Code extension for Trumplang (Git submodule)
+- **packages/trumplang-website/**: (Future) Web-based playground and documentation site
+
+The monorepo structure allows for better code organization, separation of concerns, and easier contributions to specific components.
+
 ## Language Style and Tone
 
 Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The language design follows these principles:
@@ -15,6 +25,8 @@ Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The 
 
 ## Running Commands
 
+From the `packages/trumplang-core` directory:
+
 - Run Trumplang program: `npm start [filename.MAGA]`
 - Run legacy simplified interpreter: `node src/simplified-interpreter.js [filename.MAGA]`
 - Run ANTLR-based interpreter directly: `node src/cli/index.js [filename.MAGA]`
@@ -24,11 +36,34 @@ Trumplang is based on Donald Trump's unique speech patterns and vocabulary. The 
 
 ## Project Setup
 
+From the `packages/trumplang-core` directory:
+
 - Generate ANTLR4 parser: `npm run generate-parser`
 - Build project: `npm run build`
 - Debug tokens: `node src/debug-tokenizer.js [filename]`
 - Debug parsing: `node src/debug-parser.js [filename]`
 - Visualize parse tree: `node src/debug-tree.js [filename]`
+
+## Working with Git Submodules
+
+The trumplang-vscode package is maintained as a Git submodule. When making changes:
+
+1. First, navigate to the submodule directory: `cd packages/trumplang-vscode`
+2. Make and test your changes to the VS Code extension
+3. Commit and push changes to the extension repository
+4. Return to the root directory and update the submodule reference: 
+   ```
+   cd ../..
+   git add packages/trumplang-vscode
+   git commit -m "Update VS Code extension submodule reference"
+   ```
+
+For new contributors cloning the repository, initialize submodules with:
+```
+git clone --recursive https://github.com/your-username/Trumplang.git
+# Or if already cloned:
+git submodule update --init --recursive
+```
 
 ## Implementation Achievements
 
@@ -47,6 +82,7 @@ We've successfully implemented the complete Trumplang language with all features
 - Optimized visitor implementation to use labeled elements with `.text` property
 - Converted codebase from CommonJS to ES Modules for modern JavaScript support
 - Updated visitor pattern to use ES6 classes rather than prototype-based inheritance
+- Restructured project as a monorepo with separate packages for core language, VS Code extension, and website
 
 ## Code Style Guidelines
 
@@ -138,8 +174,16 @@ We've successfully implemented the complete Trumplang language with all features
 
 ## VS Code Integration
 
-- Language support available in trumplang-vscode extension
-- Syntax highlighting uses Trump-inspired colors: red, gold, navy blue
+- Language support available in the `packages/trumplang-vscode` submodule
+- Features include:
+  - Syntax highlighting using Trump-inspired colors (red, gold, navy blue)
+  - Code snippets for common Trumplang patterns
+  - Basic validation and linting
+- To install locally for development:
+  1. Navigate to the VS Code extension directory: `cd packages/trumplang-vscode`
+  2. Install dependencies: `npm install`
+  3. Package the extension: `npm run package`
+  4. Install the VSIX file in VS Code
 
 ## Implementation Status
 
@@ -183,42 +227,51 @@ We've successfully implemented the complete Trumplang language with all features
   - Factors handle literals, variables, and parenthesized expressions
 - Compound assignments for more concise syntax and operations
 - Full support for the entire expression hierarchy described in the grammar
+- Monorepo structure with dedicated packages for different components
 
 ## Project Structure
 
-- `/src/simplified-interpreter.js` - Original simplified interpreter (legacy)
-- `/src/interpreter/` - ANTLR4-based interpreter (fully implemented)
-  - `/src/interpreter/index.js` - Main interpreter class
-  - `/src/interpreter/visitor.js` - Complete AST visitor implementation with support for all language features
-  - `/src/interpreter/environment_utils.js` - Utilities for managing variable and function environments
-- `/src/parser/` - Generated parser from ANTLR4
-- `/src/cli/` - Command line interface (now updated to use the full interpreter)
-- `/src/runtime/` - Runtime support for variables and functions
-  - `/src/runtime/environment.js` - Variable and function environment with proper scope handling
-  - `/src/runtime/errors.js` - Trump-styled error messages
-- `/src/debug-tree.js` - Debugging tool for parse tree visualization
-- `/src/debug-tokenizer.js` - Debugging tool for lexer tokenization
-- `/grammar/Trumplang.g4` - Complete grammar definition with labeled elements and BlockStatement structure
-- `/examples/` - Example Trumplang programs
-  - `/examples/SIMPLE.MAGA` - Simple variable and print example
-  - `/examples/COUNTER.MAGA` - Counter with increment operations
-  - `/examples/SIMPLE_FUNCTION.MAGA` - Function demonstration with parameters and return values
-  - `/examples/VERY_SIMPLE.MAGA` - Basic arithmetic and variable assignments
-  - `/examples/IF_STATEMENT.MAGA` - Conditional logic demonstration
-  - `/examples/WHILE_LOOP.MAGA` - While loop demonstration
-  - `/examples/FOR_LOOP.MAGA` - For loop demonstration
-  - `/examples/FOREACH_LOOP.MAGA` - For-each loop demonstration
-  - `/examples/FIBONACCI.MAGA` - Fibonacci sequence implementation using a function
-  - `/examples/ARRAY_SIMPLE.MAGA` - Basic array declaration and access example
-  - `/examples/DEAL_SIMPLE.MAGA` - Basic deal structure declaration and access example
-  - `/examples/NESTED_DEAL_WORKAROUND.MAGA` - Example of working with multiple deal structures
-- `/test/` - Test files and test framework
+### Root Structure
+- `/docs/` - Documentation for the Trumplang language
+- `/packages/` - Contains all package components
+  - `/packages/trumplang-core/` - Main language implementation
+  - `/packages/trumplang-vscode/` - VS Code extension (Git submodule)
+  - `/packages/trumplang-website/` - (Future) Web-based playground
+
+### Core Package Structure
+- `/packages/trumplang-core/src/simplified-interpreter.js` - Original simplified interpreter (legacy)
+- `/packages/trumplang-core/src/interpreter/` - ANTLR4-based interpreter (fully implemented)
+  - `/packages/trumplang-core/src/interpreter/index.js` - Main interpreter class
+  - `/packages/trumplang-core/src/interpreter/visitor.js` - Complete AST visitor implementation
+  - `/packages/trumplang-core/src/interpreter/environment_utils.js` - Environment utilities
+- `/packages/trumplang-core/src/parser/` - Generated parser from ANTLR4
+- `/packages/trumplang-core/src/cli/` - Command line interface
+- `/packages/trumplang-core/src/runtime/` - Runtime support
+  - `/packages/trumplang-core/src/runtime/environment.js` - Variable and function environment
+  - `/packages/trumplang-core/src/runtime/errors.js` - Trump-styled error messages
+- `/packages/trumplang-core/src/debug-tree.js` - Parse tree visualization
+- `/packages/trumplang-core/src/debug-tokenizer.js` - Lexer tokenization debugging
+- `/packages/trumplang-core/grammar/Trumplang.g4` - Complete grammar definition
+- `/packages/trumplang-core/examples/` - Example programs
+  - `/packages/trumplang-core/examples/SIMPLE.MAGA` - Simple variable and print example
+  - `/packages/trumplang-core/examples/COUNTER.MAGA` - Counter with increment operations
+  - `/packages/trumplang-core/examples/SIMPLE_FUNCTION.MAGA` - Function demonstration
+  - `/packages/trumplang-core/examples/VERY_SIMPLE.MAGA` - Basic arithmetic
+  - `/packages/trumplang-core/examples/IF_STATEMENT.MAGA` - Conditional logic
+  - `/packages/trumplang-core/examples/WHILE_LOOP.MAGA` - While loop demonstration
+  - `/packages/trumplang-core/examples/FOR_LOOP.MAGA` - For loop demonstration
+  - `/packages/trumplang-core/examples/FOREACH_LOOP.MAGA` - For-each loop demonstration
+  - `/packages/trumplang-core/examples/FIBONACCI.MAGA` - Fibonacci implementation
+  - `/packages/trumplang-core/examples/ARRAY_SIMPLE.MAGA` - Array example
+  - `/packages/trumplang-core/examples/DEAL_SIMPLE.MAGA` - Deal structure example
+  - `/packages/trumplang-core/examples/NESTED_DEAL_WORKAROUND.MAGA` - Multiple deal structures
+- `/packages/trumplang-core/test/` - Test files and framework
 
 ## Debugging
 
-- For parser issues, use the debug-parser.js tool: `node src/debug-parser.js [file]`
-- For tokenization issues, use debug-tokenizer.js: `node src/debug-tokenizer.js [file]`
-- For parse tree visualization, use debug-tree.js: `node src/debug-tree.js [file]`
+- For parser issues, use the debug-parser.js tool: `node packages/trumplang-core/src/debug-parser.js [file]`
+- For tokenization issues, use debug-tokenizer.js: `node packages/trumplang-core/src/debug-tokenizer.js [file]`
+- For parse tree visualization, use debug-tree.js: `node packages/trumplang-core/src/debug-tree.js [file]`
 - Error messages are Trump-styled (e.g., "NOBODY KNOWS WHAT THIS VARIABLE IS")
 
 ## Development Progress
@@ -248,6 +301,8 @@ We've successfully implemented the complete Trumplang language with all features
 - **Test Framework**: Ensured all tests pass with the enhanced expression parser implementation
 - **Grammar Extensions**: Added new expression types (bitwise and shift operations) to grammar
 - **Enhanced Operators**: Added Trump-style syntax for new operator types
+- **Monorepo Structure**: Reorganized project as a monorepo with dedicated packages
+- **VS Code Extension**: Added syntax highlighting and language support for VS Code
 
 The implementation now fully supports all the core language features specified in the grammar, with a properly designed visitor-based interpreter architecture. The transition from the simplified interpreter to the full ANTLR4-based implementation is complete, and all example programs can be executed using the new interpreter. With the addition of BlockStatement structure in the grammar and corresponding visitors, the parser now generates more precise error messages and handles code blocks more consistently across different control structures and functions.
 
@@ -258,6 +313,8 @@ The codebase has been fully migrated from CommonJS to ES Modules format, with pr
 The latest updates include implementing proper support for the extended expression hierarchy introduced in the grammar. This includes adding visitors for the `bitwiseExpression`, `shiftExpression`, and `powerExpression` rules that handle bitwise operations, bit shifts, and exponentiation operations respectively. The `term` visitor has been enhanced to support modulo operations with the `LEFTOVER FROM` syntax. Additionally, compound assignment operators have been implemented for more concise code.
 
 The language now supports a rich set of operations with Trump-style syntax, including bitwise operations (`ALLIANCE WITH`, `COMBINED FORCES WITH`, `EXCLUSIVE DEAL WITH`), shift operations (`PROMOTE`, `DEMOTE`), and mathematics operations like modulo (`LEFTOVER FROM`) and exponentiation (`HUGELY MULTIPLIED BY`). Default values for uninitialized variables have been implemented in a type-safe manner, providing appropriate defaults based on the variable's data type (e.g., 0 for integers, empty string for text).
+
+With the monorepo structure, the project is now better organized with separate packages for the core language implementation, VS Code extension, and (soon) a web-based playground. This separation of concerns makes it easier for contributors to work on specific aspects of the project without affecting others.
 
 ## Error Messages
 
