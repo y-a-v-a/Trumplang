@@ -1,0 +1,3 @@
+[submodule "packages/trumplang-vscode"]
+	path = packages/trumplang-vscode
+	url = git@github.com:y-a-v-a/trumplang-vscode.git
