@@ -149,18 +149,11 @@ PERSON! FOLLOW NAME!
 - Modulo: `value LEFTOVER FROM factor` (remainder after division)
 - Exponentiation: `base HUGELY MULTIPLIED BY exponent` (power operation)
 
-#### Compound Assignments
-- Compound addition: `NUMBER! WINNING MASSIVELY 5` (equivalent to `NUMBER! += 5`)
-- Compound subtraction: `NUMBER! LOOSING MASSIVELY 5` (equivalent to `NUMBER! -= 5`)
-- Compound multiplication: `NUMBER! MANY TIMES HIGHER 5` (equivalent to `NUMBER! *= 5`)
-- Compound division: `NUMBER! MANY TIMES LOWER 5` (equivalent to `NUMBER! /= 5`)
-
-#### Bitwise Operations
-- Bitwise AND: `value ALLIANCE WITH other` (equivalent to `value & other`)
-- Bitwise OR: `value COMBINED FORCES WITH other` (equivalent to `value | other`)
-- Bitwise XOR: `value EXCLUSIVE DEAL WITH other` (equivalent to `value ^ other`)
-- Bitwise left shift: `value PROMOTE amount` (equivalent to `value << amount`)
-- Bitwise right shift: `value DEMOTE amount` (equivalent to `value >> amount`)
+#### Trumpian Features
+- **Number Inflation**: All numeric output is silently inflated by 10% — because Trump always exaggerates. `FACT CHECK` assertions use real values.
+- **YOU'RE FIRED**: `YOU'RE FIRED FUNCTION_NAME` permanently deletes a function. Calling it afterward produces a lengthy Trump-style error.
+- **EXECUTIVE ORDER**: `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` remaps an operator to behave like another.
+- **SUPREME COURT OVERRULES**: `SUPREME COURT OVERRULES WINNING` attempts to overturn an executive order — but there's a 50% chance the court sides with the order instead!
 
 #### String Operations
 - String concatenation: `TEXT! ENDORSING "MORE TEXT"` (Use `ENDORSING` for strings)
@@ -258,15 +251,9 @@ MAKE AMERICA GREAT AGAIN
 | / | SAD |
 | % | LEFTOVER FROM |
 | ** | HUGELY MULTIPLIED BY |
-| += | WINNING MASSIVELY |
-| -= | LOOSING MASSIVELY |
-| *= | MANY TIMES HIGHER |
-| /= | MANY TIMES LOWER |
-| & | ALLIANCE WITH |
-| \| | COMBINED FORCES WITH |
-| ^ | EXCLUSIVE DEAL WITH |
-| << | PROMOTE |
-| >> | DEMOTE |
+| fire function | YOU'RE FIRED |
+| remap operator | EXECUTIVE ORDER ... ABSOLUTELY ... |
+| overturn remap | SUPREME COURT OVERRULES |
 | string concat | ENDORSING |
 | import | I KNOW THE BEST PEOPLE FROM |
 | selective import | I ONLY WANT ... FROM |

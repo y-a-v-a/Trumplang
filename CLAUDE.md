@@ -118,15 +118,12 @@ We've successfully implemented the complete Trumplang language with all features
 - Division: `value SAD factor`
 - Modulo: `value LEFTOVER FROM factor` (remainder after division)
 - Exponentiation: `base HUGELY MULTIPLIED BY exponent` (power operation)
-- Compound addition: `NUMBER! WINNING MASSIVELY 5` (equivalent to `NUMBER! += 5`)
-- Compound subtraction: `NUMBER! LOOSING MASSIVELY 5` (equivalent to `NUMBER! -= 5`)
-- Compound multiplication: `NUMBER! MANY TIMES HIGHER 5` (equivalent to `NUMBER! *= 5`)
-- Compound division: `NUMBER! MANY TIMES LOWER 5` (equivalent to `NUMBER! /= 5`)
-- Bitwise AND (simulated): `value ALLIANCE WITH other` (equivalent to `value & other`)
-- Bitwise OR (simulated): `value COMBINED FORCES WITH other` (equivalent to `value | other`)
-- Bitwise XOR (simulated): `value EXCLUSIVE DEAL WITH other` (equivalent to `value ^ other`)
-- Bitwise left shift (simulated): `value PROMOTE amount` (equivalent to `value << amount`)
-- Bitwise right shift (simulated): `value DEMOTE amount` (equivalent to `value >> amount`)
+### Trumpian Behavior
+
+- **Number Inflation**: All numeric output via `EVERYONE IS TALKING ABOUT` is automatically inflated by 10% — because Trump always exaggerates. `FACT CHECK` assertions use the real values, so your program logic is correct but the output always lies.
+- **YOU'RE FIRED**: `YOU'RE FIRED FUNCTION_NAME` permanently deletes a function. Calling a fired function produces a lengthy Trump-style error. Functions can be re-declared after being fired (everyone deserves a second chance... maybe).
+- **EXECUTIVE ORDER**: `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` remaps the `WINNING` operator to behave as `LOSING` for the rest of execution. You're literally gaslighting the language.
+- **SUPREME COURT OVERRULES**: `SUPREME COURT OVERRULES WINNING` attempts to overturn an executive order — but there's a 50% chance the Supreme Court sides with the order instead!
 
 ### Control Structures
 
@@ -137,6 +134,19 @@ We've successfully implemented the complete Trumplang language with all features
 - Else if: `PEOPLE ARE SAYING condition BELIEVE ME ...`
 - Else: `NOBODY KNEW ...`
 - Break from loop: `I WILL VETO!`
+
+### Firing Functions
+
+- Fire a function: `YOU'RE FIRED FUNCTION_NAME` (permanently deletes it)
+- Fired functions throw Trump-style errors if called
+- Functions can be re-declared after being fired
+
+### Executive Orders
+
+- Remap an operator: `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` (makes + behave as -)
+- Challenge an order: `SUPREME COURT OVERRULES WINNING` (50% chance it works)
+- Available operators: `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`
+- String concatenation (`ENDORSING`) and modulo (`LEFTOVER FROM`) are immune to executive orders
 
 ### Functions and Imports
 
@@ -197,9 +207,10 @@ We've successfully implemented the complete Trumplang language with all features
   - All arithmetic operations: `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`
   - Power expressions with `HUGELY MULTIPLIED BY`
   - Modulo operation with `LEFTOVER FROM`
-  - Compound assignments: `WINNING MASSIVELY`, `LOOSING MASSIVELY`, `MANY TIMES HIGHER`, `MANY TIMES LOWER`
-  - Simulated bitwise operations: `ALLIANCE WITH`, `COMBINED FORCES WITH`, `EXCLUSIVE DEAL WITH`
-  - Shift operations: `PROMOTE`, `DEMOTE`
+  - YOU'RE FIRED function deletion
+  - EXECUTIVE ORDER operator remapping
+  - SUPREME COURT OVERRULES (with 50% chance of siding with the order)
+  - Number inflation on print output (10% exaggeration, because Trump)
   - Increment/decrement with `MAKE ... GREATER` and `MAKE ... SMALLER`
   - String and number literals
   - Conditional statements (if/else-if/else)
@@ -295,12 +306,11 @@ We've successfully implemented the complete Trumplang language with all features
 - **ES Module Migration**: Converted codebase from CommonJS to ES Modules format
 - **Modern JavaScript**: Updated visitor implementation to use ES6 classes instead of prototype-based inheritance
 - **Expression Hierarchy**: Added support for a proper expression hierarchy with powerExpression, term, and factor
-- **Extended Operations**: Implemented bitwise, shift, modulo, and power operations
-- **Compound Assignments**: Added support for compound assignment operators
+- **Extended Operations**: Implemented modulo and power operations
 - **Type Initialization**: Implemented sensible default values for all variable types
 - **Test Framework**: Ensured all tests pass with the enhanced expression parser implementation
-- **Grammar Extensions**: Added new expression types (bitwise and shift operations) to grammar
-- **Enhanced Operators**: Added Trump-style syntax for new operator types
+- **Esolang Features**: Added YOU'RE FIRED, EXECUTIVE ORDER, SUPREME COURT OVERRULES, and number inflation
+- **Operator Cleanup**: Removed unused bitwise, shift, and compound assignment operators
 - **Monorepo Structure**: Reorganized project as a monorepo with dedicated packages
 - **VS Code Extension**: Added syntax highlighting and language support for VS Code
 
@@ -310,9 +320,9 @@ The most recent optimization involves using ANTLR4 labels in the grammar (e.g., 
 
 The codebase has been fully migrated from CommonJS to ES Modules format, with proper use of `import`/`export` statements instead of `require()`/`module.exports`. This modernization also includes converting the visitor implementation from prototype-based inheritance to ES6 classes with proper extension using the `extends` keyword and `super()` constructor calls. All places using `__dirname` have been updated to use `import.meta.url` with the URL API for path resolution, making the codebase fully compatible with Node.js ES modules.
 
-The latest updates include implementing proper support for the extended expression hierarchy introduced in the grammar. This includes adding visitors for the `bitwiseExpression`, `shiftExpression`, and `powerExpression` rules that handle bitwise operations, bit shifts, and exponentiation operations respectively. The `term` visitor has been enhanced to support modulo operations with the `LEFTOVER FROM` syntax. Additionally, compound assignment operators have been implemented for more concise code.
+The latest updates focused on making Trumplang a better esolang by removing unused operator bloat (bitwise, shift, and compound assignments) and adding genuinely Trumpian features: `YOU'RE FIRED` permanently deletes functions, `EXECUTIVE ORDER` remaps arithmetic operators (making addition behave as subtraction, etc.), `SUPREME COURT OVERRULES` has a 50% chance of overturning an executive order (and 50% chance of siding with it), and all numeric print output is silently inflated by 10% because Trump always exaggerates crowd sizes. `FACT CHECK` assertions still use real values, so program logic is correct but the output always lies. Error messages have been rewritten to be longer, more unhinged, and more screenshot-worthy.
 
-The language now supports a rich set of operations with Trump-style syntax, including bitwise operations (`ALLIANCE WITH`, `COMBINED FORCES WITH`, `EXCLUSIVE DEAL WITH`), shift operations (`PROMOTE`, `DEMOTE`), and mathematics operations like modulo (`LEFTOVER FROM`) and exponentiation (`HUGELY MULTIPLIED BY`). Default values for uninitialized variables have been implemented in a type-safe manner, providing appropriate defaults based on the variable's data type (e.g., 0 for integers, empty string for text).
+The language supports modulo (`LEFTOVER FROM`) and exponentiation (`HUGELY MULTIPLIED BY`). Default values for uninitialized variables have been implemented in a type-safe manner, providing appropriate defaults based on the variable's data type (e.g., 0 for integers, empty string for text).
 
 With the monorepo structure, the project is now better organized with separate packages for the core language implementation, VS Code extension, and (soon) a web-based playground. This separation of concerns makes it easier for contributors to work on specific aspects of the project without affecting others.
 

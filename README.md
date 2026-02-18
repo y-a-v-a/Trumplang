@@ -72,6 +72,15 @@ git add .gitmodules packages/<directory-name>
 git commit -m "Add <repo-name> as submodule"
 ```
 
+## Trumpian Features
+
+Trumplang isn't just a language with funny keywords — it has genuinely unhinged runtime behavior:
+
+- **Number Inflation**: All numeric output is silently inflated by 10%. Because Trump always exaggerates crowd sizes. `FACT CHECK` assertions still use real values.
+- **YOU'RE FIRED**: Permanently deletes a function. Calling a fired function produces a lengthy Trump-style rant.
+- **EXECUTIVE ORDER**: Remaps arithmetic operators at runtime. Make addition behave as subtraction!
+- **SUPREME COURT OVERRULES**: Attempts to overturn an executive order — 50% chance the court sides with the order instead.
+
 ## Future Development
 
 This monorepo is structured to accommodate additional subpackages such as:

@@ -33,6 +33,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     this.scopeStack = [this.environment];
     this.currentScope = this.environment;
     this.functions = {}; // Store function definitions
+    this.firedFunctions = {}; // Track fired functions and their obituaries
+    this.executiveOrders = {}; // Operator remapping via EXECUTIVE ORDER
     this.debug = true; // Turn on debugging
   }
 
@@ -94,7 +96,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Verify variable naming convention (should end with !)
     if (!variableName.endsWith('!')) {
       throw new Error(
-        "THERE'S NO ENTHUSIASM HERE, NO GOOD! VARIABLES NEED ENERGY! BIG ENERGY!",
+        "THERE'S NO ENTHUSIASM HERE! NO ENERGY! VARIABLES NEED TO END WITH AN EXCLAMATION MARK! THIS IS LIKE A JEB BUSH RALLY — LOW ENERGY, VERY SAD!",
       );
     }
 
@@ -219,13 +221,13 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     // Has operators
     if (ctx.PLUS()) {
-      // Addition
       const left = this.visit(ctx.expression(0));
       const right = this.visit(ctx.term(0));
-      debug(`Addition: ${left} + ${right}`);
-      return left + right;
+      const effectiveOp = this._resolveOperator('WINNING');
+      debug(`Addition (effective: ${effectiveOp}): ${left} op ${right}`);
+      return this._applyOperator(effectiveOp, left, right);
     } else if (ctx.STRING_CONCAT()) {
-      // String concatenation
+      // String concatenation - NOT affected by executive orders (it's not arithmetic)
       const left = this.visit(ctx.expression(0));
       const right = this.visit(ctx.term(0));
       const leftStr =
@@ -235,11 +237,11 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       debug(`String concatenation: "${leftStr}" + "${rightStr}"`);
       return leftStr + rightStr;
     } else if (ctx.MINUS()) {
-      // Subtraction
       const left = this.visit(ctx.expression(0));
       const right = this.visit(ctx.term(0));
-      debug(`Subtraction: ${left} - ${right}`);
-      return left - right;
+      const effectiveOp = this._resolveOperator('LOSING');
+      debug(`Subtraction (effective: ${effectiveOp}): ${left} op ${right}`);
+      return this._applyOperator(effectiveOp, left, right);
     }
 
     // Fall back to visiting the first child
@@ -269,11 +271,25 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   }
 
   // Print statement visitor
+  // Numbers are automatically inflated by ~10% because Trump always exaggerates.
+  // FACT CHECK assertions still use real values — only the OUTPUT lies.
   visitPrintStatementContext(ctx) {
     const value = this.visit(ctx.expression());
-    debug('Output:', value);
-    console.log(`${value}`);
-    return value;
+    debug('Output (real value):', value);
+
+    let displayValue = value;
+    if (typeof value === 'number' && !isNaN(value)) {
+      // Inflate numbers by 10% — TREMENDOUS numbers, the BEST numbers
+      displayValue = Math.round(value * 1.1 * 100) / 100;
+      // Clean up: if it was an integer input, keep it looking like an integer
+      if (Number.isInteger(value) && Number.isInteger(displayValue)) {
+        // already fine
+      }
+      debug(`Number inflated from ${value} to ${displayValue} (TRUMP FACTOR)`);
+    }
+
+    console.log(`${displayValue}`);
+    return value; // Return the REAL value for internal use
   }
 
   // For backward compatibility
@@ -367,25 +383,21 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     if (ctx.MULTIPLY()) {
       const left = this.visit(ctx.term(0));
       const right = this.visit(ctx.primaryExpression(0));
-      debug(`Multiplication: ${left} * ${right}`);
-      return left * right;
+      const effectiveOp = this._resolveOperator('BIG LEAGUE TIMES');
+      debug(`Multiplication (effective: ${effectiveOp}): ${left} op ${right}`);
+      return this._applyOperator(effectiveOp, left, right);
     }
 
     // Division
     if (ctx.DIVIDE()) {
       const left = this.visit(ctx.term(0));
       const right = this.visit(ctx.primaryExpression(0));
-      debug(`Division: ${left} / ${right}`);
-
-      if (right === 0) {
-        throw new Error(
-          "THAT'S A DISASTER. YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!",
-        );
-      }
-      return left / right;
+      const effectiveOp = this._resolveOperator('SAD');
+      debug(`Division (effective: ${effectiveOp}): ${left} op ${right}`);
+      return this._applyOperator(effectiveOp, left, right);
     }
 
-    // Modulo
+    // Modulo - not affected by executive orders
     if (ctx.MODULO()) {
       const left = this.visit(ctx.term(0));
       const right = this.visit(ctx.primaryExpression(0));
@@ -393,7 +405,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
       if (right === 0) {
         throw new Error(
-          "THAT'S A DISASTER. YOU CAN'T DO MODULO BY ZERO, THAT'S FOR LOSERS!",
+          "YOU'RE TRYING TO DO MODULO BY ZERO. THAT'S THE WORST DEAL IN THE HISTORY OF DEALS, MAYBE EVER. EVEN SLEEPY JOE WOULDN'T TRY THIS. TOTAL DISASTER!",
         );
       }
       return left % right;
@@ -442,36 +454,12 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     const variable = this.getVariable(variableName);
     if (!variable) {
       throw new Error(
-        `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`,
+        `NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF ${variableName}. I ASKED AROUND. I ASKED THE BEST PEOPLE. THEY SAID "SIR, THAT VARIABLE DOESN'T EXIST." YOU NEED TO DECLARE IT FIRST. VERY EMBARRASSING FOR YOU!`,
       );
     }
 
-    const expressionValue = this.visit(ctx.expression());
-    let newValue;
-
-    // Check for compound assignment types
-    if (ctx.COMPOUND_ADD()) {
-      debug(`Compound add: ${variableName} += ${expressionValue}`);
-      newValue = variable.value + expressionValue;
-    } else if (ctx.COMPOUND_SUBTRACT()) {
-      debug(`Compound subtract: ${variableName} -= ${expressionValue}`);
-      newValue = variable.value - expressionValue;
-    } else if (ctx.COMPOUND_MULTIPLY()) {
-      debug(`Compound multiply: ${variableName} *= ${expressionValue}`);
-      newValue = variable.value * expressionValue;
-    } else if (ctx.COMPOUND_DIVIDE()) {
-      debug(`Compound divide: ${variableName} /= ${expressionValue}`);
-      if (expressionValue === 0) {
-        throw new Error(
-          "THAT'S A DISASTER. YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!",
-        );
-      }
-      newValue = variable.value / expressionValue;
-    } else {
-      // Regular assignment
-      debug(`Regular assignment: ${variableName} = ${expressionValue}`);
-      newValue = expressionValue;
-    }
+    const newValue = this.visit(ctx.expression());
+    debug(`Regular assignment: ${variableName} = ${newValue}`);
 
     // Update variable
     variable.value = newValue;
@@ -480,96 +468,19 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return newValue;
   }
 
-  // BitwiseExpression visitor
-  visitBitwiseExpressionContext(ctx) {
-    debug(`Bitwise expression with ${ctx.getChildCount()} children`);
-
-    // Simple shift expression
-    if (ctx.getChildCount() === 1) {
-      return this.visit(ctx.shiftExpression(0));
-    }
-
-    // Bitwise AND
-    if (ctx.BITWISE_AND()) {
-      const left = this.visit(ctx.bitwiseExpression(0));
-      const right = this.visit(ctx.shiftExpression(0));
-      debug(`Bitwise AND: ${left} & ${right}`);
-      return left & right;
-    }
-
-    // Bitwise OR
-    if (ctx.BITWISE_OR()) {
-      const left = this.visit(ctx.bitwiseExpression(0));
-      const right = this.visit(ctx.shiftExpression(0));
-      debug(`Bitwise OR: ${left} | ${right}`);
-      return left | right;
-    }
-
-    // Bitwise XOR
-    if (ctx.BITWISE_XOR()) {
-      const left = this.visit(ctx.bitwiseExpression(0));
-      const right = this.visit(ctx.shiftExpression(0));
-      debug(`Bitwise XOR: ${left} ^ ${right}`);
-      return left ^ right;
-    }
-
-    return null;
-  }
-
-  // For backward compatibility
-  visitBitwiseExpression(ctx) {
-    return this.visitBitwiseExpressionContext(ctx);
-  }
-
-  // ShiftExpression visitor
-  visitShiftExpressionContext(ctx) {
-    debug(`Shift expression with ${ctx.getChildCount()} children`);
-
-    // Simple term
-    if (ctx.getChildCount() === 1) {
-      return this.visit(ctx.term(0));
-    }
-
-    // Left shift
-    if (ctx.SHIFT_LEFT()) {
-      const left = this.visit(ctx.shiftExpression(0));
-      const right = this.visit(ctx.term(0));
-      debug(`Left shift: ${left} << ${right}`);
-      return left << right;
-    }
-
-    // Right shift
-    if (ctx.SHIFT_RIGHT()) {
-      const left = this.visit(ctx.shiftExpression(0));
-      const right = this.visit(ctx.term(0));
-      debug(`Right shift: ${left} >> ${right}`);
-      return left >> right;
-    }
-
-    return null;
-  }
-
-  // For backward compatibility
-  visitShiftExpression(ctx) {
-    return this.visitShiftExpressionContext(ctx);
-  }
-
   // Increment visitor
   visitIncrementStatement(ctx) {
     const variableName = ctx.varName.text;
     debug('Incrementing variable:', variableName);
 
-    // Ensure variable exists
     const variable = this.getVariable(variableName);
     if (!variable) {
       throw new Error(
-        `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`,
+        `NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF ${variableName}. I ASKED THE BEST PEOPLE. THEY SAID "SIR, THAT VARIABLE DOESN'T EXIST." DECLARE IT FIRST!`,
       );
     }
 
-    // Update variable
     variable.value++;
-
     return variable.value;
   }
 
@@ -578,17 +489,14 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     const variableName = ctx.varName.text;
     debug('Decrementing variable:', variableName);
 
-    // Ensure variable exists
     const variable = this.getVariable(variableName);
     if (!variable) {
       throw new Error(
-        `NOBODY KNOWS WHAT ${variableName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`,
+        `NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF ${variableName}. I ASKED THE BEST PEOPLE. THEY SAID "SIR, THAT VARIABLE DOESN'T EXIST." DECLARE IT FIRST!`,
       );
     }
 
-    // Update variable
     variable.value--;
-
     return variable.value;
   }
 
@@ -636,7 +544,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         return value;
       }
       throw new Error(
-        `NOBODY KNOWS WHAT ${varName} IS. YOU NEED TO DECLARE IT FIRST, BELIEVE ME!`,
+        `NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF ${varName}. I ASKED AROUND. I ASKED THE BEST PEOPLE. THEY SAID "SIR, THAT VARIABLE DOESN'T EXIST." DECLARE IT FIRST!`,
       );
     }
 
@@ -873,7 +781,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     if (!array.value || !Array.isArray(array.value)) {
       throw new Error(
-        `${arrayVar} IS NOT A WALL (ARRAY). SAD! IT'S A ${typeof array.value}`,
+        `${arrayVar} IS NOT A WALL! YOU CAN'T ITERATE OVER SOMETHING THAT ISN'T A WALL! IT'S A ${typeof array.value}. WHAT A DISGRACE. THIS IS WORSE THAN THE IRAN DEAL!`,
       );
     }
 
@@ -920,6 +828,113 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitLoopBreakContext(ctx);
   }
 
+  // Helper: resolve operator name from grammar context
+  _getOperatorName(operatorCtx) {
+    if (operatorCtx.PLUS()) return 'WINNING';
+    if (operatorCtx.MINUS()) return 'LOSING';
+    if (operatorCtx.MULTIPLY()) return 'BIG LEAGUE TIMES';
+    if (operatorCtx.DIVIDE()) return 'SAD';
+    return null;
+  }
+
+  // Helper: resolve the effective operator (accounting for executive orders)
+  _resolveOperator(opName) {
+    const resolved = this.executiveOrders[opName];
+    if (resolved) {
+      debug(`EXECUTIVE ORDER in effect: ${opName} remapped to ${resolved}`);
+      return resolved;
+    }
+    return opName;
+  }
+
+  // Helper: apply an arithmetic operator by name
+  _applyOperator(opName, left, right) {
+    switch (opName) {
+      case 'WINNING': return left + right;
+      case 'LOSING': return left - right;
+      case 'BIG LEAGUE TIMES': return left * right;
+      case 'SAD':
+        if (right === 0) {
+          throw new Error(
+            "YOU'RE TRYING TO DIVIDE BY ZERO. THAT'S THE WORST DEAL IN THE HISTORY OF DEALS, MAYBE EVER. EVEN SLEEPY JOE WOULDN'T TRY THIS. TOTAL DISASTER!",
+          );
+        }
+        return left / right;
+      default:
+        throw new Error(`NOBODY KNOWS THIS OPERATOR: ${opName}. SAD!`);
+    }
+  }
+
+  // YOU'RE FIRED - permanently delete a function
+  visitFireStatementContext(ctx) {
+    const funcName = ctx.funcName.text;
+    debug(`FIRING function: ${funcName}`);
+
+    if (!this.functions[funcName]) {
+      throw new Error(
+        `YOU CAN'T FIRE ${funcName}! THEY DON'T EVEN WORK HERE! I CHECKED WITH HR — NOBODY BY THAT NAME. VERY EMBARRASSING FOR YOU!`,
+      );
+    }
+
+    // Remember it was fired (for the error message)
+    this.firedFunctions[funcName] = true;
+    delete this.functions[funcName];
+
+    console.log(`${funcName} — YOU'RE FIRED!`);
+    return null;
+  }
+
+  // For backward compatibility
+  visitFireStatement(ctx) {
+    return this.visitFireStatementContext(ctx);
+  }
+
+  // EXECUTIVE ORDER - remap an operator
+  visitExecutiveOrderContext(ctx) {
+    const fromOp = this._getOperatorName(ctx.fromOp);
+    const toOp = this._getOperatorName(ctx.toOp);
+
+    debug(`EXECUTIVE ORDER: ${fromOp} now behaves as ${toOp}`);
+    this.executiveOrders[fromOp] = toOp;
+
+    console.log(`EXECUTIVE ORDER SIGNED: ${fromOp} NOW DOES WHAT ${toOp} DOES. BECAUSE I SAID SO!`);
+    return null;
+  }
+
+  // For backward compatibility
+  visitExecutiveOrder(ctx) {
+    return this.visitExecutiveOrderContext(ctx);
+  }
+
+  // SUPREME COURT OVERRULES - 50% chance it actually overrules, 50% it sides with the order
+  visitSupremeCourtOverruleContext(ctx) {
+    const opName = this._getOperatorName(ctx.fromOp);
+
+    if (!this.executiveOrders[opName]) {
+      console.log(`THE SUPREME COURT HAS NOTHING TO OVERRULE FOR ${opName}. NO EXECUTIVE ORDER EXISTS. CASE DISMISSED!`);
+      return null;
+    }
+
+    // 50/50 chance
+    const sided = Math.random() < 0.5;
+
+    if (sided) {
+      // Court sides with the executive order
+      console.log(`THE SUPREME COURT HAS RULED 5-4: THE EXECUTIVE ORDER ON ${opName} STANDS! TREMENDOUS VICTORY! THE JUSTICES ARE VERY SMART PEOPLE!`);
+    } else {
+      // Court overrules
+      delete this.executiveOrders[opName];
+      console.log(`THE SUPREME COURT HAS OVERRULED THE EXECUTIVE ORDER ON ${opName}! VERY UNFAIR! A TOTAL DISGRACE! WE WILL APPEAL... SOMEHOW!`);
+    }
+
+    return null;
+  }
+
+  // For backward compatibility
+  visitSupremeCourtOverrule(ctx) {
+    return this.visitSupremeCourtOverruleContext(ctx);
+  }
+
   // Function declaration visitor
   visitFunctionDeclarationContext(ctx) {
     const identifier = ctx.funcName.text;
@@ -936,6 +951,12 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     if (!blockCtx) {
       throw new Error('FUNCTION DECLARATION MISSING BODY! SAD!');
+    }
+
+    // Clear fired status if re-hiring (everyone deserves a second chance... maybe)
+    if (this.firedFunctions[identifier]) {
+      debug(`Re-hiring previously fired function: ${identifier}`);
+      delete this.firedFunctions[identifier];
     }
 
     // Store function in our functions registry
@@ -995,10 +1016,19 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       throw new Error('FUNCTION CALL IS A DISASTER! NEEDS A NAME, FOLKS!');
     }
 
+    // Check if function was fired
+    if (this.firedFunctions[identifier]) {
+      throw new Error(
+        `${identifier} WAS FIRED. THEY WERE TERRIBLE AT THEIR JOB. EVERYONE SAID SO. NOT JUST ME. EVERYONE. THEY SHOULD HAVE BEEN FIRED SOONER. MUCH SOONER!`,
+      );
+    }
+
     // Get function definition
     const functionDef = this.functions[identifier];
     if (!functionDef) {
-      throw new Error(`NOBODY KNOWS A FUNCTION CALLED ${identifier}! SAD!`);
+      throw new Error(
+        `I CALL UPON ${identifier} AND NOBODY SHOWS UP. VERY DISLOYAL. WHEN I NEEDED THEM, THEY WEREN'T THERE. PROBABLY A NEVER-TRUMPER. SAD!`,
+      );
     }
 
     // Create a new scope for function execution
@@ -1212,7 +1242,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     // Get the array
     const array = this.getVariable(arrayName);
     if (!array || !Array.isArray(array.value)) {
-      throw new Error(`${arrayName} IS NOT A WALL (ARRAY). SAD!`);
+      throw new Error(`${arrayName} IS NOT A WALL! YOU CAN'T ACCESS SECTIONS OF SOMETHING THAT ISN'T A WALL! WHAT A DISGRACE!`);
     }
 
     // Get the index
@@ -1223,7 +1253,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     if (typeof index !== 'number' || index < 0 || index >= array.value.length) {
       throw new Error(
-        `ILLEGAL IMMIGRATION ATTEMPT! INDEX ${index} IS OUTSIDE THE WALL BOUNDARIES!`,
+        `INDEX ${index}?! THE WALL IS ONLY ${array.value.length} SECTIONS LONG! YOU'RE TRYING TO GO AROUND THE WALL. WE'RE BUILDING IT HIGHER. BUT YOU STILL CAN'T DO THAT!`,
       );
     }
 
@@ -1301,13 +1331,13 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     const deal = this.getVariable(dealName);
 
     if (!deal || typeof deal.value !== 'object') {
-      throw new Error(`${dealName} IS NOT A DEAL STRUCTURE. BAD DEAL!`);
+      throw new Error(`${dealName} IS NOT A DEAL! NOBODY MAKES DEALS LIKE ME, AND I'M TELLING YOU — THAT'S NOT A DEAL! BELIEVE ME!`);
     }
 
     // Get the field
     if (!deal.value[fieldName]) {
       throw new Error(
-        `THE DEAL DOESN'T HAVE THIS TERM: ${fieldName}. WORST DEAL EVER!`,
+        `THERE'S NO "${fieldName}" IN THIS DEAL! I'VE READ EVERY DEAL — THE BEST DEALS, THE WORST DEALS — AND THIS TERM ISN'T IN ANY OF THEM. FAKE FIELD!`,
       );
     }
 
@@ -1426,6 +1456,12 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitCommentStatement(ctx.commentStatement());
     } else if (ctx.loopBreak()) {
       return this.visitLoopBreak(ctx.loopBreak());
+    } else if (ctx.fireStatement()) {
+      return this.visitFireStatement(ctx.fireStatement());
+    } else if (ctx.executiveOrder()) {
+      return this.visitExecutiveOrder(ctx.executiveOrder());
+    } else if (ctx.supremeCourtOverrule()) {
+      return this.visitSupremeCourtOverrule(ctx.supremeCourtOverrule());
     } else if (ctx.importStatement()) {
       return this.visitImportStatement(ctx.importStatement());
     } else if (ctx.selectiveImport()) {
@@ -1434,10 +1470,6 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {
       return this.visitBlockStatement(ctx.blockStatement());
-    } else if (ctx.bitwiseExpression && ctx.bitwiseExpression()) {
-      return this.visitBitwiseExpression(ctx.bitwiseExpression());
-    } else if (ctx.shiftExpression && ctx.shiftExpression()) {
-      return this.visitShiftExpression(ctx.shiftExpression());
     }
 
     // If no specific statement type matches, visit the first child as fallback

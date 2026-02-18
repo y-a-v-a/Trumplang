@@ -37,6 +37,9 @@ statement:
 	| returnStatement
 	| commentStatement
 	| loopBreak
+	| fireStatement
+	| executiveOrder
+	| supremeCourtOverrule
 	| assertStatement;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
@@ -108,6 +111,18 @@ forEachLoop:
 // Break from loop early
 loopBreak: BREAK;
 
+// Fire a function - permanently delete it, Trump's catchphrase
+fireStatement: FIRE funcName=IDENTIFIER;
+
+// Executive order - remap an operator to behave like another operator
+executiveOrder: EXEC_ORDER fromOp=operator ASSIGNMENT toOp=operator;
+
+// Supreme Court can overturn an executive order (50% chance it sides with the order instead!)
+supremeCourtOverrule: SUPREME_COURT fromOp=operator;
+
+// Operator tokens for executive orders
+operator: PLUS | MINUS | MULTIPLY | DIVIDE;
+
 // Array declaration - "BUILD THE WALL"
 arrayDeclaration:
 	ARRAY_DECL arrayName = VARIABLE ARRAY_ELEMENTS_DECL arrayElements?;
@@ -117,11 +132,7 @@ arrayElements: expression (ARRAY_CHAIN expression)*;
 
 // Assignment statement - updated to "ABSOLUTELY" (was "IT IS YET", which was "IS YET", which was "JUST HIRED")
 assignmentStatement: 
-    varName = VARIABLE ASSIGNMENT expression          // Basic assignment (=)
-    | varName = VARIABLE COMPOUND_ADD expression      // Add and assign (+=)
-    | varName = VARIABLE COMPOUND_SUBTRACT expression // Subtract and assign (-=)
-    | varName = VARIABLE COMPOUND_MULTIPLY expression // Multiply and assign (*=)
-    | varName = VARIABLE COMPOUND_DIVIDE expression;  // Divide and assign (/=)
+    varName = VARIABLE ASSIGNMENT expression;          // Basic assignment (=)
 
 // Print statement - "EVERYONE IS TALKING ABOUT"
 printStatement: PRINT expression;
@@ -159,18 +170,6 @@ expression:
 	| expression PLUS term // Numeric addition
 	| expression STRING_CONCAT term // String concatenation
 	| expression MINUS term; // Subtraction
-
-bitwiseExpression:
-	shiftExpression
-	| bitwiseExpression BITWISE_AND shiftExpression  // Bitwise AND
-	| bitwiseExpression BITWISE_OR shiftExpression   // Bitwise OR
-	| bitwiseExpression BITWISE_XOR shiftExpression; // Bitwise XOR
-
-// New level for bitwise shifts
-shiftExpression:
-	term
-	| shiftExpression SHIFT_LEFT term   // Left shift
-	| shiftExpression SHIFT_RIGHT term; // Right shift
 
 // Terms - updated "TREMENDOUS" to "BIG LEAGUE TIMES" for multiplication
 term:
@@ -256,6 +255,12 @@ FUNC_CALL: 'I CALL UPON';
 
 BREAK: 'I WILL VETO!';
 
+FIRE: 'YOU\'RE FIRED';
+
+EXEC_ORDER: 'EXECUTIVE ORDER';
+
+SUPREME_COURT: 'SUPREME COURT OVERRULES';
+
 WHILE_LOOP_DECL: 'WE\'RE GOING TO WIN IN A LANDSLIDE';
 
 FOR_LOOP_DECL: 'WE\'RE GOING TO WIN, WIN, WIN';
@@ -303,24 +308,6 @@ PLUS: 'WINNING'; // +
 MINUS: 'LOSING'; // -
 
 ASSIGNMENT: 'ABSOLUTELY'; // =
-
-COMPOUND_ADD: 'WINNING MASSIVELY'; // +=
-
-COMPOUND_SUBTRACT: 'LOOSING MASSIVELY'; // -=
-
-COMPOUND_MULTIPLY: 'MANY TIMES HIGHER'; // *=
-
-COMPOUND_DIVIDE: 'MANY TIMES LOWER'; // /=
-
-BITWISE_AND: 'ALLIANCE WITH'; // &
-
-BITWISE_OR: 'COMBINED FORCES WITH'; // |
-
-BITWISE_XOR: 'EXCLUSIVE DEAL WITH'; // ^
-
-SHIFT_LEFT: 'PROMOTE';   // <<
-
-SHIFT_RIGHT: 'DEMOTE';   // >>
 
 STRING_CONCAT: 'ENDORSING';
 

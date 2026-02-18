@@ -99,18 +99,20 @@ MAKE AMERICA GREAT AGAIN
 
 ## Current Implementation Status
 
-The current interpreter implementation supports:
+The interpreter fully supports:
 
-- Variable declarations with `I HAVE THE BEST`
-- Variable assignment with `ABSOLUTELY`
-- String and number literals
-- Basic arithmetic with `WINNING` (addition)
-- Increment with `MAKE ... GREATER`
-- Decrement with `MAKE ... SMALLER`
-- Print statements with `EVERYONE IS TALKING ABOUT`
-- Comments with `A LOT OF PEOPLE ARE SAYING`
-
-Control structures and advanced features are in development.
+- Variable declarations, assignment, constants
+- All arithmetic: `WINNING` (+), `LOSING` (-), `BIG LEAGUE TIMES` (*), `SAD` (/)
+- Modulo (`LEFTOVER FROM`) and power (`HUGELY MULTIPLIED BY`)
+- String concatenation with `ENDORSING`
+- Increment/decrement with `MAKE ... GREATER` / `MAKE ... SMALLER`
+- Control structures: if/else, while, for, foreach
+- Functions with parameters and return values
+- Arrays (`BUILD THE WALL`) and Deal structures (objects)
+- `YOU'RE FIRED` — permanently deletes a function
+- `EXECUTIVE ORDER` — remaps arithmetic operators at runtime
+- `SUPREME COURT OVERRULES` — 50% chance of overturning an executive order
+- **Number Inflation** — all numeric print output is silently inflated by 10% (because Trump always exaggerates). `FACT CHECK` assertions use real values.
 
 ## Project Structure
 
