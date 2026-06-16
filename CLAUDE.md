@@ -38,7 +38,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 **Operations**
 - Inc/dec: `MAKE COUNT! GREATER` / `SMALLER`
 - Add (num) `WINNING` · Concat (str) `ENDORSING` · Mul `BIG LEAGUE TIMES` · Div `SAD` · Mod `LEFTOVER FROM` · Pow `HUGELY MULTIPLIED BY`
-- Compound: `WINNING MASSIVELY` (+=) · `LOOSING MASSIVELY` (-=) · `MANY TIMES HIGHER` (*=) · `MANY TIMES LOWER` (/=)
+- Compound: `WINNING MASSIVELY` (+=) · `LOSING MASSIVELY` (-=) · `MANY TIMES HIGHER` (*=) · `MANY TIMES LOWER` (/=)
 - Bitwise: `ALLIANCE WITH` (&) · `COMBINED FORCES WITH` (|) · `EXCLUSIVE DEAL WITH` (^) · Shift `PROMOTE` (<<) / `DEMOTE` (>>)
 
 **Control flow**
