@@ -31,34 +31,53 @@ good the keywords are:
 
 ---
 
-## A. Unify into one expression grammar — ☐ proposed (highest impact)
+## A. Unify into one expression grammar — ☑ done
 
-Collapse `condition` into `expression` and build a single complete precedence
-ladder. This makes booleans first-class, wires in the orphaned bitwise/shift
-rules, and lets any boolean-typed expression be a condition.
+Collapsed `condition` into `expression` and built a single complete precedence
+ladder. Booleans are now first-class, the orphaned bitwise/shift rules are wired
+in (they were dead code), and any boolean-typed expression can be a condition.
+
+The implemented ladder (loosest binding at the top). Note: **equality is the
+OUTERMOST operator**, looser than `AND`/`OR`. This deviates from textbook C
+precedence on purpose — it is what keeps the `FACT CHECK <actual> SO TRUE
+<expected>` idiom working as `(<actual>) == (<expected>)`. With equality nested
+*inside* logical ops, `FALSE_VALUE! AND IT'S TRUE TRUE_VALUE! SO TRUE FAKE NEWS`
+would parse as `false && (true == false)` and assert the wrong thing; with
+equality outermost it is `(false && true) == false`, which is what the idiom
+means.
 
 ```antlr
-expression  : logicalOr ;
-logicalOr   : logicalAnd (OR logicalAnd)* ;
-logicalAnd  : equality  (AND equality)* ;
-equality    : comparison ((EQUALS | NOT_EQUALS) comparison)? ;
-comparison  : bitwiseOr ((GREATER_THAN | LESS_THAN
-                         | GREATER_THAN_OR_EQUALS | LESS_THAN_OR_EQUALS) bitwiseOr)? ;
-bitwiseOr   : bitwiseXor ((BITWISE_OR | BITWISE_XOR) bitwiseXor)* ;
-bitwiseXor  : bitwiseAnd (BITWISE_XOR bitwiseAnd)* ;
-bitwiseAnd  : shift (BITWISE_AND shift)* ;
-shift       : additive ((SHIFT_LEFT | SHIFT_RIGHT) additive)* ;
-additive    : term ((PLUS | MINUS | STRING_CONCAT) term)* ;
-term        : power ((MULTIPLY | DIVIDE | MODULO) power)* ;
-power       : unary (POWER power)? ;          // right-assoc, now chainable
-unary       : (NOT | MINUS) unary | primary ; // logical NOT + numeric negation
-primary     : OPEN_PAREN expression CLOSE_PAREN
-            | literal | VARIABLE | functionCall | arrayAccess | dealAccess ;
+expression           : equalityExpression ;
+equalityExpression   : logicalOrExpression
+                     | equalityExpression (EQUALS | NOT_EQUALS) logicalOrExpression ; // left-assoc, chainable
+logicalOrExpression  : logicalAndExpression
+                     | logicalOrExpression OR logicalAndExpression ;
+logicalAndExpression : comparisonExpression
+                     | logicalAndExpression AND comparisonExpression ;
+comparisonExpression : bitwiseExpression
+                     | comparisonExpression (GT | LT | GTE | LTE) bitwiseExpression ;
+bitwiseExpression    : shiftExpression
+                     | bitwiseExpression (BITWISE_AND | BITWISE_OR | BITWISE_XOR) shiftExpression ;
+shiftExpression      : additiveExpression
+                     | shiftExpression (SHIFT_LEFT | SHIFT_RIGHT) additiveExpression ;
+additiveExpression   : term
+                     | additiveExpression (PLUS | MINUS | STRING_CONCAT) term ;
+term                 : powerExpression
+                     | term (MULTIPLY | DIVIDE | MODULO) powerExpression ;
+powerExpression      : unaryExpression
+                     | unaryExpression POWER powerExpression ; // right-assoc, chainable
+unaryExpression      : (NOT | MINUS) unaryExpression | primaryExpression ;
+primaryExpression    : OPEN_PAREN expression CLOSE_PAREN
+                     | VARIABLE | STRING | NUMBER | BOOLEAN
+                     | functionCall | arrayAccess | dealAccess ;
 ```
 
-Then `ifStatement` / `whileLoop` / etc. take `expression` where they took
-`condition`, and the `condition` rule is deleted. Requires visitor rewrite +
-fresh tests per precedence level.
+`ifStatement` / `elseIfStatement` / `whileLoop` / `assertStatement` now take
+`expression`; the `condition` and `comparison` rules are deleted. `assertStatement`
+is just `ASSERT_CALL expression` (a single boolean that must be TRUE). Array index
+uses `additiveExpression` (not full `expression`) so a trailing comparison such as
+`ARRAY! SECTION 0 SO TRUE 10` stays `(ARRAY! SECTION 0) SO TRUE 10` instead of
+being swallowed into the index.
 
 ## B. Real assignment targets (lvalues) — ☐ proposed
 
@@ -148,4 +167,39 @@ so existing programs keep working. The visitor needed no changes — it reads
 labeled elements (`ctx.varName`, `ctx.filePath`, `ctx.importName`) and
 `ctx.expression()`, all preserved.
 
-A through C, E, F remain proposed. A is the highest-impact next step.
+**A — Unify into one expression grammar — DONE (2026-06-16).** One ladder to
+rule them all, and it's the best ladder.
+
+- Replaced the separate `condition` / `comparison` / `expression` / dead
+  `bitwiseExpression` / `shiftExpression` rules with one linear precedence ladder
+  (`equalityExpression` → `logicalOr` → `logicalAnd` → `comparison` → `bitwise` →
+  `shift` → `additive` → `term` → `power` → `unary` → `primary`).
+- **Booleans are first-class:** a comparison or logic expression can be stored in
+  a `SUPPORT` variable, returned, or passed as an argument.
+- **Bitwise and shift operators are reachable at last** — they were defined but
+  orphaned (no rule referenced them), so no program could ever parse one. Now
+  `5 ALLIANCE WITH 3`, `5 PROMOTE 2`, etc. work inside any expression.
+- Added a **unary** level: logical NOT (`WRONG`) and numeric negation (`LOSING 7`
+  = -7). Power (`HUGELY MULTIPLIED BY`) is now right-associative and chainable
+  without parens.
+- `if` / `else-if` / `while` / `assert` now take a plain `expression`. `assert`
+  became `FACT CHECK <boolean expression>`; the old two-operand form still reads
+  identically because `SO TRUE` is the outermost equality operator.
+- Design choice: equality is the *loosest-binding* operator (looser than
+  `AND`/`OR`) so the `FACT CHECK <actual> SO TRUE <expected>` idiom keeps meaning
+  `(<actual>) == (<expected>)`. Array index is restricted to `additiveExpression`
+  so `ARRAY! SECTION 0 SO TRUE 10` parses as `(ARRAY[0]) == 10`.
+
+Parser regenerated; full suite green at **30 passed / 0 failed** (added
+`test/UNIFIED_EXPRESSIONS.TEST.MAGA` covering every newly-possible construct).
+All existing tests and example programs pass unchanged.
+
+Implementation note: the interpreter dispatches via a custom `visit(ctx)` that
+maps `ctx.constructor.name` → `visit<ClassName>` (so the real method names carry
+the `Context` suffix, e.g. `visitEqualityExpressionContext`). The committed
+generated `TrumplangVisitor.js` base is stale (the `generate-parser` script omits
+`-visitor`), but it is inert: the custom dispatcher never relies on it. Worth
+fixing under a separate cleanup if the base visitor is ever needed.
+
+B, C, E, F remain proposed. B (real lvalues for arrays/deals) is the natural next
+step now that the expression grammar is solid.

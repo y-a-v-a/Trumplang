@@ -86,16 +86,16 @@ argumentList: expression (PARAMS_ARGS_CHAIN expression)*;
 
 // If statement - "LISTEN"
 ifStatement:
-	IF_DECL condition statement elseIfStatement* elseStatement?;
+	IF_DECL expression statement elseIfStatement* elseStatement?;
 
 // Else if statement - "PEOPLE ARE SAYING"
-elseIfStatement: ELSE_IF_DECL condition statement;
+elseIfStatement: ELSE_IF_DECL expression statement;
 
 // Else statement - "NOBODY KNEW"
 elseStatement: ELSE_DECL statement;
 
 // While loop - "WE'RE GOING TO WIN IN A LANDSLIDE"
-whileLoop: WHILE_LOOP_DECL condition blockStatement;
+whileLoop: WHILE_LOOP_DECL expression blockStatement;
 
 // For loop - "WE'RE GOING TO WIN, WIN, WIN"
 forLoop:
@@ -135,30 +135,34 @@ incrementStatement: MAKE_DECL varName = VARIABLE INCREMENT_OP;
 // Decrement operation - "MAKE SMALLER"
 decrementStatement: MAKE_DECL varName = VARIABLE DECREMENT_OP;
 
-// Condition for control structures
-condition:
-	expression comparison expression
-	| condVar = VARIABLE
-	| condBool = BOOLEAN
-	| NOT condition
-	| condition AND condition
-	| condition OR condition;
+// Unified expression grammar - one precedence ladder, lowest-binding first.
+//
+// Equality ("SO TRUE" / "TOTAL DISASTER") sits at the TOP (loosest binding) on
+// purpose: it lets a whole boolean computation be checked against an expected
+// value the way POTUS talks - "<this whole thing> SO TRUE <that>". It also keeps
+// the FACT CHECK idiom working: `FACT CHECK <actual> SO TRUE <expected>` is just
+// an equality expression that must come out TRUE.
+expression: equalityExpression;
 
-// Comparison operators - "SO TRUE" remains for equality checks
-comparison:
-	EQUALS // Equals
-	| NOT_EQUALS // Not equals
-	| GREATER_THAN // Greater than
-	| LESS_THAN // Less than
-	| GREATER_THAN_OR_EQUALS // Greater than or equal
-	| LESS_THAN_OR_EQUALS; // Less than or equal
+equalityExpression:
+	logicalOrExpression
+	| equalityExpression EQUALS logicalOrExpression       // == "SO TRUE"
+	| equalityExpression NOT_EQUALS logicalOrExpression;  // != "TOTAL DISASTER"
 
-// Expressions
-expression:
-	term
-	| expression PLUS term // Numeric addition
-	| expression STRING_CONCAT term // String concatenation
-	| expression MINUS term; // Subtraction
+logicalOrExpression:
+	logicalAndExpression
+	| logicalOrExpression OR logicalAndExpression;        // || "OR MAYBE"
+
+logicalAndExpression:
+	comparisonExpression
+	| logicalAndExpression AND comparisonExpression;      // && "AND IT'S TRUE"
+
+comparisonExpression:
+	bitwiseExpression
+	| comparisonExpression GREATER_THAN bitwiseExpression           // >
+	| comparisonExpression LESS_THAN bitwiseExpression              // <
+	| comparisonExpression GREATER_THAN_OR_EQUALS bitwiseExpression // >=
+	| comparisonExpression LESS_THAN_OR_EQUALS bitwiseExpression;   // <=
 
 bitwiseExpression:
 	shiftExpression
@@ -166,22 +170,33 @@ bitwiseExpression:
 	| bitwiseExpression BITWISE_OR shiftExpression   // Bitwise OR
 	| bitwiseExpression BITWISE_XOR shiftExpression; // Bitwise XOR
 
-// New level for bitwise shifts
 shiftExpression:
-	term
-	| shiftExpression SHIFT_LEFT term   // Left shift
-	| shiftExpression SHIFT_RIGHT term; // Right shift
+	additiveExpression
+	| shiftExpression SHIFT_LEFT additiveExpression   // Left shift
+	| shiftExpression SHIFT_RIGHT additiveExpression; // Right shift
 
-// Terms - updated "TREMENDOUS" to "BIG LEAGUE TIMES" for multiplication
+additiveExpression:
+	term
+	| additiveExpression PLUS term          // Numeric addition "WINNING"
+	| additiveExpression STRING_CONCAT term // String concatenation "ENDORSING"
+	| additiveExpression MINUS term;        // Subtraction "LOSING"
+
+// Terms - "BIG LEAGUE TIMES" for multiplication
 term:
 	powerExpression
-	| term MULTIPLY primaryExpression // Multiplication (was "TREMENDOUS")
-	| term DIVIDE primaryExpression // Division
-	| term MODULO primaryExpression; // Modulo (new)
+	| term MULTIPLY powerExpression // Multiplication
+	| term DIVIDE powerExpression   // Division
+	| term MODULO powerExpression;  // Modulo
 
 powerExpression:
-    primaryExpression
-    | primaryExpression POWER primaryExpression;  // Exponentiation (right-associative)
+	unaryExpression
+	| unaryExpression POWER powerExpression; // Exponentiation (right-associative)
+
+// Unary - logical NOT ("WRONG") and numeric negation ("LOSING")
+unaryExpression:
+	NOT unaryExpression
+	| MINUS unaryExpression
+	| primaryExpression;
 
 // Factors
 primaryExpression:
@@ -194,8 +209,10 @@ primaryExpression:
 	| arrayAccess
 	| dealAccess;
 
-// Array access - using "WALL" metaphor
-arrayAccess: arrayName = VARIABLE ARRAY_ACCESS expression;
+// Array access - using "WALL" metaphor. The index is an additive expression so
+// that a trailing comparison (e.g. "ARRAY! SECTION 0 SO TRUE 10") is not swallowed
+// into the index - it stays "(ARRAY! SECTION 0) SO TRUE 10".
+arrayAccess: arrayName = VARIABLE ARRAY_ACCESS additiveExpression;
 
 // Deal field entries
 dealField: dataType fieldName = VARIABLE ASSIGNMENT expression;
@@ -208,9 +225,11 @@ dealDeclaration:
 dealAccess:
 	dealName = VARIABLE DEAL_ACCESS_KEYWORD fieldName = VARIABLE;
 
-// Assert statement - "FACT CHECK"
+// Assert statement - "FACT CHECK". Takes a single boolean expression that must
+// come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" now reads as the
+// equality expression "<actual> SO TRUE <expected>".
 assertStatement:
-	ASSERT_CALL (expression | condition) EQUALS expression;
+	ASSERT_CALL expression;
 
 // Import statement - "I KNOW THE BEST PEOPLE FROM"
 importStatement: IMPORT filePath = FILEPATH;
