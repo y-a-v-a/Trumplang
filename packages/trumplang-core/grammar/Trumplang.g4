@@ -99,7 +99,7 @@ whileLoop: WHILE_LOOP_DECL condition blockStatement;
 
 // For loop - "WE'RE GOING TO WIN, WIN, WIN"
 forLoop:
-	FOR_LOOP_DECL FOR_LOOP_WITH varName = VARIABLE FOR_LOOP_FROM expression FOR_LOOP_TO expression blockStatement;
+	FOR_LOOP_DECL FOR_LOOP_WITH varName = VARIABLE FROM_KEYWORD expression FOR_LOOP_TO expression blockStatement;
 
 // Loop item iteration - "BILLIONS AND BILLIONS"
 forEachLoop:
@@ -130,10 +130,10 @@ printStatement: PRINT expression;
 inputStatement: INPUT varName = VARIABLE;
 
 // Increment operation - "MAKE GREATER"
-incrementStatement: 'MAKE' varName = VARIABLE 'GREATER';
+incrementStatement: MAKE_DECL varName = VARIABLE INCREMENT_OP;
 
 // Decrement operation - "MAKE SMALLER"
-decrementStatement: 'MAKE' varName = VARIABLE 'SMALLER';
+decrementStatement: MAKE_DECL varName = VARIABLE DECREMENT_OP;
 
 // Condition for control structures
 condition:
@@ -185,7 +185,7 @@ powerExpression:
 
 // Factors
 primaryExpression:
-	'(' expression ')'
+	OPEN_PAREN expression CLOSE_PAREN
 	| VARIABLE
 	| STRING
 	| NUMBER
@@ -202,7 +202,7 @@ dealField: dataType fieldName = VARIABLE ASSIGNMENT expression;
 
 // Deal structure declaration
 dealDeclaration:
-	'(' dealField (AMPERSAND dealField)* ')' DEAL_DECLARE;
+	OPEN_PAREN dealField (AMPERSAND dealField)* CLOSE_PAREN DEAL_DECLARE;
 
 // Deal field access
 dealAccess:
@@ -217,9 +217,9 @@ importStatement: IMPORT filePath = FILEPATH;
 
 // Selective import - specific "people"
 selectiveImport:
-	'I ONLY WANT' importName += IDENTIFIER (
+	SELECTIVE_IMPORT_DECL importName += IDENTIFIER (
 		PARAMS_ARGS_CHAIN importName += IDENTIFIER
-	)* 'FROM' filePath = FILEPATH;
+	)* FROM_KEYWORD filePath = FILEPATH;
 
 // Lexer Rules
 IF_DECL: 'LISTEN';
@@ -262,7 +262,7 @@ FOR_LOOP_DECL: 'WE\'RE GOING TO WIN, WIN, WIN';
 
 FOR_LOOP_WITH: 'WITH';
 
-FOR_LOOP_FROM: 'FROM';
+FROM_KEYWORD: 'FROM';
 
 FOR_LOOP_TO: 'TO';
 
@@ -306,7 +306,7 @@ ASSIGNMENT: 'ABSOLUTELY'; // =
 
 COMPOUND_ADD: 'WINNING MASSIVELY'; // +=
 
-COMPOUND_SUBTRACT: 'LOOSING MASSIVELY'; // -=
+COMPOUND_SUBTRACT: 'LOSING MASSIVELY'; // -=
 
 COMPOUND_MULTIPLY: 'MANY TIMES HIGHER'; // *=
 
@@ -347,6 +347,21 @@ STRUCTUR_TYPE: 'DEAL'; // Object/Structure
 OPEN_BLOCK: 'BELIEVE ME';
 
 CLOSE_BLOCK: 'I TOLD YOU SO';
+
+// Increment/decrement keywords - "MAKE ... GREATER" / "MAKE ... SMALLER"
+MAKE_DECL: 'MAKE';
+
+INCREMENT_OP: 'GREATER';
+
+DECREMENT_OP: 'SMALLER';
+
+// Selective import - "I ONLY WANT ... FROM"
+SELECTIVE_IMPORT_DECL: 'I ONLY WANT';
+
+// Grouping parentheses
+OPEN_PAREN: '(';
+
+CLOSE_PAREN: ')';
 
 AMPERSAND: '&';
 
