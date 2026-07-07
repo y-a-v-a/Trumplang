@@ -45,6 +45,41 @@ class RuntimeError extends TrumplangError {
 }
 
 /**
+ * A failed FACT CHECK. You cannot pardon a fact check — that's the whole
+ * point of fact checks. PARDON blocks re-throw these untouched.
+ */
+class AssertionError extends TrumplangError {
+  constructor(message) {
+    super(message);
+    this.name = 'AssertionError';
+  }
+}
+
+/**
+ * IMPEACH — a user-thrown error. Carries the impeached value so a
+ * WITCH HUNT! clause can bind it. A perfect phone call, and they
+ * impeach anyway.
+ */
+class ImpeachmentError extends TrumplangError {
+  constructor(value) {
+    super(`IMPEACHED: ${value}. A PERFECT CALL — MAYBE THE MOST PERFECT CALL EVER — AND THEY IMPEACH ANYWAY. TOTAL WITCH HUNT!`);
+    this.name = 'ImpeachmentError';
+    this.value = value;
+  }
+}
+
+/**
+ * Loop-control signal for I WILL VETO! — not an error, not pardonable,
+ * just a very executive way to leave a loop.
+ */
+class BreakSignal extends Error {
+  constructor() {
+    super('BREAK');
+    this.name = 'BreakSignal';
+  }
+}
+
+/**
  * The BEST error message dictionary. Many people are saying these are
  * the most tremendous error messages ever written. And they're right!
  */
@@ -164,6 +199,9 @@ export {
   VariableError,
   SyntaxError,
   RuntimeError,
+  AssertionError,
+  ImpeachmentError,
+  BreakSignal,
   errorMessages,
   trumpifyErrorMessage
 };

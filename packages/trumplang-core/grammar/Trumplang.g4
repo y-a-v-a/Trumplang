@@ -38,6 +38,8 @@ statement:
 	| returnStatement
 	| commentStatement
 	| loopBreak
+	| pardonStatement
+	| impeachStatement
 	| fireStatement
 	| executiveOrder
 	| supremeCourtOverrule
@@ -115,6 +117,17 @@ forEachLoop:
 
 // Break from loop early
 loopBreak: BREAK;
+
+// PARDON - exception handling. You attempt the block because I ALONE CAN FIX IT;
+// when it blows up, that's a WITCH HUNT! and the error gets pardoned (caught).
+// The optional variable after WITCH HUNT! receives the error as a TWEET.
+// You CANNOT pardon a failed FACT CHECK - that is the entire point of fact checks.
+pardonStatement:
+	TRY_DECL blockStatement CATCH_DECL (errName = VARIABLE)? blockStatement;
+
+// IMPEACH - throw. The impeached value flies up the call stack until some
+// WITCH HUNT! clause pardons it. A perfect call, and they impeach anyway.
+impeachStatement: IMPEACH expression;
 
 // Fire a function - permanently delete it, Trump's catchphrase
 fireStatement: FIRE funcName=IDENTIFIER;
@@ -292,6 +305,12 @@ FUNC_CALL: 'I CALL UPON';
 BREAK: 'I WILL VETO!';
 
 FIRE: 'YOU\'RE FIRED';
+
+TRY_DECL: 'I ALONE CAN FIX IT';
+
+CATCH_DECL: 'WITCH HUNT!';
+
+IMPEACH: 'IMPEACH';
 
 EXEC_ORDER: 'EXECUTIVE ORDER';
 

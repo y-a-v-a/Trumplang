@@ -44,6 +44,8 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 - Fire a function: `YOU'RE FIRED NAME` (permanently deletes it; re-declarable; calling it afterwards rants)
 - Remap an operator: `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` (+ behaves as -) · Challenge: `SUPREME COURT OVERRULES WINNING` (50% chance it works)
 - Orders apply to `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`; `ENDORSING` and `LEFTOVER FROM` are immune
+- Try/catch: `I ALONE CAN FIX IT BELIEVE ME … I TOLD YOU SO WITCH HUNT! [ERR!] BELIEVE ME … I TOLD YOU SO` (optional `ERR!` binds the error as a TWEET)
+- Throw: `IMPEACH expr` · Failed `FACT CHECK`s are NOT pardonable; `I WILL VETO!` passes through
 
 **Control flow**
 - If: `LISTEN cond BELIEVE ME … I TOLD YOU SO` · Else-if: `PEOPLE ARE SAYING cond …` · Else: `NOBODY KNEW …`

@@ -14,18 +14,17 @@ add `.TEST.MAGA` + example → `npm run test-all` → update CLAUDE.md/README �
 
 The loudest gap in the grammar. The theme hands us the design for free.
 
-- [ ] Grammar: `tryStatement: PARDON_BLOCK blockStatement CAUGHT_CLAUSE blockStatement;`
-      Proposed tokens: try = `NOBODY GETS PARDONED LIKE ME`, catch = `WITCH HUNT!`
-      (bikeshed the exact phrases; catch should optionally bind the error message
-      to a `TWEET` variable)
-- [ ] Grammar: throw statement — `IMPEACH expression` (throwing is an impeachment;
+- [x] Grammar: `pardonStatement` — try = `I ALONE CAN FIX IT`, catch = `WITCH HUNT!`
+      with optional `errName = VARIABLE` binding the error as a TWEET
+- [x] Grammar: `impeachStatement: IMPEACH expression` (throwing is an impeachment;
       being caught is a pardon)
-- [ ] Visitor: implement try/catch over the existing `Error`-based runtime errors,
-      so division by zero, undefined vars, wall-climbing etc. become catchable
-- [ ] Decide: are ASSERTION FAILED errors catchable? (Recommend NO — you can't
-      pardon a fact check, that's the whole joke)
-- [ ] Tests: `test/PARDON.TEST.MAGA` (catch div-by-zero, catch IMPEACH, verify
-      uncaught IMPEACH still crashes) · Example: `examples/PARDON.MAGA`
+- [x] Visitor: typed signal classes in errors.js (AssertionError, ImpeachmentError,
+      BreakSignal); div-by-zero, undefined vars, wall-climbing all catchable
+- [x] Decided: ASSERTION FAILED is NOT catchable — you can't pardon a fact check.
+      `I WILL VETO!` (BreakSignal) passes through untouched too.
+- [x] Tests: `test/PARDON.TEST.MAGA` (div-by-zero, IMPEACH binding, OOB wall write,
+      clean path, nested pardons, rethrow/escalation) · Example: `examples/PARDON.MAGA`
+      · uncaught IMPEACH crash + unpardonable FACT CHECK verified manually
 
 ## 2. Writable WALL sections — array element assignment (BUG-TIER GAP)
 

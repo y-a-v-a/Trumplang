@@ -175,6 +175,24 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
+	// Enter a parse tree produced by TrumplangParser#pardonStatement.
+	enterPardonStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#pardonStatement.
+	exitPardonStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#impeachStatement.
+	enterImpeachStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#impeachStatement.
+	exitImpeachStatement(ctx) {
+	}
+
+
 	// Enter a parse tree produced by TrumplangParser#fireStatement.
 	enterFireStatement(ctx) {
 	}

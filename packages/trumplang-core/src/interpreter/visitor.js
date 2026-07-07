@@ -25,6 +25,15 @@ try {
 // Import environment utilities
 import * as envUtils from './environment_utils.js';
 
+// Typed signals: BreakSignal is loop control (not pardonable), AssertionError
+// is a failed FACT CHECK (you can't pardon a fact check), ImpeachmentError is
+// a user-thrown value from IMPEACH.
+import {
+  AssertionError,
+  BreakSignal,
+  ImpeachmentError,
+} from '../runtime/errors.js';
+
 // Create our custom visitor by extending the generated one
 class CustomTrumplangVisitor extends TrumplangVisitor {
   constructor(environment) {
@@ -365,7 +374,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     }
 
     const claim = ctx.expression().getText();
-    throw new Error(
+    // AssertionError is deliberately NOT pardonable - you can't pardon a fact check
+    throw new AssertionError(
       chalk.red(`ASSERTION FAILED: ${claim} IS TOTALLY RIGGED! SAD!`),
     );
   }
@@ -699,7 +709,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
       return result;
     } catch (error) {
-      if (error.message === 'BREAK') {
+      if (error instanceof BreakSignal) {
         // Handle loop break
         return null;
       }
@@ -763,7 +773,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
       return result;
     } catch (error) {
-      if (error.message === 'BREAK') {
+      if (error instanceof BreakSignal) {
         // Handle loop break
         return null;
       }
@@ -819,7 +829,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
       return result;
     } catch (error) {
-      if (error.message === 'BREAK') {
+      if (error instanceof BreakSignal) {
         // Handle loop break
         return null;
       }
@@ -834,12 +844,67 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
   // Loop break visitor
   visitLoopBreakContext(ctx) {
-    throw new Error('BREAK');
+    throw new BreakSignal();
   }
 
   // For backward compatibility
   visitLoopBreak(ctx) {
     return this.visitLoopBreakContext(ctx);
+  }
+
+  // PARDON - exception handling. Try the first block; if anything blows up,
+  // it's a WITCH HUNT! and the error gets pardoned (caught) by the second.
+  visitPardonStatementContext(ctx) {
+    debug('PARDON block: I ALONE CAN FIX IT');
+    try {
+      // Propagate the result so a return inside the block still works
+      return this.visit(ctx.blockStatement(0));
+    } catch (error) {
+      // Loop control is not an error - let I WILL VETO! do its job
+      if (error instanceof BreakSignal) {
+        throw error;
+      }
+      // You CANNOT pardon a failed FACT CHECK. That's the point of fact checks.
+      if (error instanceof AssertionError) {
+        debug('PARDON refused: failed FACT CHECK is not pardonable');
+        throw error;
+      }
+
+      debug(`WITCH HUNT! Pardoning error: ${error.message}`);
+
+      // Bind the error to the optional TWEET variable after WITCH HUNT!
+      if (ctx.errName) {
+        const errVarName = ctx.errName.text;
+        // An impeached value comes through as-is; anything else binds its message
+        const errValue =
+          error instanceof ImpeachmentError ? error.value : error.message;
+        const existing = this.getVariable(errVarName);
+        if (existing) {
+          existing.value = errValue;
+        } else {
+          this.defineVariable(errVarName, 'TWEET', errValue);
+        }
+      }
+
+      return this.visit(ctx.blockStatement(1));
+    }
+  }
+
+  // For backward compatibility
+  visitPardonStatement(ctx) {
+    return this.visitPardonStatementContext(ctx);
+  }
+
+  // IMPEACH - throw a value up the call stack until someone pardons it
+  visitImpeachStatementContext(ctx) {
+    const value = this.visit(ctx.expression());
+    debug(`IMPEACHING with value: ${value}`);
+    throw new ImpeachmentError(value);
+  }
+
+  // For backward compatibility
+  visitImpeachStatement(ctx) {
+    return this.visitImpeachStatementContext(ctx);
   }
 
   // Helper: resolve operator name from grammar context
@@ -1452,6 +1517,10 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitCommentStatement(ctx.commentStatement());
     } else if (ctx.loopBreak()) {
       return this.visitLoopBreak(ctx.loopBreak());
+    } else if (ctx.pardonStatement()) {
+      return this.visitPardonStatement(ctx.pardonStatement());
+    } else if (ctx.impeachStatement()) {
+      return this.visitImpeachStatement(ctx.impeachStatement());
     } else if (ctx.fireStatement()) {
       return this.visitFireStatement(ctx.fireStatement());
     } else if (ctx.executiveOrder()) {
