@@ -61,7 +61,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 - Array: `BUILD THE WALL NUMBERS! AND MEXICO WILL PAY FOR IT 1 PREVAILS 2 PREVAILS 3` (omit elements for empty)
 - Access: `ARRAY! SECTION 1` (0-indexed, bounds-checked) · Write: `ARRAY! SECTION 1 ABSOLUTELY 99` (bounds-checked, no appending)
 - Deal: `(HUGE AGE! ABSOLUTELY 42 & TWEET NAME! ABSOLUTELY "DONALD")!!` (typed fields, `&`-separated, `!!` terminator)
-- Field access: `PERSON! FOLLOW NAME!` · Nested deals: a `DEAL` field can hold a deal declaration; chain access with `PERSON! FOLLOW ADDRESS! FOLLOW CITY!`
+- Field access: `PERSON! FOLLOW NAME!` · Field write: `PERSON! FOLLOW AGE! ABSOLUTELY 78` (existing fields only, any depth) · Nested deals: a `DEAL` field can hold a deal declaration; chain access with `PERSON! FOLLOW ADDRESS! FOLLOW CITY!`
 
 **Testing**
 - Assert: `FACT CHECK [actual] SO TRUE [expected]` → returns `PASSED BIGLY` or `TOTALLY RIGGED`

@@ -1411,6 +1411,69 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitDealAccessContext(ctx);
   }
 
+  // Deal field assignment - renegotiate any term of the deal, arbitrarily deep
+  visitDealAssignmentContext(ctx) {
+    const dealName = ctx.dealName.text;
+    const fieldNames = ctx.fieldName.map((f) => f.text);
+
+    debug(
+      `Renegotiating ${dealName} ${fieldNames.join(' -> ')} (deal assignment)`,
+    );
+
+    const deal = this.getVariable(dealName);
+    if (!deal || typeof deal.value !== 'object' || Array.isArray(deal.value)) {
+      throw new Error(
+        `${dealName} IS NOT A DEAL! YOU CAN'T RENEGOTIATE SOMETHING THAT ISN'T A DEAL. NOBODY MAKES DEALS LIKE ME, BELIEVE ME!`,
+      );
+    }
+
+    // Walk to the PARENT of the field being assigned
+    let current = deal.value;
+    let pathSoFar = dealName;
+    for (let i = 0; i < fieldNames.length - 1; i++) {
+      const fieldName = fieldNames[i];
+      if (
+        current === null ||
+        typeof current !== 'object' ||
+        Array.isArray(current) ||
+        !current[fieldName]
+      ) {
+        throw new Error(
+          `THERE'S NO "${fieldName}" IN ${pathSoFar}! I'VE READ EVERY DEAL — THE BEST DEALS, THE WORST DEALS — AND THIS TERM ISN'T IN ANY OF THEM. FAKE FIELD!`,
+        );
+      }
+      current = current[fieldName].value;
+      pathSoFar += ` FOLLOW ${fieldName}`;
+    }
+
+    const lastField = fieldNames[fieldNames.length - 1];
+    if (
+      current === null ||
+      typeof current !== 'object' ||
+      Array.isArray(current)
+    ) {
+      throw new Error(
+        `${pathSoFar} IS NOT A DEAL! YOU CAN'T RENEGOTIATE TERMS OF SOMETHING THAT ISN'T A DEAL. SAD!`,
+      );
+    }
+    if (!current[lastField]) {
+      throw new Error(
+        `THERE'S NO "${lastField}" IN ${pathSoFar}! YOU CAN RENEGOTIATE A DEAL, YOU CAN'T INVENT TERMS THAT WERE NEVER IN IT. FAKE FIELD!`,
+      );
+    }
+
+    const newValue = this.visit(ctx.expression());
+    debug(`Renegotiated ${pathSoFar} FOLLOW ${lastField} = ${newValue}`);
+    current[lastField].value = newValue;
+
+    return newValue;
+  }
+
+  // For backward compatibility
+  visitDealAssignment(ctx) {
+    return this.visitDealAssignmentContext(ctx);
+  }
+
   // Input statement visitor
   visitInputStatementContext(ctx) {
     const variableName = ctx.varName.text;
@@ -1513,6 +1576,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitArrayDeclaration(ctx.arrayDeclaration());
     } else if (ctx.arrayAssignment()) {
       return this.visitArrayAssignment(ctx.arrayAssignment());
+    } else if (ctx.dealAssignment()) {
+      return this.visitDealAssignment(ctx.dealAssignment());
     } else if (ctx.commentStatement()) {
       return this.visitCommentStatement(ctx.commentStatement());
     } else if (ctx.vetoStatement()) {

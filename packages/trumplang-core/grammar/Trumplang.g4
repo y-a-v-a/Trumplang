@@ -46,6 +46,7 @@ statement:
 	| forEachLoop
 	| arrayDeclaration
 	| arrayAssignment
+	| dealAssignment
 	| assignmentStatement
 	| incrementStatement
 	| decrementStatement
@@ -281,6 +282,11 @@ dealDeclaration:
 // COMPANY! FOLLOW CEO! FOLLOW NAME!
 dealAccess:
 	dealName = VARIABLE (DEAL_ACCESS_KEYWORD fieldName += VARIABLE)+;
+
+// Deal field assignment - deals are RENEGOTIABLE. Any term of the deal can be
+// rewritten, arbitrarily deep: PERSON! FOLLOW ADDRESS! FOLLOW CITY! ABSOLUTELY "MOSCOW"
+dealAssignment:
+	dealName = VARIABLE (DEAL_ACCESS_KEYWORD fieldName += VARIABLE)+ ASSIGNMENT expression;
 
 // Assert statement - "FACT CHECK". Takes a single boolean expression that must
 // come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" reads as the equality
