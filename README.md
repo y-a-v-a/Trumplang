@@ -80,6 +80,8 @@ Trumplang isn't just a language with funny keywords — it has genuinely unhinge
 - **YOU'RE FIRED**: Permanently deletes a function. Calling a fired function produces a lengthy Trump-style rant.
 - **EXECUTIVE ORDER**: Remaps arithmetic operators at runtime. Make addition behave as subtraction!
 - **SUPREME COURT OVERRULES**: Attempts to overturn an executive order — 50% chance the court sides with the order instead.
+- **PARDON / WITCH HUNT!**: Exception handling. `I ALONE CAN FIX IT` tries a block; when it blows up, `WITCH HUNT!` pardons (catches) the error. `IMPEACH` throws. Failed `FACT CHECK`s can never be pardoned.
+- **Mandatory superlatives**: Every function declaration MUST praise itself (`THE BEST`, `TREMENDOUS`, or `LIKE NOBODY HAS EVER SEEN`). Modesty is a parse error.
 
 ## Future Development
 

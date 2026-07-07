@@ -87,9 +87,10 @@ someone reading Trumplang.g4.
 
 ## Housekeeping (from the merge, low effort)
 
-- [ ] `docs/social/*.md` and READMEs: verify no lingering references to removed
-      operators (bitwise/shift/compound) — refinement updated them, but re-check
-      after tasks above land
+- [x] `docs/social/*.md` and READMEs: no lingering removed-operator references
+      (only hits were actual Trump tweets in gitignored CSVs); function examples
+      updated with mandatory superlatives; READMEs document PARDON/IMPEACH,
+      wall writes, nested deals, for-steps, and the modesty constraint
 - [ ] Push local `main` (currently ahead of origin: merge + gitignore + this file)
 - [ ] `packages/trumplang-website/` playground is still "(future)" — chaos features
       (inflation, SUPREME COURT coin-flip) are exactly what a playground demos best

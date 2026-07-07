@@ -109,7 +109,7 @@ I WILL VETO!
 Functions are declared using "INCREDIBLE":
 
 ```
-INCREDIBLE FUNCTION_NAME PEOPLE TELL ME [parameters] BELIEVE ME
+INCREDIBLE FUNCTION_NAME THE BEST PEOPLE TELL ME [parameters] BELIEVE ME
   [statements]
   AND I MEAN THAT [return value]
 I TOLD YOU SO

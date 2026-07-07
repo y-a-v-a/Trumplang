@@ -106,9 +106,11 @@ The interpreter fully supports:
 - Modulo (`LEFTOVER FROM`) and power (`HUGELY MULTIPLIED BY`)
 - String concatenation with `ENDORSING`
 - Increment/decrement with `MAKE ... GREATER` / `MAKE ... SMALLER`
-- Control structures: if/else, while, for, foreach
-- Functions with parameters and return values
-- Arrays (`BUILD THE WALL`) and Deal structures (objects)
+- Control structures: if/else, while, for (with `IN TREMENDOUS STEPS OF` and inferred countdown), foreach
+- Functions with parameters and return values — declared with a MANDATORY superlative (`INCREDIBLE NAME THE BEST PEOPLE TELL ME ...`); the parser rejects modest functions
+- Arrays (`BUILD THE WALL`) with bounds-checked read AND write access (`ARRAY! SECTION 1 ABSOLUTELY 99`)
+- Deal structures (objects), including nested deals and chained access (`A! FOLLOW B! FOLLOW C!`)
+- Exception handling: `I ALONE CAN FIX IT ... WITCH HUNT!` (try/catch), `IMPEACH` (throw); failed `FACT CHECK`s are unpardonable
 - `YOU'RE FIRED` — permanently deletes a function
 - `EXECUTIVE ORDER` — remaps arithmetic operators at runtime
 - `SUPREME COURT OVERRULES` — 50% chance of overturning an executive order

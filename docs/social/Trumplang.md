@@ -154,7 +154,7 @@ To demonstrate the language in action, here's a Fibonacci function in Trumplang:
 ```
 THE TIME FOR EMPTY TALK IS OVER!!!
 
-INCREDIBLE GET_FIBONACCI PEOPLE TELL ME HUGE N! BELIEVE ME
+INCREDIBLE GET_FIBONACCI THE BEST PEOPLE TELL ME HUGE N! BELIEVE ME
     LISTEN N! SO TRUE 0 BELIEVE ME
         AND I MEAN THAT 0
     I TOLD YOU SO
@@ -203,7 +203,7 @@ These deal structures can include fields of any data type, and access uses the "
 Trump's most iconic catchphrase is now a language feature. `YOU'RE FIRED` permanently deletes a function:
 
 ```
-INCREDIBLE GREET PEOPLE TELL ME TWEET NAME! BELIEVE ME
+INCREDIBLE GREET TREMENDOUS PEOPLE TELL ME TWEET NAME! BELIEVE ME
     EVERYONE IS TALKING ABOUT "HELLO, " ENDORSING NAME!
 I TOLD YOU SO
 
