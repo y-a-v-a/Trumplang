@@ -238,30 +238,48 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
-	// Enter a parse tree produced by TrumplangParser#condition.
-	enterCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by TrumplangParser#condition.
-	exitCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by TrumplangParser#comparison.
-	enterComparison(ctx) {
-	}
-
-	// Exit a parse tree produced by TrumplangParser#comparison.
-	exitComparison(ctx) {
-	}
-
-
 	// Enter a parse tree produced by TrumplangParser#expression.
 	enterExpression(ctx) {
 	}
 
 	// Exit a parse tree produced by TrumplangParser#expression.
 	exitExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#equalityExpression.
+	enterEqualityExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#equalityExpression.
+	exitEqualityExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#logicalOrExpression.
+	enterLogicalOrExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#logicalOrExpression.
+	exitLogicalOrExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#logicalAndExpression.
+	enterLogicalAndExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#logicalAndExpression.
+	exitLogicalAndExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#comparisonExpression.
+	enterComparisonExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#comparisonExpression.
+	exitComparisonExpression(ctx) {
 	}
 
 
@@ -283,6 +301,15 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
+	// Enter a parse tree produced by TrumplangParser#additiveExpression.
+	enterAdditiveExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#additiveExpression.
+	exitAdditiveExpression(ctx) {
+	}
+
+
 	// Enter a parse tree produced by TrumplangParser#term.
 	enterTerm(ctx) {
 	}
@@ -298,6 +325,15 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by TrumplangParser#powerExpression.
 	exitPowerExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#unaryExpression.
+	enterUnaryExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#unaryExpression.
+	exitUnaryExpression(ctx) {
 	}
 
 

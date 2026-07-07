@@ -206,66 +206,102 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   }
 
   // Expression visitor
+  // expression : equalityExpression
   visitExpressionContext(ctx) {
-    // Log the expression structure for debugging
-    debug(`Expression with ${ctx.getChildCount()} children`);
+    return this.visit(ctx.equalityExpression());
+  }
 
-    // Simple bitwiseExpression
+  // equalityExpression - "SO TRUE" (==) / "TOTAL DISASTER" (!=), loosest binding
+  visitEqualityExpressionContext(ctx) {
     if (ctx.getChildCount() === 1) {
-      const result = this.visit(ctx.term(0));
-      debug(`Simple term expression result: ${result}`);
-      return result;
+      return this.visit(ctx.logicalOrExpression());
     }
+    const left = this.visit(ctx.equalityExpression(0));
+    const right = this.visit(ctx.logicalOrExpression());
+    if (ctx.EQUALS()) {
+      debug(`Equality: ${left} == ${right}`);
+      return left == right;
+    }
+    if (ctx.NOT_EQUALS()) {
+      debug(`Inequality: ${left} != ${right}`);
+      return left != right;
+    }
+    return null;
+  }
 
-    // Has operators
+  // logicalOrExpression - "OR MAYBE" (||)
+  visitLogicalOrExpressionContext(ctx) {
+    if (ctx.getChildCount() === 1) {
+      return this.visit(ctx.logicalAndExpression());
+    }
+    // JS || short-circuits, just like a winner who doesn't waste time
+    return (
+      this.visit(ctx.logicalOrExpression(0)) ||
+      this.visit(ctx.logicalAndExpression())
+    );
+  }
+
+  // logicalAndExpression - "AND IT'S TRUE" (&&)
+  visitLogicalAndExpressionContext(ctx) {
+    if (ctx.getChildCount() === 1) {
+      return this.visit(ctx.comparisonExpression());
+    }
+    return (
+      this.visit(ctx.logicalAndExpression(0)) &&
+      this.visit(ctx.comparisonExpression())
+    );
+  }
+
+  // comparisonExpression - relational operators
+  visitComparisonExpressionContext(ctx) {
+    if (ctx.getChildCount() === 1) {
+      return this.visit(ctx.bitwiseExpression());
+    }
+    const left = this.visit(ctx.comparisonExpression(0));
+    const right = this.visit(ctx.bitwiseExpression());
+    debug(`Comparison: ${left} ? ${right}`);
+    if (ctx.GREATER_THAN()) return left > right;
+    if (ctx.LESS_THAN()) return left < right;
+    if (ctx.GREATER_THAN_OR_EQUALS()) return left >= right;
+    if (ctx.LESS_THAN_OR_EQUALS()) return left <= right;
+    return null;
+  }
+
+  // additiveExpression - "WINNING" (+), "LOSING" (-), "ENDORSING" (concat)
+  visitAdditiveExpressionContext(ctx) {
+    if (ctx.getChildCount() === 1) {
+      return this.visit(ctx.term());
+    }
+    const left = this.visit(ctx.additiveExpression(0));
+    const right = this.visit(ctx.term());
     if (ctx.PLUS()) {
-      // Addition
-      const left = this.visit(ctx.expression(0));
-      const right = this.visit(ctx.term(0));
       debug(`Addition: ${left} + ${right}`);
       return left + right;
-    } else if (ctx.STRING_CONCAT()) {
-      // String concatenation
-      const left = this.visit(ctx.expression(0));
-      const right = this.visit(ctx.term(0));
+    }
+    if (ctx.STRING_CONCAT()) {
       const leftStr =
         left !== null && left !== undefined ? left.toString() : '';
       const rightStr =
         right !== null && right !== undefined ? right.toString() : '';
       debug(`String concatenation: "${leftStr}" + "${rightStr}"`);
       return leftStr + rightStr;
-    } else if (ctx.MINUS()) {
-      // Subtraction
-      const left = this.visit(ctx.expression(0));
-      const right = this.visit(ctx.term(0));
+    }
+    if (ctx.MINUS()) {
       debug(`Subtraction: ${left} - ${right}`);
       return left - right;
     }
-
-    // Fall back to visiting the first child
-    for (let i = 0; i < ctx.getChildCount(); i++) {
-      const child = ctx.getChild(i);
-      if (child && typeof this.visit === 'function') {
-        try {
-          const result = this.visit(child);
-          if (result !== undefined) {
-            debug(`Fallback expression result from child ${i}: ${result}`);
-            return result;
-          }
-        } catch (e) {
-          // Ignore errors when trying to visit
-          debug(`Error visiting child ${i}: ${e.message}`);
-        }
-      }
-    }
-
-    debug(`Expression returning null - no matching term or operation`);
     return null;
   }
 
-  // For backward compatibility
-  visitExpression(ctx) {
-    return this.visitExpressionContext(ctx);
+  // unaryExpression - "WRONG" (logical NOT) and unary "LOSING" (numeric negation)
+  visitUnaryExpressionContext(ctx) {
+    if (ctx.NOT()) {
+      return !this.visit(ctx.unaryExpression());
+    }
+    if (ctx.MINUS()) {
+      return -this.visit(ctx.unaryExpression());
+    }
+    return this.visit(ctx.primaryExpression());
   }
 
   // Print statement visitor
@@ -296,57 +332,23 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitDataTypeContext(ctx);
   }
 
-  // Assert statement visitor
+  // Assert statement visitor - "FACT CHECK <expression>"
+  // The expression is a single boolean (e.g. "<actual> SO TRUE <expected>") that
+  // must come out TRUE. Anything falsy is TOTALLY RIGGED.
   visitAssertStatementContext(ctx) {
     debug(`Assert statement with ${ctx.getChildCount()} children`);
 
-    // Get the actual value (could be from expression or condition)
-    let actual;
+    const result = this.visit(ctx.expression());
+    debug(`Assertion evaluated to: ${result}`);
 
-    if (ctx.condition()) {
-      // For condition, evaluate the condition
-      actual = this.visit(ctx.condition());
-      debug(`Evaluated condition to: ${actual}`);
-    } else if (ctx.expression().length >= 2) {
-      // For comparison between two expressions
-      // This handles cases like FACT CHECK A! SO TRUE C!
-      actual = this.visit(ctx.expression(0));
-
-      if (ctx.EQUALS()) {
-        // Direct equality assertion
-        const expected = this.visit(ctx.expression(1));
-        debug(`Asserting direct equality: ${actual} == ${expected}`);
-
-        if (actual == expected) {
-          return true;
-        } else {
-          throw new Error(
-            chalk.red(
-              `ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`,
-            ),
-          );
-        }
-      }
-    } else {
-      throw new Error('ASSERTION IS A DISASTER! NEEDS ACTUAL VALUE, FOLKS!');
-    }
-
-    // If we get here, we're checking against a boolean expected value
-    // Get the expected value (usually a boolean)
-    const expected = this.visit(ctx.expression(ctx.expression().length - 1));
-    debug(`Asserting boolean: ${actual} == ${expected}`);
-
-    // Compare values with type conversion for booleans
-    if (!!actual === !!expected) {
-      // Loose equality check after boolean conversion
+    if (result) {
       return true;
-    } else {
-      throw new Error(
-        chalk.red(
-          `ASSERTION FAILED: EXPECTED ${expected} BUT GOT ${actual}. TOTALLY RIGGED!`,
-        ),
-      );
     }
+
+    const claim = ctx.expression().getText();
+    throw new Error(
+      chalk.red(`ASSERTION FAILED: ${claim} IS TOTALLY RIGGED! SAD!`),
+    );
   }
 
   // For backward compatibility
@@ -354,7 +356,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitAssertStatementContext(ctx);
   }
 
-  // Visit term
+  // Visit term - operands are power expressions so "2 * 3 ^ 2" = "2 * (3^2)"
   visitTermContext(ctx) {
     debug(`Term with ${ctx.getChildCount()} children`);
 
@@ -363,20 +365,18 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visit(ctx.powerExpression(0));
     }
 
+    const left = this.visit(ctx.term(0));
+    const right = this.visit(ctx.powerExpression(0));
+
     // Multiplication
     if (ctx.MULTIPLY()) {
-      const left = this.visit(ctx.term(0));
-      const right = this.visit(ctx.primaryExpression(0));
       debug(`Multiplication: ${left} * ${right}`);
       return left * right;
     }
 
     // Division
     if (ctx.DIVIDE()) {
-      const left = this.visit(ctx.term(0));
-      const right = this.visit(ctx.primaryExpression(0));
       debug(`Division: ${left} / ${right}`);
-
       if (right === 0) {
         throw new Error(
           "THAT'S A DISASTER. YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!",
@@ -387,10 +387,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
     // Modulo
     if (ctx.MODULO()) {
-      const left = this.visit(ctx.term(0));
-      const right = this.visit(ctx.primaryExpression(0));
       debug(`Modulo: ${left} % ${right}`);
-
       if (right === 0) {
         throw new Error(
           "THAT'S A DISASTER. YOU CAN'T DO MODULO BY ZERO, THAT'S FOR LOSERS!",
@@ -402,26 +399,20 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return null;
   }
 
-  // Power expression visitor
+  // Power expression visitor - right-associative and chainable
   visitPowerExpressionContext(ctx) {
     debug(`Power expression with ${ctx.getChildCount()} children`);
 
-    // Simple factor
+    // Simple unary expression
     if (ctx.getChildCount() === 1) {
-      const result = this.visit(ctx.primaryExpression(0));
-      debug(`Simple factor power expression result: ${result}`);
-      return result;
+      return this.visit(ctx.unaryExpression());
     }
 
-    // Exponentiation
-    if (ctx.POWER()) {
-      const base = this.visit(ctx.primaryExpression(0));
-      const exponent = this.visit(ctx.primaryExpression(1));
-      debug(`Exponentiation: ${base} ^ ${exponent}`);
-      return Math.pow(base, exponent);
-    }
-
-    return null;
+    // Exponentiation: base is the unary, exponent recurses (right-associative)
+    const base = this.visit(ctx.unaryExpression());
+    const exponent = this.visit(ctx.powerExpression());
+    debug(`Exponentiation: ${base} ^ ${exponent}`);
+    return Math.pow(base, exponent);
   }
 
   // For backward compatibility
@@ -525,23 +516,22 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   visitShiftExpressionContext(ctx) {
     debug(`Shift expression with ${ctx.getChildCount()} children`);
 
-    // Simple term
+    // Simple additive expression
     if (ctx.getChildCount() === 1) {
-      return this.visit(ctx.term(0));
+      return this.visit(ctx.additiveExpression(0));
     }
+
+    const left = this.visit(ctx.shiftExpression(0));
+    const right = this.visit(ctx.additiveExpression(0));
 
     // Left shift
     if (ctx.SHIFT_LEFT()) {
-      const left = this.visit(ctx.shiftExpression(0));
-      const right = this.visit(ctx.term(0));
       debug(`Left shift: ${left} << ${right}`);
       return left << right;
     }
 
     // Right shift
     if (ctx.SHIFT_RIGHT()) {
-      const left = this.visit(ctx.shiftExpression(0));
-      const right = this.visit(ctx.term(0));
       debug(`Right shift: ${left} >> ${right}`);
       return left >> right;
     }
@@ -707,7 +697,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     debug(`If statement with ${ctx.getChildCount()} children`);
 
     // Evaluate the condition
-    const conditionResult = this.visit(ctx.condition());
+    const conditionResult = this.visit(ctx.expression());
     debug('Condition result:', conditionResult);
 
     // Execute the appropriate block based on condition result
@@ -749,7 +739,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     debug(`Else-if statement with ${ctx.getChildCount()} children`);
 
     // Evaluate the condition
-    const conditionResult = this.visit(ctx.condition());
+    const conditionResult = this.visit(ctx.expression());
     debug('Else-if condition result:', conditionResult);
 
     // Execute the block if condition is true
@@ -789,7 +779,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       let loopCount = 0;
 
       // Loop while condition is true
-      while (this.visit(ctx.condition())) {
+      while (this.visit(ctx.expression())) {
         debug(`While loop iteration: ${++loopCount}`);
         result = this.visit(ctx.blockStatement());
       }
@@ -1087,84 +1077,6 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitArgumentListContext(ctx);
   }
 
-  // Condition visitor
-  visitConditionContext(ctx) {
-    debug(`Condition with ${ctx.getChildCount()} children`);
-
-    // NOT operator
-    if (ctx.NOT()) {
-      return !this.visit(ctx.condition(0));
-    }
-
-    // AND operator
-    if (ctx.AND()) {
-      return this.visit(ctx.condition(0)) && this.visit(ctx.condition(1));
-    }
-
-    // OR operator
-    if (ctx.OR()) {
-      return this.visit(ctx.condition(0)) || this.visit(ctx.condition(1));
-    }
-
-    // Simple variable as condition
-    if (ctx.condVar) {
-      const varName = ctx.condVar.text;
-      const value = this.getValue(varName);
-      debug(`Variable as condition: ${varName} = ${value}`);
-      return !!value;
-    }
-
-    // Boolean literal as condition
-    if (ctx.condBool) {
-      return ctx.condBool.text === 'VERY TRUE';
-    }
-
-    // Comparison expression
-    if (ctx.expression() && ctx.expression().length >= 2 && ctx.comparison()) {
-      const left = this.visit(ctx.expression(0));
-      const right = this.visit(ctx.expression(1));
-      const operator = ctx.comparison().getText();
-
-      debug(`Comparing: ${left} ${operator} ${right}`);
-
-      switch (operator) {
-        case 'SO TRUE': // Equals
-          return left == right;
-        case 'TOTAL DISASTER': // Not equals
-          return left != right;
-        case 'BETTER THAN': // Greater than
-          return left > right;
-        case 'NOT AS GOOD AS': // Less than
-          return left < right;
-        case 'AT LEAST AS GOOD AS': // Greater than or equal
-          return left >= right;
-        case 'NO BETTER THAN': // Less than or equal
-          return left <= right;
-        default:
-          throw new Error(
-            `NOBODY KNOWS THIS COMPARISON OPERATOR: ${operator}. SAD!`,
-          );
-      }
-    }
-
-    return false;
-  }
-
-  // For backward compatibility
-  visitCondition(ctx) {
-    return this.visitConditionContext(ctx);
-  }
-
-  // Comparison visitor
-  visitComparisonContext(ctx) {
-    return ctx.getText();
-  }
-
-  // For backward compatibility
-  visitComparison(ctx) {
-    return this.visitComparisonContext(ctx);
-  }
-
   // Array declaration visitor
   visitArrayDeclaration(ctx) {
     const arrayName = ctx.arrayName.text;
@@ -1215,8 +1127,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       throw new Error(`${arrayName} IS NOT A WALL (ARRAY). SAD!`);
     }
 
-    // Get the index
-    const index = this.visit(ctx.expression());
+    // Get the index (an additive expression so trailing comparisons stay outside it)
+    const index = this.visit(ctx.additiveExpression());
     debug(
       `Trying to access array index ${index} of array with length ${array.value.length}`,
     );
