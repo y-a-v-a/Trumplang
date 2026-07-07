@@ -37,3 +37,8 @@ coverage/
 .tmp/
 tmp/
 temp/
+# Local tweet-archive research data (not part of the repo)
+docs/output.csv
+docs/ps.js
+docs/realDonaldTrump_in_office.csv
+docs/tweets_01-08-2021.csv
