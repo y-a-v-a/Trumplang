@@ -214,7 +214,7 @@ export default class TrumplangParser extends antlr4.Parser {
                          "blockStatement", "parameterList", "returnStatement", 
                          "functionCall", "argumentList", "ifStatement", 
                          "elseIfStatement", "elseStatement", "whileLoop", 
-                         "forLoop", "forEachLoop", "loopBreak", "pardonStatement", 
+                         "forLoop", "forEachLoop", "vetoStatement", "pardonStatement", 
                          "impeachStatement", "fireStatement", "executiveOrder", 
                          "supremeCourtOverrule", "operator", "arrayDeclaration", 
                          "arrayElements", "arrayAssignment", "assignmentStatement", 
@@ -224,7 +224,7 @@ export default class TrumplangParser extends antlr4.Parser {
                          "comparisonExpression", "additiveExpression", "term", 
                          "powerExpression", "unaryExpression", "primaryExpression", 
                          "arrayAccess", "dealField", "dealDeclaration", 
-                         "dealAccess", "assertStatement", "importStatement", 
+                         "dealAccess", "factCheckStatement", "importStatement", 
                          "selectiveImport" ];
 
     constructor(input) {
@@ -494,7 +494,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	        case 21:
 	            this.enterOuterAlt(localctx, 21);
 	            this.state = 128;
-	            this.loopBreak();
+	            this.vetoStatement();
 	            break;
 
 	        case 22:
@@ -530,7 +530,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	        case 27:
 	            this.enterOuterAlt(localctx, 27);
 	            this.state = 134;
-	            this.assertStatement();
+	            this.factCheckStatement();
 	            break;
 
 	        }
@@ -1101,9 +1101,9 @@ export default class TrumplangParser extends antlr4.Parser {
 
 
 
-	loopBreak() {
-	    let localctx = new LoopBreakContext(this, this._ctx, this.state);
-	    this.enterRule(localctx, 36, TrumplangParser.RULE_loopBreak);
+	vetoStatement() {
+	    let localctx = new VetoStatementContext(this, this._ctx, this.state);
+	    this.enterRule(localctx, 36, TrumplangParser.RULE_vetoStatement);
 	    try {
 	        this.enterOuterAlt(localctx, 1);
 	        this.state = 243;
@@ -2340,9 +2340,9 @@ export default class TrumplangParser extends antlr4.Parser {
 
 
 
-	assertStatement() {
-	    let localctx = new AssertStatementContext(this, this._ctx, this.state);
-	    this.enterRule(localctx, 94, TrumplangParser.RULE_assertStatement);
+	factCheckStatement() {
+	    let localctx = new FactCheckStatementContext(this, this._ctx, this.state);
+	    this.enterRule(localctx, 94, TrumplangParser.RULE_factCheckStatement);
 	    try {
 	        this.enterOuterAlt(localctx, 1);
 	        this.state = 456;
@@ -2536,7 +2536,7 @@ TrumplangParser.RULE_elseStatement = 14;
 TrumplangParser.RULE_whileLoop = 15;
 TrumplangParser.RULE_forLoop = 16;
 TrumplangParser.RULE_forEachLoop = 17;
-TrumplangParser.RULE_loopBreak = 18;
+TrumplangParser.RULE_vetoStatement = 18;
 TrumplangParser.RULE_pardonStatement = 19;
 TrumplangParser.RULE_impeachStatement = 20;
 TrumplangParser.RULE_fireStatement = 21;
@@ -2565,7 +2565,7 @@ TrumplangParser.RULE_arrayAccess = 43;
 TrumplangParser.RULE_dealField = 44;
 TrumplangParser.RULE_dealDeclaration = 45;
 TrumplangParser.RULE_dealAccess = 46;
-TrumplangParser.RULE_assertStatement = 47;
+TrumplangParser.RULE_factCheckStatement = 47;
 TrumplangParser.RULE_importStatement = 48;
 TrumplangParser.RULE_selectiveImport = 49;
 
@@ -2713,8 +2713,8 @@ class StatementContext extends antlr4.ParserRuleContext {
 	    return this.getTypedRuleContext(CommentStatementContext,0);
 	};
 
-	loopBreak() {
-	    return this.getTypedRuleContext(LoopBreakContext,0);
+	vetoStatement() {
+	    return this.getTypedRuleContext(VetoStatementContext,0);
 	};
 
 	pardonStatement() {
@@ -2737,8 +2737,8 @@ class StatementContext extends antlr4.ParserRuleContext {
 	    return this.getTypedRuleContext(SupremeCourtOverruleContext,0);
 	};
 
-	assertStatement() {
-	    return this.getTypedRuleContext(AssertStatementContext,0);
+	factCheckStatement() {
+	    return this.getTypedRuleContext(FactCheckStatementContext,0);
 	};
 
 	enterRule(listener) {
@@ -3583,7 +3583,7 @@ class ForEachLoopContext extends antlr4.ParserRuleContext {
 
 
 
-class LoopBreakContext extends antlr4.ParserRuleContext {
+class VetoStatementContext extends antlr4.ParserRuleContext {
 
     constructor(parser, parent, invokingState) {
         if(parent===undefined) {
@@ -3594,7 +3594,7 @@ class LoopBreakContext extends antlr4.ParserRuleContext {
         }
         super(parent, invokingState);
         this.parser = parser;
-        this.ruleIndex = TrumplangParser.RULE_loopBreak;
+        this.ruleIndex = TrumplangParser.RULE_vetoStatement;
     }
 
 	BREAK() {
@@ -3603,13 +3603,13 @@ class LoopBreakContext extends antlr4.ParserRuleContext {
 
 	enterRule(listener) {
 	    if(listener instanceof TrumplangListener ) {
-	        listener.enterLoopBreak(this);
+	        listener.enterVetoStatement(this);
 		}
 	}
 
 	exitRule(listener) {
 	    if(listener instanceof TrumplangListener ) {
-	        listener.exitLoopBreak(this);
+	        listener.exitVetoStatement(this);
 		}
 	}
 
@@ -4963,7 +4963,7 @@ class DealAccessContext extends antlr4.ParserRuleContext {
 
 
 
-class AssertStatementContext extends antlr4.ParserRuleContext {
+class FactCheckStatementContext extends antlr4.ParserRuleContext {
 
     constructor(parser, parent, invokingState) {
         if(parent===undefined) {
@@ -4974,7 +4974,7 @@ class AssertStatementContext extends antlr4.ParserRuleContext {
         }
         super(parent, invokingState);
         this.parser = parser;
-        this.ruleIndex = TrumplangParser.RULE_assertStatement;
+        this.ruleIndex = TrumplangParser.RULE_factCheckStatement;
     }
 
 	ASSERT_CALL() {
@@ -4987,13 +4987,13 @@ class AssertStatementContext extends antlr4.ParserRuleContext {
 
 	enterRule(listener) {
 	    if(listener instanceof TrumplangListener ) {
-	        listener.enterAssertStatement(this);
+	        listener.enterFactCheckStatement(this);
 		}
 	}
 
 	exitRule(listener) {
 	    if(listener instanceof TrumplangListener ) {
-	        listener.exitAssertStatement(this);
+	        listener.exitFactCheckStatement(this);
 		}
 	}
 
@@ -5131,7 +5131,7 @@ TrumplangParser.ElseStatementContext = ElseStatementContext;
 TrumplangParser.WhileLoopContext = WhileLoopContext; 
 TrumplangParser.ForLoopContext = ForLoopContext; 
 TrumplangParser.ForEachLoopContext = ForEachLoopContext; 
-TrumplangParser.LoopBreakContext = LoopBreakContext; 
+TrumplangParser.VetoStatementContext = VetoStatementContext; 
 TrumplangParser.PardonStatementContext = PardonStatementContext; 
 TrumplangParser.ImpeachStatementContext = ImpeachStatementContext; 
 TrumplangParser.FireStatementContext = FireStatementContext; 
@@ -5160,6 +5160,6 @@ TrumplangParser.ArrayAccessContext = ArrayAccessContext;
 TrumplangParser.DealFieldContext = DealFieldContext; 
 TrumplangParser.DealDeclarationContext = DealDeclarationContext; 
 TrumplangParser.DealAccessContext = DealAccessContext; 
-TrumplangParser.AssertStatementContext = AssertStatementContext; 
+TrumplangParser.FactCheckStatementContext = FactCheckStatementContext; 
 TrumplangParser.ImportStatementContext = ImportStatementContext; 
 TrumplangParser.SelectiveImportContext = SelectiveImportContext; 

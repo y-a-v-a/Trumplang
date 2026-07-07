@@ -1,13 +1,29 @@
 /*
  * Trumplang - A Trump-inspired esoteric programming language
- * 
+ *
  * This grammar defines a programming language based on Donald Trump's speech patterns, famous
  * quotes, and tweet style. The language is designed to look like Trump prose while functioning as a
  * proper programming language.
- * 
+ *
  * Key design principles: - ALL KEYWORDS IN UPPERCASE - All variables end with exclamation mark (!)
  * and are in UPPERCASE - All strings must be in UPPERCASE - The language should read like
  * Trump-speech
+ *
+ * THE IDENTITY OF THIS LANGUAGE - read this before anything else:
+ *
+ * The output lies, the logic doesn't. Every number printed via EVERYONE IS TALKING ABOUT is
+ * inflated by 10% (crowd sizes, folks), while FACT CHECK assertions always see the real values.
+ *
+ * The operators themselves can be gaslit. EXECUTIVE ORDER remaps arithmetic at runtime
+ * (addition can be made to subtract), and SUPREME COURT OVERRULES has a 50% chance of striking
+ * the order down - or siding with it. Nondeterminism is a branch of government here.
+ *
+ * The programmer is constrained by the theme. Functions MUST praise themselves (a superlative
+ * is required syntax - modesty is a parse error), strings MUST be uppercase, and a failed
+ * FACT CHECK can never be pardoned.
+ *
+ * Errors are governance. IMPEACH throws, WITCH HUNT! catches, YOU'RE FIRED deletes functions,
+ * and I WILL VETO! leaves loops.
  */
 
 grammar Trumplang;
@@ -37,13 +53,13 @@ statement:
 	| inputStatement
 	| returnStatement
 	| commentStatement
-	| loopBreak
+	| vetoStatement
 	| pardonStatement
 	| impeachStatement
 	| fireStatement
 	| executiveOrder
 	| supremeCourtOverrule
-	| assertStatement;
+	| factCheckStatement;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
 commentStatement: COMMENT;
@@ -119,8 +135,8 @@ forLoop:
 forEachLoop:
 	FOR_EACH_LOOP_DECL varName = VARIABLE FOR_EACH_FROM listName = VARIABLE blockStatement;
 
-// Break from loop early
-loopBreak: BREAK;
+// Break from loop early - a very executive way to leave
+vetoStatement: BREAK;
 
 // PARDON - exception handling. You attempt the block because I ALONE CAN FIX IT;
 // when it blows up, that's a WITCH HUNT! and the error gets pardoned (caught).
@@ -136,10 +152,15 @@ impeachStatement: IMPEACH expression;
 // Fire a function - permanently delete it, Trump's catchphrase
 fireStatement: FIRE funcName=IDENTIFIER;
 
-// Executive order - remap an operator to behave like another operator
+// Executive order - remap an arithmetic operator to behave like another operator,
+// for the REST OF EXECUTION. `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` makes
+// addition subtract. This is the language being gaslit at runtime; string
+// concatenation (ENDORSING) and modulo (LEFTOVER FROM) are immune.
 executiveOrder: EXEC_ORDER fromOp=operator ASSIGNMENT toOp=operator;
 
-// Supreme Court can overturn an executive order (50% chance it sides with the order instead!)
+// The Supreme Court can overturn an executive order - but this is a COIN FLIP:
+// 50% it strikes the order down, 50% it rules the order STANDS. The only
+// nondeterministic construct in the language, and it's the judiciary.
 supremeCourtOverrule: SUPREME_COURT fromOp=operator;
 
 // Operator tokens for executive orders
@@ -161,7 +182,10 @@ arrayAssignment:
 assignmentStatement: 
     varName = VARIABLE ASSIGNMENT expression;          // Basic assignment (=)
 
-// Print statement - "EVERYONE IS TALKING ABOUT"
+// Print statement - "EVERYONE IS TALKING ABOUT". THE OUTPUT LIES: any numeric
+// value printed here is inflated by 10% at runtime (biggest crowds ever), while
+// the program's internal value - and every FACT CHECK - stays honest. The one
+// place where the grammar looks innocent and the runtime absolutely is not.
 printStatement: PRINT expression;
 
 // Input statement - "MANY PEOPLE ARE ASKING"
@@ -259,9 +283,11 @@ dealAccess:
 	dealName = VARIABLE (DEAL_ACCESS_KEYWORD fieldName += VARIABLE)+;
 
 // Assert statement - "FACT CHECK". Takes a single boolean expression that must
-// come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" now reads as the
-// equality expression "<actual> SO TRUE <expected>".
-assertStatement:
+// come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" reads as the equality
+// expression "<actual> SO TRUE <expected>". Fact checks see REAL values (never
+// the inflated output) and a failed one cannot be pardoned by WITCH HUNT! -
+// it is the one incorruptible construct in the language.
+factCheckStatement:
 	ASSERT_CALL expression;
 
 // Import statement - "I KNOW THE BEST PEOPLE FROM"

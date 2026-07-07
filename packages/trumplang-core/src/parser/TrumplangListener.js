@@ -166,12 +166,12 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
-	// Enter a parse tree produced by TrumplangParser#loopBreak.
-	enterLoopBreak(ctx) {
+	// Enter a parse tree produced by TrumplangParser#vetoStatement.
+	enterVetoStatement(ctx) {
 	}
 
-	// Exit a parse tree produced by TrumplangParser#loopBreak.
-	exitLoopBreak(ctx) {
+	// Exit a parse tree produced by TrumplangParser#vetoStatement.
+	exitVetoStatement(ctx) {
 	}
 
 
@@ -427,12 +427,12 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
-	// Enter a parse tree produced by TrumplangParser#assertStatement.
-	enterAssertStatement(ctx) {
+	// Enter a parse tree produced by TrumplangParser#factCheckStatement.
+	enterFactCheckStatement(ctx) {
 	}
 
-	// Exit a parse tree produced by TrumplangParser#assertStatement.
-	exitAssertStatement(ctx) {
+	// Exit a parse tree produced by TrumplangParser#factCheckStatement.
+	exitFactCheckStatement(ctx) {
 	}
 
 

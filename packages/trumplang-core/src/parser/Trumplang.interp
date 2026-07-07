@@ -185,7 +185,7 @@ elseStatement
 whileLoop
 forLoop
 forEachLoop
-loopBreak
+vetoStatement
 pardonStatement
 impeachStatement
 fireStatement
@@ -214,7 +214,7 @@ arrayAccess
 dealField
 dealDeclaration
 dealAccess
-assertStatement
+factCheckStatement
 importStatement
 selectiveImport
 

@@ -363,7 +363,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   // Assert statement visitor - "FACT CHECK <expression>"
   // The expression is a single boolean (e.g. "<actual> SO TRUE <expected>") that
   // must come out TRUE. Anything falsy is TOTALLY RIGGED.
-  visitAssertStatementContext(ctx) {
+  visitFactCheckStatementContext(ctx) {
     debug(`Assert statement with ${ctx.getChildCount()} children`);
 
     const result = this.visit(ctx.expression());
@@ -381,8 +381,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   }
 
   // For backward compatibility
-  visitAssertStatement(ctx) {
-    return this.visitAssertStatementContext(ctx);
+  visitFactCheckStatement(ctx) {
+    return this.visitFactCheckStatementContext(ctx);
   }
 
   // Visit term - operands are power expressions so "2 * 3 ^ 2" = "2 * (3^2)"
@@ -842,14 +842,14 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitForEachLoopContext(ctx);
   }
 
-  // Loop break visitor
-  visitLoopBreakContext(ctx) {
+  // Veto (loop break) visitor
+  visitVetoStatementContext(ctx) {
     throw new BreakSignal();
   }
 
   // For backward compatibility
-  visitLoopBreak(ctx) {
-    return this.visitLoopBreakContext(ctx);
+  visitVetoStatement(ctx) {
+    return this.visitVetoStatementContext(ctx);
   }
 
   // PARDON - exception handling. Try the first block; if anything blows up,
@@ -1487,8 +1487,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitConstantDeclaration(ctx.constantDeclaration());
     } else if (ctx.printStatement()) {
       return this.visitPrintStatement(ctx.printStatement());
-    } else if (ctx.assertStatement()) {
-      return this.visitAssertStatement(ctx.assertStatement());
+    } else if (ctx.factCheckStatement()) {
+      return this.visitFactCheckStatement(ctx.factCheckStatement());
     } else if (ctx.ifStatement()) {
       return this.visitIfStatement(ctx.ifStatement());
     } else if (ctx.whileLoop()) {
@@ -1515,8 +1515,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitArrayAssignment(ctx.arrayAssignment());
     } else if (ctx.commentStatement()) {
       return this.visitCommentStatement(ctx.commentStatement());
-    } else if (ctx.loopBreak()) {
-      return this.visitLoopBreak(ctx.loopBreak());
+    } else if (ctx.vetoStatement()) {
+      return this.visitVetoStatement(ctx.vetoStatement());
     } else if (ctx.pardonStatement()) {
       return this.visitPardonStatement(ctx.pardonStatement());
     } else if (ctx.impeachStatement()) {

@@ -77,11 +77,13 @@ programmer. Add at least one more — pick ONE, don't do all:
 The language's identity (output lies, operators can be gaslit) is invisible to
 someone reading Trumplang.g4.
 
-- [ ] Move the number-inflation and executive-order semantics documentation into
-      grammar comments next to `printStatement` / `executiveOrder` (the FACT CHECK
-      precedence comment is the model — joke and engineering as one)
-- [ ] Rename bland rule names where the theme has a better word
-      (e.g. `tryStatement` → `pardonStatement`) so the parse tree reads on-theme
+- [x] Grammar header now states the language's identity up front ("the output lies,
+      the logic doesn't"); inflation documented at `printStatement`, gaslighting at
+      `executiveOrder`, the coin-flip at `supremeCourtOverrule`, incorruptibility
+      at `factCheckStatement`
+- [x] Renamed bland rules: `loopBreak` → `vetoStatement`, `assertStatement` →
+      `factCheckStatement` (exception handling was born as `pardonStatement`) —
+      the parse tree now reads on-theme
 
 ## Housekeeping (from the merge, low effort)
 
