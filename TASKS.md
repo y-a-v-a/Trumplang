@@ -91,7 +91,7 @@ someone reading Trumplang.g4.
       (only hits were actual Trump tweets in gitignored CSVs); function examples
       updated with mandatory superlatives; READMEs document PARDON/IMPEACH,
       wall writes, nested deals, for-steps, and the modesty constraint
-- [ ] Push local `main` — needs the maintainer's go-ahead (12 commits ahead of origin)
+- [x] Push local `main` — pushed with the maintainer's go-ahead (2026-07-07)
 - [x] `packages/trumplang-website/` now has a real playground: the ANTLR4
       interpreter bundled for the browser (esbuild, --keep-names, fs/path stubbed),
       examples demoing inflation / executive orders / pardons / nested deals /
