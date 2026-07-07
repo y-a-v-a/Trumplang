@@ -52,11 +52,12 @@ The "separate deal vars" workaround is the grammar surrendering.
 
 `FROM 0 TO 10` only counts up by 1. SAD!
 
-- [ ] Grammar: optional step clause, e.g. `... FROM expr TO expr (BY_LANDSLIDE expression)?`
-      (token bikeshed: `IN INCREMENTS OF`? `EVERY SINGLE TIME BY`?)
-- [ ] Visitor: support descending ranges (FROM 10 TO 0 counts down — direction
-      inferred, no separate keyword needed)
-- [ ] Tests: step of 2, descending loop, step with expression
+- [x] Grammar: optional step clause `... FROM expr TO expr (FOR_LOOP_STEP expression)?`
+      with `FOR_LOOP_STEP: 'IN TREMENDOUS STEPS OF'`
+- [x] Visitor: descending ranges (FROM 10 TO 0 counts down — direction inferred);
+      step must be positive or you get a low-energy rant
+- [x] Tests: `test/FOR_STEP.TEST.MAGA` — step of 2, descending, descending+step,
+      expression step, overshooting step terminates
 
 ## 5. Put ONE structural constraint in the parser (INTERCAL tier)
 

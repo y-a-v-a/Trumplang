@@ -47,7 +47,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 
 **Control flow**
 - If: `LISTEN cond BELIEVE ME … I TOLD YOU SO` · Else-if: `PEOPLE ARE SAYING cond …` · Else: `NOBODY KNEW …`
-- While: `WE'RE GOING TO WIN IN A LANDSLIDE cond …` · For: `WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 0 TO 10 …`
+- While: `WE'RE GOING TO WIN IN A LANDSLIDE cond …` · For: `WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 0 TO 10 …` (optional step: `… IN TREMENDOUS STEPS OF 2 …`; `FROM 10 TO 0` counts down; step must be positive)
 - Foreach: `BILLIONS AND BILLIONS ITEM! YET ARRAY! …` · Break: `I WILL VETO!`
 
 **Functions/imports**

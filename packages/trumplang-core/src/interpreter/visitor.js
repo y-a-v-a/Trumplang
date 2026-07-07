@@ -720,7 +720,22 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     const startValue = this.visit(ctx.expression(0));
     const endValue = this.visit(ctx.expression(1));
 
-    debug(`From ${startValue} to ${endValue}`);
+    // Optional step clause - "IN TREMENDOUS STEPS OF"
+    let step = 1;
+    if (ctx.FOR_LOOP_STEP()) {
+      step = this.visit(ctx.expression(2));
+      if (typeof step !== 'number' || step <= 0) {
+        throw new Error(
+          `A STEP OF ${step}?! WE ONLY TAKE TREMENDOUS FORWARD STEPS AROUND HERE. ZERO STEPS, BACKWARD STEPS — THAT'S LOW ENERGY. TOTAL LOSER TALK. THE STEP MUST BE POSITIVE, AND FRANKLY IT SHOULD BE HUGE!`,
+        );
+      }
+    }
+
+    // Direction is inferred: FROM 10 TO 0 counts down
+    const descending = startValue > endValue;
+    debug(
+      `From ${startValue} to ${endValue}, step ${step}${descending ? ' (descending)' : ''}`,
+    );
 
     // Create loop variable if it doesn't exist
     let variable = this.getVariable(loopVar);
@@ -733,7 +748,11 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     try {
       let result;
       // Execute the loop
-      for (let i = startValue; i <= endValue; i++) {
+      for (
+        let i = startValue;
+        descending ? i >= endValue : i <= endValue;
+        i += descending ? -step : step
+      ) {
         // Update loop variable
         this.setValue(loopVar, i);
         debug(`For loop iteration: ${loopVar} = ${i}`);

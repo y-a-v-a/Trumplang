@@ -101,9 +101,13 @@ elseStatement: ELSE_DECL statement;
 // While loop - "WE'RE GOING TO WIN IN A LANDSLIDE"
 whileLoop: WHILE_LOOP_DECL expression blockStatement;
 
-// For loop - "WE'RE GOING TO WIN, WIN, WIN"
+// For loop - "WE'RE GOING TO WIN, WIN, WIN". Direction is inferred: FROM 10 TO 0
+// counts down, no extra keyword needed. The optional step clause must be a
+// POSITIVE number - we only take tremendous forward steps around here.
 forLoop:
-	FOR_LOOP_DECL FOR_LOOP_WITH varName = VARIABLE FROM_KEYWORD expression FOR_LOOP_TO expression blockStatement;
+	FOR_LOOP_DECL FOR_LOOP_WITH varName = VARIABLE FROM_KEYWORD expression FOR_LOOP_TO expression (
+		FOR_LOOP_STEP expression
+	)? blockStatement;
 
 // Loop item iteration - "BILLIONS AND BILLIONS"
 forEachLoop:
@@ -302,6 +306,8 @@ FOR_LOOP_WITH: 'WITH';
 FROM_KEYWORD: 'FROM';
 
 FOR_LOOP_TO: 'TO';
+
+FOR_LOOP_STEP: 'IN TREMENDOUS STEPS OF';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 
