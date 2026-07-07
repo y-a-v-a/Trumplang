@@ -66,4 +66,4 @@ Trumplang isn't just a language with funny keywords — it has genuinely unhinge
 
 ---
 
-© 2026 Vincent Bruijn
+© 2026 Vincent Bruijn · [vincentbruijn.nl](https://www.vincentbruijn.nl) · [y-a-v-a.org](https://www.y-a-v-a.org)

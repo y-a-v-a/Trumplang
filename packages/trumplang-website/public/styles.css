@@ -378,6 +378,14 @@ footer small {
     opacity: 0.8;
 }
 
+footer a {
+    color: var(--gold-light);
+}
+
+footer a:hover {
+    color: var(--maga-gold);
+}
+
 /* Responsive adjustments - IT WORKS ON EVERY PHONE, EVEN THE SMALL ONES */
 @media (max-width: 800px) {
     .playground-panes {
