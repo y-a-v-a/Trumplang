@@ -1,7 +1,8 @@
 # OPEN_POINTS.md — UNFINISHED BUSINESS
 
-The honest list. Everything else shipped (see git history for TASKS.md and
-SUGGESTIONS.md — both fully implemented and retired); these six remain.
+The honest list — now fully dishonest, because everything on it shipped
+(2026-07-07). Kept as the record of the last six gaps; see git history for
+TASKS.md and SUGGESTIONS.md, its retired predecessors.
 
 ## 1. Imports are a facade — ☑ done (2026-07-07)
 
@@ -30,42 +31,31 @@ SUGGESTIONS.md — both fully implemented and retired); these six remain.
 - [x] CLI-verified-only (examples/INPUT.MAGA + piped verification); not in the
       test suite, which must run with empty stdin in CI
 
-## 3. VS Code extension is behind the language
+## 3. VS Code extension is behind the language — ☑ done (2026-07-07)
 
-The `packages/trumplang-vscode` submodule predates the 2026-07-07 sprint.
-Missing highlighting/snippets for: `I ALONE CAN FIX IT` / `WITCH HUNT!` /
-`IMPEACH`, `PERIOD.`, `GIVING BACK`, `NOTHING TO SEE HERE`, the superlatives
-(`THE BEST` / `TREMENDOUS` / `LIKE NOBODY HAS EVER SEEN`), and
-`IN TREMENDOUS STEPS OF`. Removed operators (bitwise/shift/compound) may still
-be highlighted.
+- [x] TextMate grammar updated in the submodule: PARDON keywords
+      (`I ALONE CAN FIX IT` / `WITCH HUNT!` / `IMPEACH`), `PERIOD.`,
+      `GIVING BACK`, `NOTHING TO SEE HERE`, the superlatives, and
+      `IN TREMENDOUS STEPS OF`. (No dead operators were present; the
+      extension ships no snippets file.)
+- [x] Committed and pushed in the submodule (rebased onto its newer
+      origin/main), reference bumped here
 
-- [ ] Update the TextMate grammar + snippets inside the submodule repo
-- [ ] Commit/push in the submodule, then bump the reference here
-      (`git add packages/trumplang-vscode && git commit`)
+## 4. Deploy the playground to GitHub Pages — ☑ done (2026-07-07)
 
-## 4. Deploy the playground to GitHub Pages
+- [x] `deploy-playground.yml` builds the bundle and deploys `public/` via
+      Pages artifacts on every push to main
+- [x] Pages enabled via API (`build_type: workflow`) —
+      https://y-a-v-a.github.io/Trumplang/
+- [x] Root README links the live playground
 
-The playground is a static build already (`npm run build -w trumplang-website`
-→ `public/`); nobody should have to clone the repo to see the chaos.
+## 5. License: MIT — ☑ done (2026-07-07)
 
-- [ ] GitHub Actions workflow: build the bundle, upload `public/` as a Pages
-      artifact, deploy
-- [ ] Enable Pages (Settings → Pages → GitHub Actions source)
-- [ ] Link the live playground from the root README — THE BEST DEMO, LIVE
+- [x] `LICENSE` added (MIT, © 2026 Vincent Bruijn)
+- [x] `license: MIT` in root, core, and website package.json
 
-## 5. License: MIT
+## 6. CI: EXTREME-VETTING ALL on every push — ☑ done (2026-07-07)
 
-`package.json` says ISC and no LICENSE file exists. Decision made: **MIT**.
-
-- [ ] Add `LICENSE` (MIT, © 2026 Vincent Bruijn)
-- [ ] Align the `license` field in every package.json (root, core, website)
-
-## 6. CI: EXTREME-VETTING ALL on every push
-
-40 tests and a playground smoke suite exist; nothing runs them automatically.
-TOTAL HONOR SYSTEM. SAD!
-
-- [ ] GitHub Actions workflow on push/PR: checkout (with submodules), npm
-      install, `EXTREME-VETTING ALL` in trumplang-core, `npm run smoke` in
-      trumplang-website
-- [ ] Badge in the root README: VETTED BIGLY
+- [x] `extreme-vetting.yml` on push/PR: core test suite + playground
+      build+smoke (checkout skips the SSH-URL submodule — not needed for tests)
+- [x] VETTED BIGLY badge in the root README
