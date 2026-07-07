@@ -31,10 +31,11 @@ The loudest gap in the grammar. The theme hands us the design for free.
 
 `arrayAccess` exists only as an expression; the WALL is currently read-only.
 
-- [ ] Grammar: extend `assignmentStatement` (or add `arrayAssignment`):
+- [x] Grammar: added `arrayAssignment`:
       `arrayName = VARIABLE ARRAY_ACCESS index = additiveExpression ASSIGNMENT expression`
-- [ ] Visitor: bounds-checked element write (reuse the CLIMB OVER THE WALL error)
-- [ ] Tests: extend `test/array/` — write, overwrite, out-of-bounds write
+- [x] Visitor: bounds-checked element write (renovation allowed, no bolting on new sections)
+- [x] Tests: `test/array/WALL_WRITE.TEST.MAGA` — write, overwrite, expression index/value
+      (out-of-bounds write asserted via PARDON in task 1's test)
 
 ## 3. Nested DEALs — stop admitting defeat in the docs
 

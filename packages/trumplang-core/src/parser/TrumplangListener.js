@@ -229,6 +229,15 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
+	// Enter a parse tree produced by TrumplangParser#arrayAssignment.
+	enterArrayAssignment(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#arrayAssignment.
+	exitArrayAssignment(ctx) {
+	}
+
+
 	// Enter a parse tree produced by TrumplangParser#assignmentStatement.
 	enterAssignmentStatement(ctx) {
 	}

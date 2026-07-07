@@ -57,7 +57,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 
 **Arrays / Deals**
 - Array: `BUILD THE WALL NUMBERS! AND MEXICO WILL PAY FOR IT 1 PREVAILS 2 PREVAILS 3` (omit elements for empty)
-- Access: `ARRAY! SECTION 1` (0-indexed, bounds-checked)
+- Access: `ARRAY! SECTION 1` (0-indexed, bounds-checked) · Write: `ARRAY! SECTION 1 ABSOLUTELY 99` (bounds-checked, no appending)
 - Deal: `(HUGE AGE! ABSOLUTELY 42 & TWEET NAME! ABSOLUTELY "DONALD")!!` (typed fields, `&`-separated, `!!` terminator)
 - Field access: `PERSON! FOLLOW NAME!` · Nested deals: use separate deal vars and reference them
 

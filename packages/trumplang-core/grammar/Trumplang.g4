@@ -29,6 +29,7 @@ statement:
 	| forLoop
 	| forEachLoop
 	| arrayDeclaration
+	| arrayAssignment
 	| assignmentStatement
 	| incrementStatement
 	| decrementStatement
@@ -129,6 +130,11 @@ arrayDeclaration:
 
 // Array elements
 arrayElements: expression (ARRAY_CHAIN expression)*;
+
+// Array element assignment - rebuilding a SECTION of the WALL. Bounds-checked:
+// you can renovate an existing section, you cannot bolt new sections onto the end.
+arrayAssignment:
+	arrayName = VARIABLE ARRAY_ACCESS index = additiveExpression ASSIGNMENT expression;
 
 // Assignment statement - updated to "ABSOLUTELY" (was "IT IS YET", which was "IS YET", which was "JUST HIRED")
 assignmentStatement: 

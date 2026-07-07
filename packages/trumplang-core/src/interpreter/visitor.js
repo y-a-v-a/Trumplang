@@ -1183,6 +1183,36 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitArrayAccessContext(ctx);
   }
 
+  // Array element assignment - rebuild a SECTION of the WALL
+  visitArrayAssignmentContext(ctx) {
+    const arrayName = ctx.arrayName.text;
+
+    const array = this.getVariable(arrayName);
+    if (!array || !Array.isArray(array.value)) {
+      throw new Error(
+        `${arrayName} IS NOT A WALL! YOU CAN'T REBUILD SECTIONS OF SOMETHING THAT ISN'T A WALL! WHAT A DISGRACE!`,
+      );
+    }
+
+    const index = this.visit(ctx.additiveExpression());
+    if (typeof index !== 'number' || index < 0 || index >= array.value.length) {
+      throw new Error(
+        `INDEX ${index}?! THE WALL IS ONLY ${array.value.length} SECTIONS LONG! YOU CAN RENOVATE THE WALL, YOU CAN'T BOLT NEW SECTIONS ONTO IT. WE HAVE PLANS. THE BEST PLANS. THIS ISN'T ONE OF THEM!`,
+      );
+    }
+
+    const newValue = this.visit(ctx.expression());
+    debug(`Rebuilding ${arrayName}[${index}] = ${newValue}`);
+    array.value[index] = newValue;
+
+    return newValue;
+  }
+
+  // For backward compatibility
+  visitArrayAssignment(ctx) {
+    return this.visitArrayAssignmentContext(ctx);
+  }
+
   // Deal field visitor
   visitDealFieldContext(ctx) {
     const fieldType = this.visit(ctx.dataType());
@@ -1369,6 +1399,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitDecrementStatement(ctx.decrementStatement());
     } else if (ctx.arrayDeclaration()) {
       return this.visitArrayDeclaration(ctx.arrayDeclaration());
+    } else if (ctx.arrayAssignment()) {
+      return this.visitArrayAssignment(ctx.arrayAssignment());
     } else if (ctx.commentStatement()) {
       return this.visitCommentStatement(ctx.commentStatement());
     } else if (ctx.loopBreak()) {
