@@ -37,9 +37,13 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 
 **Operations**
 - Inc/dec: `MAKE COUNT! GREATER` / `SMALLER`
-- Add (num) `WINNING` · Concat (str) `ENDORSING` · Mul `BIG LEAGUE TIMES` · Div `SAD` · Mod `LEFTOVER FROM` · Pow `HUGELY MULTIPLIED BY`
-- Compound: `WINNING MASSIVELY` (+=) · `LOSING MASSIVELY` (-=) · `MANY TIMES HIGHER` (*=) · `MANY TIMES LOWER` (/=)
-- Bitwise: `ALLIANCE WITH` (&) · `COMBINED FORCES WITH` (|) · `EXCLUSIVE DEAL WITH` (^) · Shift `PROMOTE` (<<) / `DEMOTE` (>>)
+- Add (num) `WINNING` · Sub `LOSING` · Concat (str) `ENDORSING` · Mul `BIG LEAGUE TIMES` · Div `SAD` · Mod `LEFTOVER FROM` · Pow `HUGELY MULTIPLIED BY`
+
+**Trumpian runtime behavior**
+- Number inflation: numeric output via `EVERYONE IS TALKING ABOUT` is inflated by 10%; `FACT CHECK` uses real values (the output lies, the logic doesn't)
+- Fire a function: `YOU'RE FIRED NAME` (permanently deletes it; re-declarable; calling it afterwards rants)
+- Remap an operator: `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` (+ behaves as -) · Challenge: `SUPREME COURT OVERRULES WINNING` (50% chance it works)
+- Orders apply to `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`; `ENDORSING` and `LEFTOVER FROM` are immune
 
 **Control flow**
 - If: `LISTEN cond BELIEVE ME … I TOLD YOU SO` · Else-if: `PEOPLE ARE SAYING cond …` · Else: `NOBODY KNEW …`
@@ -70,7 +74,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 
 - ES Modules throughout (`import`/`export`, `import.meta.url` for paths); visitor uses ES6 classes.
 - Grammar uses ANTLR4 labels; in the visitor access labeled elements via `.text` (not `.getText()`).
-- Error message examples: undefined var → "NOBODY KNOWS WHAT [var] IS…BELIEVE ME!"; div-by-zero → "…YOU CAN'T DIVIDE BY ZERO, THAT'S FOR LOSERS!"; array OOB → "YOU'RE TRYING TO CLIMB OVER THE WALL!…"; non-deal access → "THAT'S NOT A DEAL!…".
+- Error messages are multi-sentence Trump rants (see `src/runtime/errors.js`). Examples: undefined var → "NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF [var]…"; div-by-zero → "…THAT'S THE WORST DEAL IN THE HISTORY OF DEALS, MAYBE EVER…"; array OOB → "YOU'RE TRYING TO CLIMB OVER THE WALL!…"; non-deal access → "THAT'S NOT A DEAL!…".
 
 ## Submodule (trumplang-vscode)
 

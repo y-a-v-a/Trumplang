@@ -121,13 +121,15 @@ VALUE! ABSOLUTELY PRICE! BIG LEAGUE TIMES TAX! // Multiplication
 REMAINDER! ABSOLUTELY VALUE! LEFTOVER FROM 2   // Modulo operation
 ```
 
-The language even includes power expressions (`HUGELY MULTIPLIED BY`) and bitwise operations using political metaphors:
+The language even includes power expressions (`HUGELY MULTIPLIED BY`) and some truly unhinged features:
 
 ```
-FORCES! ABSOLUTELY BASE! ALLIANCE WITH ALLY!           // Bitwise AND
-COALITION! ABSOLUTELY PARTY1! COMBINED FORCES WITH PARTY2! // Bitwise OR
-DEAL! ABSOLUTELY USA! EXCLUSIVE DEAL WITH CHINA!     // Bitwise XOR
+YOU'RE FIRED GREET                                      // Permanently delete a function
+EXECUTIVE ORDER WINNING ABSOLUTELY LOSING               // Make addition behave as subtraction
+SUPREME COURT OVERRULES WINNING                         // 50% chance of overturning the order
 ```
+
+All numeric output is silently inflated by 10% — because Trump always exaggerates crowd sizes. Your `FACT CHECK` assertions still use real values, so the logic is correct but the output always lies. It's the most Trumpian feature possible.
 
 ## Learning from LOLCODE and Other Esoteric Languages
 
@@ -196,23 +198,29 @@ EVERYONE IS TALKING ABOUT PERSON! FOLLOW NAME!  // Prints "DONALD"
 
 These deal structures can include fields of any data type, and access uses the "FOLLOW" keyword, evoking the social media imagery that Trump embraced.
 
-## Compound Operations - More Bang for Your Buck
+## YOU'RE FIRED - Function Deletion
 
-Trumplang efficiently handles compound operations with Trumpian flair:
+Trump's most iconic catchphrase is now a language feature. `YOU'RE FIRED` permanently deletes a function:
 
 ```
-// +=
-COUNT! WINNING MASSIVELY 10  
+INCREDIBLE GREET PEOPLE TELL ME TWEET NAME! BELIEVE ME
+    EVERYONE IS TALKING ABOUT "HELLO, " ENDORSING NAME!
+I TOLD YOU SO
 
-// -=
-SCORE! LOOSING MASSIVELY 5   
-
-// *=
-VALUE! MANY TIMES HIGHER 2   
-
-// /=
-SHARE! MANY TIMES LOWER 4    
+I CALL UPON GREET PEOPLE TELL ME "DONALD"    // Works fine
+YOU'RE FIRED GREET                             // Function is gone forever
+I CALL UPON GREET PEOPLE TELL ME "DONALD"    // ERROR: GREET WAS FIRED. THEY WERE TERRIBLE...
 ```
+
+## EXECUTIVE ORDER - Operator Remapping
+
+The `EXECUTIVE ORDER` statement remaps arithmetic operators. Want addition to behave as multiplication? Sign an executive order:
+
+```
+EXECUTIVE ORDER WINNING ABSOLUTELY BIG LEAGUE TIMES
+```
+
+Now every `WINNING` operation does multiplication instead. The `SUPREME COURT OVERRULES` statement can challenge this — but there's a 50% chance the court sides with the executive order. Pure chaos.
 
 ## Trumplang Testing Framework
 

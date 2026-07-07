@@ -175,6 +175,42 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
+	// Enter a parse tree produced by TrumplangParser#fireStatement.
+	enterFireStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#fireStatement.
+	exitFireStatement(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#executiveOrder.
+	enterExecutiveOrder(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#executiveOrder.
+	exitExecutiveOrder(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#supremeCourtOverrule.
+	enterSupremeCourtOverrule(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#supremeCourtOverrule.
+	exitSupremeCourtOverrule(ctx) {
+	}
+
+
+	// Enter a parse tree produced by TrumplangParser#operator.
+	enterOperator(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#operator.
+	exitOperator(ctx) {
+	}
+
+
 	// Enter a parse tree produced by TrumplangParser#arrayDeclaration.
 	enterArrayDeclaration(ctx) {
 	}
@@ -280,24 +316,6 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by TrumplangParser#comparisonExpression.
 	exitComparisonExpression(ctx) {
-	}
-
-
-	// Enter a parse tree produced by TrumplangParser#bitwiseExpression.
-	enterBitwiseExpression(ctx) {
-	}
-
-	// Exit a parse tree produced by TrumplangParser#bitwiseExpression.
-	exitBitwiseExpression(ctx) {
-	}
-
-
-	// Enter a parse tree produced by TrumplangParser#shiftExpression.
-	enterShiftExpression(ctx) {
-	}
-
-	// Exit a parse tree produced by TrumplangParser#shiftExpression.
-	exitShiftExpression(ctx) {
 	}
 
 
