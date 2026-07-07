@@ -63,14 +63,14 @@ The "separate deal vars" workaround is the grammar surrendering.
 All-uppercase strings is currently the only grammar-level constraint on the
 programmer. Add at least one more — pick ONE, don't do all:
 
-- [ ] Option A — Import tariffs: `I KNOW THE BEST PEOPLE FROM "X.MAGA"` requires a
-      tariff clause (`AND THEY'RE PAYING FOR IT expression`); the value is charged
-      against... something (a global GREATNESS budget?)
-- [ ] Option B — Mandatory superlative: every `functionDeclaration` must include a
-      self-praise token before the body (`THE BEST | TREMENDOUS | INCREDIBLE, FOLKS`),
-      and the parser rejects modest functions
-- [ ] Option C — Chapter 11: `DECLARE BANKRUPTCY` statement wipes the current scope's
-      variables (grammar + visitor; it's scope disposal as a business strategy)
+- [x] **Chose Option B — Mandatory superlative**: every `functionDeclaration` must
+      praise itself (`THE BEST | TREMENDOUS | LIKE NOBODY HAS EVER SEEN`) between the
+      name and `PEOPLE TELL ME`, so it reads "INCREDIBLE FIB, THE BEST PEOPLE TELL ME…".
+      The parser rejects modest functions with a dedicated modesty rant.
+      Bonus: syntax errors are now FATAL (custom Trump error listener in the
+      interpreter) — no more running half-parsed programs.
+- [ ] ~~Option A — Import tariffs~~ (not chosen; task said pick one)
+- [ ] ~~Option C — Chapter 11 bankruptcy~~ (not chosen; task said pick one)
 
 ## 6. Let the chaos show in the grammar file itself
 

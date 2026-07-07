@@ -46,8 +46,36 @@ class TrumplangInterpreter {
       debug('Parser created');
       parser.buildParseTrees = true;
 
+      // Trump-styled syntax errors. Syntax errors are FATAL - we don't run
+      // half-parsed programs around here. Modest functions get a special rant.
+      const syntaxErrors = [];
+      const trumpErrorListener = {
+        syntaxError(recognizer, offendingSymbol, line, column, msg) {
+          if (msg.includes('SUPERLATIVE')) {
+            syntaxErrors.push(
+              `LINE ${line}: THIS FUNCTION IS FAR TOO MODEST! EVERY FUNCTION MUST PRAISE ITSELF — SAY 'THE BEST' OR 'TREMENDOUS' OR 'LIKE NOBODY HAS EVER SEEN' BEFORE 'PEOPLE TELL ME'. MODESTY IS FOR LOSERS!`,
+            );
+          } else {
+            syntaxErrors.push(
+              `LINE ${line}:${column} — WHAT IS THIS? ${msg.toUpperCase()}. I'VE READ THE BEST CODE, THE ABSOLUTE BEST, AND THIS ISN'T IT!`,
+            );
+          }
+        },
+        reportAmbiguity() {},
+        reportAttemptingFullContext() {},
+        reportContextSensitivity() {},
+      };
+      lexer.removeErrorListeners();
+      lexer.addErrorListener(trumpErrorListener);
+      parser.removeErrorListeners();
+      parser.addErrorListener(trumpErrorListener);
+
       // Get the root of the parse tree
       const tree = parser.program();
+
+      if (syntaxErrors.length > 0) {
+        throw new Error(syntaxErrors.join('\n'));
+      }
 
       // Create visitor and visit the tree
       const visitor = new TrumplangVisitor(this.environment);

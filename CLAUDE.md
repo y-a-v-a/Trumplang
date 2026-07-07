@@ -53,7 +53,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 - Foreach: `BILLIONS AND BILLIONS ITEM! YET ARRAY! …` · Break: `I WILL VETO!`
 
 **Functions/imports**
-- Declare: `INCREDIBLE NAME PEOPLE TELL ME PARAMS BELIEVE ME … I TOLD YOU SO`
+- Declare: `INCREDIBLE NAME THE BEST PEOPLE TELL ME PARAMS BELIEVE ME … I TOLD YOU SO` — the superlative (`THE BEST` / `TREMENDOUS` / `LIKE NOBODY HAS EVER SEEN`) is MANDATORY; the parser rejects modest functions
 - Call: `I CALL UPON NAME PEOPLE TELL ME ARGS` · Return: `AND I MEAN THAT expr`
 - Import: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"` · Selective: `I ONLY WANT NAME FROM "MATH.MAGA"`
 

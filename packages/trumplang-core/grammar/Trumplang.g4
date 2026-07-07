@@ -68,9 +68,13 @@ dataType:
 	| ARRAY_TYPE
 	| STRUCTUR_TYPE;
 
-// Function declaration - "INCREDIBLE" (was "TREMENDOUS")
+// Function declaration - "INCREDIBLE" (was "TREMENDOUS").
+// STRUCTURAL CONSTRAINT (INTERCAL tier): every function MUST praise itself.
+// The parser rejects modest functions. The superlative slots in before
+// PARAMS_ARGS_START so it reads as natural Trump:
+//   INCREDIBLE FIB THE BEST PEOPLE TELL ME HUGE N! BELIEVE ME ...
 functionDeclaration:
-	FUNCTION_DECL funcName = IDENTIFIER PARAMS_ARGS_START parameterList? blockStatement;
+	FUNCTION_DECL funcName = IDENTIFIER praise = SUPERLATIVE PARAMS_ARGS_START parameterList? blockStatement;
 
 blockStatement: OPEN_BLOCK statement* CLOSE_BLOCK;
 
@@ -289,6 +293,9 @@ PROG_START: 'THE TIME FOR EMPTY TALK IS OVER!!!';
 PROG_END: 'MAKE AMERICA GREAT AGAIN';
 
 FUNCTION_DECL: 'INCREDIBLE';
+
+// Mandatory self-praise for function declarations. Modesty is a parse error.
+SUPERLATIVE: 'THE BEST' | 'TREMENDOUS' | 'LIKE NOBODY HAS EVER SEEN';
 
 VARIABLE_DECL: 'I HAVE THE BEST';
 
