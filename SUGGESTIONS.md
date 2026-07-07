@@ -120,8 +120,9 @@ Real bugs and latent hazards, not style:
 
 ## E. Completeness gaps — ☐ proposed
 
-- **Function return types** — functions are currently untyped; a return-type
-  clause (e.g. `... GIVING BACK HUGE`) makes it feel designed.
+- ~~Function return types~~ — ☑ done 2026-07-07: optional `GIVING BACK <type>`
+  clause after the parameter list, enforced at runtime (a `HUGE` promise rejects
+  a `BIGLY` delivery; breaking the promise rants, pardonably).
 - **A null / absent value** — no way to express "no value" (e.g. `NOTHING TO SEE HERE`).
 - ~~For-loop step~~ — ☑ done 2026-07-07 as `IN TREMENDOUS STEPS OF n`, with
   descending ranges inferred from `FROM 10 TO 0`.

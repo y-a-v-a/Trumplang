@@ -88,8 +88,12 @@ dataType:
 // The parser rejects modest functions. The superlative slots in before
 // PARAMS_ARGS_START so it reads as natural Trump:
 //   INCREDIBLE FIB THE BEST PEOPLE TELL ME HUGE N! BELIEVE ME ...
+// The optional GIVING BACK clause declares a return type, enforced at runtime:
+//   INCREDIBLE FIB THE BEST PEOPLE TELL ME HUGE N! GIVING BACK HUGE BELIEVE ME ...
 functionDeclaration:
-	FUNCTION_DECL funcName = IDENTIFIER praise = SUPERLATIVE PARAMS_ARGS_START parameterList? blockStatement;
+	FUNCTION_DECL funcName = IDENTIFIER praise = SUPERLATIVE PARAMS_ARGS_START parameterList? (
+		RETURN_TYPE_DECL dataType
+	)? blockStatement;
 
 blockStatement: OPEN_BLOCK statement* CLOSE_BLOCK;
 
@@ -342,6 +346,8 @@ PARAMS_ARGS_START: 'PEOPLE TELL ME';
 PARAMS_ARGS_CHAIN: 'AND';
 
 RETURN: 'AND I MEAN THAT';
+
+RETURN_TYPE_DECL: 'GIVING BACK';
 
 FUNC_CALL: 'I CALL UPON';
 

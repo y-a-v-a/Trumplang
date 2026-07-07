@@ -54,6 +54,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 
 **Functions/imports**
 - Declare: `INCREDIBLE NAME THE BEST PEOPLE TELL ME PARAMS BELIEVE ME … I TOLD YOU SO` — the superlative (`THE BEST` / `TREMENDOUS` / `LIKE NOBODY HAS EVER SEEN`) is MANDATORY; the parser rejects modest functions
+- Return type (optional): `… PARAMS GIVING BACK HUGE BELIEVE ME …` — enforced at runtime (`HUGE` requires an integer; breaking the promise rants)
 - Call: `I CALL UPON NAME PEOPLE TELL ME ARGS` · Return: `AND I MEAN THAT expr`
 - Import: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"` · Selective: `I ONLY WANT NAME FROM "MATH.MAGA"`
 

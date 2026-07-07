@@ -1046,14 +1046,63 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       delete this.firedFunctions[identifier];
     }
 
+    // Optional GIVING BACK clause - the function's declared return type.
+    // functionDeclaration's only direct dataType child is the return type
+    // (parameter types live inside parameterList).
+    let returnType = null;
+    const returnTypeCtx = ctx.dataType ? ctx.dataType() : null;
+    if (returnTypeCtx) {
+      const single = Array.isArray(returnTypeCtx)
+        ? returnTypeCtx[0]
+        : returnTypeCtx;
+      if (single) {
+        returnType = single.getText();
+        debug(`Function ${identifier} GIVING BACK ${returnType}`);
+      }
+    }
+
     // Store function in our functions registry
     this.functions[identifier] = {
       name: identifier,
       paramListCtx: paramListCtx,
       blockCtx: blockCtx,
+      returnType: returnType,
     };
 
     return null;
+  }
+
+  // Helper: describe a runtime value in Trumplang type terms
+  _describeValue(value) {
+    if (value === null || value === undefined) return 'NOTHING AT ALL';
+    if (Array.isArray(value)) return 'A WALL';
+    if (typeof value === 'object') return 'A DEAL';
+    if (typeof value === 'boolean') return 'A SUPPORT';
+    if (typeof value === 'string') return 'A TWEET';
+    if (typeof value === 'number') {
+      return Number.isInteger(value) ? 'A HUGE' : 'A BIGLY';
+    }
+    return 'GARBAGE';
+  }
+
+  // Helper: does a runtime value satisfy a declared Trumplang type?
+  _matchesType(value, type) {
+    switch (type) {
+      case 'HUGE':
+        return typeof value === 'number' && Number.isInteger(value);
+      case 'BIGLY':
+        return typeof value === 'number';
+      case 'SUPPORT':
+        return typeof value === 'boolean';
+      case 'TWEET':
+        return typeof value === 'string';
+      case 'WALL':
+        return Array.isArray(value);
+      case 'DEAL':
+        return this._isDealObject(value);
+      default:
+        return true;
+    }
   }
 
   // For backward compatibility
@@ -1169,6 +1218,13 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         if (result && result.isReturn) {
           result = result.value;
         }
+      }
+
+      // Enforce the GIVING BACK clause: a promised type must be delivered
+      if (functionDef.returnType && !this._matchesType(result, functionDef.returnType)) {
+        throw new Error(
+          `${identifier} PROMISED TO GIVE BACK A BEAUTIFUL ${functionDef.returnType} AND GAVE BACK ${this._describeValue(result)} INSTEAD. WHAT A DISGRACE. THIS IS WORSE THAN THE IRAN DEAL, AND THAT'S SAYING SOMETHING!`,
+        );
       }
 
       debug(`Function ${identifier} returned:`, result);
