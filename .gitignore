@@ -42,3 +42,6 @@ docs/output.csv
 docs/ps.js
 docs/realDonaldTrump_in_office.csv
 docs/tweets_01-08-2021.csv
+
+# Website build artifacts (rebuild with: npm run build -w trumplang-website)
+packages/trumplang-website/public/playground.js

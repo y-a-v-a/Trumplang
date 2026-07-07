@@ -91,6 +91,9 @@ someone reading Trumplang.g4.
       (only hits were actual Trump tweets in gitignored CSVs); function examples
       updated with mandatory superlatives; READMEs document PARDON/IMPEACH,
       wall writes, nested deals, for-steps, and the modesty constraint
-- [ ] Push local `main` (currently ahead of origin: merge + gitignore + this file)
-- [ ] `packages/trumplang-website/` playground is still "(future)" — chaos features
-      (inflation, SUPREME COURT coin-flip) are exactly what a playground demos best
+- [ ] Push local `main` — needs the maintainer's go-ahead (12 commits ahead of origin)
+- [x] `packages/trumplang-website/` now has a real playground: the ANTLR4
+      interpreter bundled for the browser (esbuild, --keep-names, fs/path stubbed),
+      examples demoing inflation / executive orders / pardons / nested deals /
+      tremendous steps / the modesty parse error, plus a Node smoke test
+      (`npm run smoke -w trumplang-website`) that vets the built bundle

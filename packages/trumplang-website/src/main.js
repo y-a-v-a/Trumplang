@@ -1,0 +1,143 @@
+// Trumplang web playground - runs the REAL ANTLR4-based interpreter in the
+// browser. The output lies by 10%, the logic doesn't. That's the language,
+// not a bug in this playground.
+import { TrumplangInterpreter } from '../../trumplang-core/src/interpreter/index.js';
+
+const EXAMPLES = {
+  'NUMBER INFLATION': `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING THE OUTPUT LIES, THE LOGIC DOESN'T
+I HAVE THE BEST HUGE CROWD! ABSOLUTELY 100
+EVERYONE IS TALKING ABOUT "REAL CROWD SIZE IS 100. PRINTED CROWD SIZE:"
+EVERYONE IS TALKING ABOUT CROWD!
+A LOT OF PEOPLE ARE SAYING THE FACT CHECK BELOW SEES THE REAL VALUE AND PASSES
+FACT CHECK CROWD! SO TRUE 100
+EVERYONE IS TALKING ABOUT "THE FACT CHECK PASSED WITH THE REAL 100. TREMENDOUS."
+MAKE AMERICA GREAT AGAIN`,
+
+  'EXECUTIVE ORDER': `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING WE CAN GASLIGHT THE OPERATORS THEMSELVES
+EVERYONE IS TALKING ABOUT "13 WINNING 8 NORMALLY MAKES:"
+EVERYONE IS TALKING ABOUT 13 WINNING 8
+EXECUTIVE ORDER WINNING ABSOLUTELY BIG LEAGUE TIMES
+EVERYONE IS TALKING ABOUT "AFTER THE ORDER, 13 WINNING 8 MAKES:"
+EVERYONE IS TALKING ABOUT 13 WINNING 8
+SUPREME COURT OVERRULES WINNING
+EVERYONE IS TALKING ABOUT "AFTER THE COURT RULING (RUN ME AGAIN - IT'S A COIN FLIP):"
+EVERYONE IS TALKING ABOUT 13 WINNING 8
+MAKE AMERICA GREAT AGAIN`,
+
+  'PARDON / WITCH HUNT': `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING DIVIDING BY ZERO IS FINE IF YOU HAVE A GOOD LAWYER
+I ALONE CAN FIX IT BELIEVE ME
+  I HAVE THE BEST HUGE DOOMED! ABSOLUTELY 100 SAD 0
+I TOLD YOU SO
+WITCH HUNT! CHARGES! BELIEVE ME
+  EVERYONE IS TALKING ABOUT "TOTAL WITCH HUNT! THE CHARGES WERE:"
+  EVERYONE IS TALKING ABOUT CHARGES!
+  EVERYONE IS TALKING ABOUT "FULL PARDON. WE MOVE ON."
+I TOLD YOU SO
+I ALONE CAN FIX IT BELIEVE ME
+  IMPEACH "A PERFECT PHONE CALL"
+I TOLD YOU SO
+WITCH HUNT! REASON! BELIEVE ME
+  EVERYONE IS TALKING ABOUT "IMPEACHED OVER:"
+  EVERYONE IS TALKING ABOUT REASON!
+  EVERYONE IS TALKING ABOUT "ACQUITTED! TOTAL EXONERATION!"
+I TOLD YOU SO
+MAKE AMERICA GREAT AGAIN`,
+
+  'NESTED DEALS': `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING NOBODY NESTS DEALS LIKE ME
+I HAVE THE BEST DEAL EMPIRE! ABSOLUTELY (
+    TWEET BRAND! ABSOLUTELY "TRUMP" &
+    DEAL TOWER! ABSOLUTELY (
+        HUGE FLOORS! ABSOLUTELY 58 &
+        DEAL PENTHOUSE! ABSOLUTELY (
+            HUGE GOLD_FIXTURES! ABSOLUTELY 24
+        )!!
+    )!!
+)!!
+EVERYONE IS TALKING ABOUT "GOLD FIXTURES IN THE PENTHOUSE (INFLATED, OBVIOUSLY):"
+EVERYONE IS TALKING ABOUT EMPIRE! FOLLOW TOWER! FOLLOW PENTHOUSE! FOLLOW GOLD_FIXTURES!
+MAKE AMERICA GREAT AGAIN`,
+
+  'TREMENDOUS STEPS': `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING WE COUNT DOWN IN TREMENDOUS STEPS
+WE'RE GOING TO WIN, WIN, WIN WITH T! FROM 10 TO 0 IN TREMENDOUS STEPS OF 2 BELIEVE ME
+  EVERYONE IS TALKING ABOUT T!
+I TOLD YOU SO
+EVERYONE IS TALKING ABOUT "LIFTOFF! (THE COUNTDOWN LOOKED 10% BIGGER THAN IT WAS)"
+MAKE AMERICA GREAT AGAIN`,
+
+  'MODEST FUNCTION (PARSE ERROR)': `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING THIS FUNCTION FORGOT TO PRAISE ITSELF - WATCH IT GET REJECTED
+INCREDIBLE HUMBLE PEOPLE TELL ME HUGE X! BELIEVE ME
+  AND I MEAN THAT X!
+I TOLD YOU SO
+MAKE AMERICA GREAT AGAIN`,
+};
+
+export async function runTrumplang(source) {
+  const captured = [];
+  const origLog = console.log;
+  const origErr = console.error;
+  console.log = (...args) => captured.push(args.join(' '));
+  console.error = () => {}; // the interpreter re-throws; we surface the error ourselves
+  try {
+    const interpreter = new TrumplangInterpreter();
+    const result = interpreter.interpret(source);
+    if (result) captured.push(String(result));
+    return { ok: true, output: captured.join('\n') };
+  } catch (error) {
+    return {
+      ok: false,
+      output: captured.join('\n'),
+      error: String(error && error.message ? error.message : error),
+    };
+  } finally {
+    console.log = origLog;
+    console.error = origErr;
+  }
+}
+
+export { EXAMPLES };
+
+// UI wiring - only in the browser (the smoke test imports this module in Node)
+if (typeof document !== 'undefined') {
+  const editor = document.getElementById('editor');
+  const output = document.getElementById('output');
+  const runButton = document.getElementById('run');
+  const exampleSelect = document.getElementById('examples');
+
+  for (const name of Object.keys(EXAMPLES)) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    exampleSelect.appendChild(option);
+  }
+
+  const loadExample = (name) => {
+    editor.value = EXAMPLES[name];
+    output.textContent = 'PRESS "MAKE IT RUN" TO SEE TREMENDOUS RESULTS.';
+    output.className = '';
+  };
+
+  exampleSelect.addEventListener('change', () => loadExample(exampleSelect.value));
+  loadExample(Object.keys(EXAMPLES)[0]);
+
+  runButton.addEventListener('click', async () => {
+    output.textContent = 'RUNNING. THE BEST EXECUTION. HOLD ON...';
+    output.className = '';
+    const result = await runTrumplang(editor.value);
+    if (result.ok) {
+      output.textContent = result.output || '(NO OUTPUT. VERY QUIET PROGRAM. SUSPICIOUS!)';
+      output.className = 'ok';
+    } else {
+      output.textContent =
+        (result.output ? result.output + '\n\n' : '') +
+        'THIS CODE IS A DISASTER! VERY SAD CODE!\n' +
+        result.error;
+      output.className = 'sad';
+    }
+  });
+}
