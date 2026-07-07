@@ -10,6 +10,6 @@
     "test": "cd packages/trumplang-core && npm test",
     "start": "cd packages/trumplang-core && npm start"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Vincent Bruijn <vebruijn@gmail.com>",
+  "license": "MIT"
 }

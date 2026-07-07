@@ -26,7 +26,7 @@
   },
   "keywords": [],
   "author": "Vincent Bruijn <vebruijn@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "bugs": {
     "url": "https://github.com/y-a-v-a/Trumplang/issues"
