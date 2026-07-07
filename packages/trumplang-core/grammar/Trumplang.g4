@@ -220,16 +220,22 @@ primaryExpression:
 // into the index - it stays "(ARRAY! SECTION 0) SO TRUE 10".
 arrayAccess: arrayName = VARIABLE ARRAY_ACCESS additiveExpression;
 
-// Deal field entries
-dealField: dataType fieldName = VARIABLE ASSIGNMENT expression;
+// Deal field entries. A field's value may itself be a deal declaration -
+// deals within deals, the ART of it.
+dealField:
+	dataType fieldName = VARIABLE ASSIGNMENT (
+		expression
+		| dealDeclaration
+	);
 
 // Deal structure declaration
 dealDeclaration:
 	OPEN_PAREN dealField (AMPERSAND dealField)* CLOSE_PAREN DEAL_DECLARE;
 
-// Deal field access
+// Deal field access - FOLLOW chains through nested deals:
+// COMPANY! FOLLOW CEO! FOLLOW NAME!
 dealAccess:
-	dealName = VARIABLE DEAL_ACCESS_KEYWORD fieldName = VARIABLE;
+	dealName = VARIABLE (DEAL_ACCESS_KEYWORD fieldName += VARIABLE)+;
 
 // Assert statement - "FACT CHECK". Takes a single boolean expression that must
 // come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" now reads as the

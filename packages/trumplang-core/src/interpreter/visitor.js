@@ -1225,9 +1225,20 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       throw new Error('DEAL FIELD IS A DISASTER! NEEDS TYPE AND NAME, FOLKS!');
     }
 
-    // Get the value
-    const value = this.visit(ctx.expression());
-    debug(`Field ${fieldName} has value: ${value}`);
+    // Get the value - either an expression or a nested deal declaration
+    let value;
+    if (ctx.dealDeclaration()) {
+      if (fieldType !== 'DEAL') {
+        throw new Error(
+          `YOU PUT A DEAL INSIDE A ${fieldType} FIELD! A DEAL GOES IN A DEAL FIELD. I WROTE THE BOOK ON DEALS — LITERALLY, THE ART OF THE DEAL — AND THIS ISN'T IN IT!`,
+        );
+      }
+      value = this.visit(ctx.dealDeclaration());
+      debug(`Field ${fieldName} holds a nested deal`);
+    } else {
+      value = this.visit(ctx.expression());
+      debug(`Field ${fieldName} has value: ${value}`);
+    }
 
     return { name: fieldName, type: fieldType, value: value };
   }
@@ -1267,31 +1278,48 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitDealDeclarationContext(ctx);
   }
 
-  // Deal access visitor
+  // Deal access visitor - FOLLOW chains through nested deals
   visitDealAccessContext(ctx) {
     const dealName = ctx.dealName.text;
-    const fieldName = ctx.fieldName.text;
+    const fieldNames = ctx.fieldName.map((f) => f.text);
 
-    debug(`Looking for deal ${dealName} with field ${fieldName}`);
+    debug(`Looking for deal ${dealName}, following ${fieldNames.join(' -> ')}`);
 
-    // Get the deal structure
+    // Get the root deal structure
     const deal = this.getVariable(dealName);
 
-    if (!deal || typeof deal.value !== 'object') {
+    if (!deal || typeof deal.value !== 'object' || Array.isArray(deal.value)) {
       throw new Error(`${dealName} IS NOT A DEAL! NOBODY MAKES DEALS LIKE ME, AND I'M TELLING YOU — THAT'S NOT A DEAL! BELIEVE ME!`);
     }
 
-    // Get the field
-    if (!deal.value[fieldName]) {
-      throw new Error(
-        `THERE'S NO "${fieldName}" IN THIS DEAL! I'VE READ EVERY DEAL — THE BEST DEALS, THE WORST DEALS — AND THIS TERM ISN'T IN ANY OF THEM. FAKE FIELD!`,
-      );
+    // Walk the FOLLOW chain
+    let current = deal.value;
+    let pathSoFar = dealName;
+    for (let i = 0; i < fieldNames.length; i++) {
+      const fieldName = fieldNames[i];
+
+      if (
+        current === null ||
+        typeof current !== 'object' ||
+        Array.isArray(current)
+      ) {
+        throw new Error(
+          `${pathSoFar} IS NOT A DEAL! YOU CAN'T FOLLOW ${fieldName} INTO SOMETHING THAT ISN'T A DEAL. NOBODY MAKES DEALS LIKE ME, BELIEVE ME!`,
+        );
+      }
+
+      if (!current[fieldName]) {
+        throw new Error(
+          `THERE'S NO "${fieldName}" IN ${pathSoFar}! I'VE READ EVERY DEAL — THE BEST DEALS, THE WORST DEALS — AND THIS TERM ISN'T IN ANY OF THEM. FAKE FIELD!`,
+        );
+      }
+
+      current = current[fieldName].value;
+      pathSoFar += ` FOLLOW ${fieldName}`;
     }
 
-    const result = deal.value[fieldName].value;
-    debug(`Field access result:`, result);
-
-    return result;
+    debug(`Field access result:`, current);
+    return current;
   }
 
   // For backward compatibility

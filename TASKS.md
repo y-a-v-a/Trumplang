@@ -41,12 +41,12 @@ The loudest gap in the grammar. The theme hands us the design for free.
 
 The "separate deal vars" workaround is the grammar surrendering.
 
-- [ ] Grammar: allow `dealDeclaration` as a `dealField` value:
-      `dealField: dataType fieldName = VARIABLE ASSIGNMENT (expression | dealDeclaration);`
-- [ ] Visitor: recursive deal construction; chained access `A! FOLLOW B! FOLLOW C!`
-      (requires making `dealAccess` left-recursive or iterative)
-- [ ] Tests: `test/deal/NESTED_DEAL.TEST.MAGA` replacing the workaround test
-- [ ] Docs: delete the "nested deal workaround" from CLAUDE.md/README
+- [x] Grammar: `dealField` value can be a `dealDeclaration`; type-enforced (must be a `DEAL` field)
+- [x] Visitor: recursive deal construction; chained access `A! FOLLOW B! FOLLOW C!`
+      via `(DEAL_ACCESS_KEYWORD fieldName += VARIABLE)+`
+- [x] Tests: `test/deal/NESTED_DEAL.TEST.MAGA` (3 levels deep) replaces the workaround test
+- [x] Docs: workaround removed from CLAUDE.md; workaround example deleted
+      (NESTED_DEAL_EXAMPLE.MAGA — previously impossible — now runs)
 
 ## 4. FOR loop step and direction
 
