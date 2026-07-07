@@ -65,7 +65,7 @@ const serializedATN = [4,1,83,496,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,
 0,0,140,125,1,0,0,0,140,126,1,0,0,0,140,127,1,0,0,0,140,128,1,0,0,0,140,
 129,1,0,0,0,140,130,1,0,0,0,140,131,1,0,0,0,140,132,1,0,0,0,140,133,1,0,
 0,0,140,134,1,0,0,0,140,135,1,0,0,0,140,136,1,0,0,0,140,137,1,0,0,0,140,
-138,1,0,0,0,140,139,1,0,0,0,141,3,1,0,0,0,142,143,5,81,0,0,143,5,1,0,0,0,
+138,1,0,0,0,140,139,1,0,0,0,141,3,1,0,0,0,142,143,5,82,0,0,143,5,1,0,0,0,
 144,145,5,12,0,0,145,146,3,10,5,0,146,147,5,73,0,0,147,148,5,50,0,0,148,
 149,3,66,33,0,149,7,1,0,0,0,150,151,5,13,0,0,151,152,3,10,5,0,152,153,5,
 73,0,0,153,154,5,50,0,0,154,155,3,66,33,0,155,9,1,0,0,0,156,157,7,0,0,0,
@@ -136,9 +136,9 @@ const serializedATN = [4,1,83,496,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,
 0,412,81,1,0,0,0,413,414,5,45,0,0,414,419,3,82,41,0,415,416,5,49,0,0,416,
 419,3,82,41,0,417,419,3,84,42,0,418,413,1,0,0,0,418,415,1,0,0,0,418,417,
 1,0,0,0,419,83,1,0,0,0,420,421,5,68,0,0,421,422,3,66,33,0,422,423,5,69,0,
-0,423,435,1,0,0,0,424,435,5,73,0,0,425,435,5,75,0,0,426,435,5,76,0,0,427,
-435,5,77,0,0,428,435,3,20,10,0,429,435,3,88,44,0,430,435,3,94,47,0,431,435,
-3,92,46,0,432,435,3,86,43,0,433,435,5,80,0,0,434,420,1,0,0,0,434,424,1,0,
+0,423,435,1,0,0,0,424,435,5,73,0,0,425,435,5,76,0,0,426,435,5,77,0,0,427,
+435,5,78,0,0,428,435,3,20,10,0,429,435,3,88,44,0,430,435,3,94,47,0,431,435,
+3,92,46,0,432,435,3,86,43,0,433,435,5,81,0,0,434,420,1,0,0,0,434,424,1,0,
 0,0,434,425,1,0,0,0,434,426,1,0,0,0,434,427,1,0,0,0,434,428,1,0,0,0,434,
 429,1,0,0,0,434,430,1,0,0,0,434,431,1,0,0,0,434,432,1,0,0,0,434,433,1,0,
 0,0,435,85,1,0,0,0,436,437,5,5,0,0,437,438,3,52,26,0,438,87,1,0,0,0,439,
@@ -152,10 +152,10 @@ const serializedATN = [4,1,83,496,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,
 468,469,5,37,0,0,469,471,5,73,0,0,470,468,1,0,0,0,471,472,1,0,0,0,472,470,
 1,0,0,0,472,473,1,0,0,0,473,474,1,0,0,0,474,475,5,50,0,0,475,476,3,66,33,
 0,476,97,1,0,0,0,477,478,5,38,0,0,478,479,3,66,33,0,479,99,1,0,0,0,480,481,
-5,36,0,0,481,482,5,82,0,0,482,101,1,0,0,0,483,484,5,67,0,0,484,489,5,74,
+5,36,0,0,481,482,5,75,0,0,482,101,1,0,0,0,483,484,5,67,0,0,484,489,5,74,
 0,0,485,486,5,15,0,0,486,488,5,74,0,0,487,485,1,0,0,0,488,491,1,0,0,0,489,
 487,1,0,0,0,489,490,1,0,0,0,490,492,1,0,0,0,491,489,1,0,0,0,492,493,5,29,
-0,0,493,494,5,82,0,0,494,103,1,0,0,0,31,108,140,163,167,175,188,198,205,
+0,0,493,494,5,75,0,0,494,103,1,0,0,0,31,108,140,163,167,175,188,198,205,
 214,218,240,256,280,287,325,327,338,349,367,369,384,386,401,403,411,418,
 434,454,465,472,489];
 
@@ -192,7 +192,7 @@ export default class TrumplangParser extends antlr4.Parser {
                             "'WALL'", "'DEAL'", "'BELIEVE ME'", "'I TOLD YOU SO'", 
                             "'MAKE'", "'GREATER'", "'SMALLER'", "'I ONLY WANT'", 
                             "'('", "')'", "'&'", "'!!'", "'!'", null, null, 
-                            null, null, null, "'VERY TRUE'", "'FAKE NEWS'", 
+                            null, null, null, null, "'VERY TRUE'", "'FAKE NEWS'", 
                             "'NOTHING TO SEE HERE'" ];
     static symbolicNames = [ null, "IF_DECL", "ELSE_IF_DECL", "ELSE_DECL", 
                              "ARRAY_DECL", "ARRAY_ELEMENTS_DECL", "ARRAY_ACCESS", 
@@ -214,9 +214,9 @@ export default class TrumplangParser extends antlr4.Parser {
                              "OPEN_BLOCK", "CLOSE_BLOCK", "MAKE_DECL", "INCREMENT_OP", 
                              "DECREMENT_OP", "SELECTIVE_IMPORT_DECL", "OPEN_PAREN", 
                              "CLOSE_PAREN", "AMPERSAND", "DEAL_DECLARE", 
-                             "VAR_DECLARE", "VARIABLE", "IDENTIFIER", "STRING", 
-                             "NUMBER", "BOOLEAN", "TRUE", "FALSE", "NOTHING", 
-                             "COMMENT", "FILEPATH", "WS" ];
+                             "VAR_DECLARE", "VARIABLE", "IDENTIFIER", "FILEPATH", 
+                             "STRING", "NUMBER", "BOOLEAN", "TRUE", "FALSE", 
+                             "NOTHING", "COMMENT", "WS" ];
     static ruleNames = [ "program", "statement", "commentStatement", "variableDeclaration", 
                          "constantDeclaration", "dataType", "functionDeclaration", 
                          "blockStatement", "parameterList", "returnStatement", 
@@ -352,7 +352,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	            this.state = 108; 
 	            this._errHandler.sync(this);
 	            _la = this._input.LA(1);
-	        } while((((_la) & ~0x1f) === 0 && ((1 << _la) & 264057874) !== 0) || ((((_la - 32)) & ~0x1f) === 0 && ((1 << (_la - 32)) & 1073741917) !== 0) || ((((_la - 64)) & ~0x1f) === 0 && ((1 << (_la - 64)) & 131593) !== 0));
+	        } while((((_la) & ~0x1f) === 0 && ((1 << _la) & 264057874) !== 0) || ((((_la - 32)) & ~0x1f) === 0 && ((1 << (_la - 32)) & 1073741917) !== 0) || ((((_la - 64)) & ~0x1f) === 0 && ((1 << (_la - 64)) & 262665) !== 0));
 	        this.state = 110;
 	        this.match(TrumplangParser.PROG_END);
 	    } catch (re) {
@@ -741,7 +741,7 @@ export default class TrumplangParser extends antlr4.Parser {
 	        this.state = 175;
 	        this._errHandler.sync(this);
 	        _la = this._input.LA(1);
-	        while((((_la) & ~0x1f) === 0 && ((1 << _la) & 264057874) !== 0) || ((((_la - 32)) & ~0x1f) === 0 && ((1 << (_la - 32)) & 1073741917) !== 0) || ((((_la - 64)) & ~0x1f) === 0 && ((1 << (_la - 64)) & 131593) !== 0)) {
+	        while((((_la) & ~0x1f) === 0 && ((1 << _la) & 264057874) !== 0) || ((((_la - 32)) & ~0x1f) === 0 && ((1 << (_la - 32)) & 1073741917) !== 0) || ((((_la - 64)) & ~0x1f) === 0 && ((1 << (_la - 64)) & 262665) !== 0)) {
 	            this.state = 172;
 	            this.statement();
 	            this.state = 177;
@@ -2098,10 +2098,10 @@ export default class TrumplangParser extends antlr4.Parser {
 	        case 18:
 	        case 68:
 	        case 73:
-	        case 75:
 	        case 76:
 	        case 77:
-	        case 80:
+	        case 78:
+	        case 81:
 	            this.enterOuterAlt(localctx, 3);
 	            this.state = 417;
 	            this.primaryExpression();
@@ -2596,14 +2596,14 @@ TrumplangParser.DEAL_DECLARE = 71;
 TrumplangParser.VAR_DECLARE = 72;
 TrumplangParser.VARIABLE = 73;
 TrumplangParser.IDENTIFIER = 74;
-TrumplangParser.STRING = 75;
-TrumplangParser.NUMBER = 76;
-TrumplangParser.BOOLEAN = 77;
-TrumplangParser.TRUE = 78;
-TrumplangParser.FALSE = 79;
-TrumplangParser.NOTHING = 80;
-TrumplangParser.COMMENT = 81;
-TrumplangParser.FILEPATH = 82;
+TrumplangParser.FILEPATH = 75;
+TrumplangParser.STRING = 76;
+TrumplangParser.NUMBER = 77;
+TrumplangParser.BOOLEAN = 78;
+TrumplangParser.TRUE = 79;
+TrumplangParser.FALSE = 80;
+TrumplangParser.NOTHING = 81;
+TrumplangParser.COMMENT = 82;
 TrumplangParser.WS = 83;
 
 TrumplangParser.RULE_program = 0;

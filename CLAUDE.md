@@ -66,6 +66,9 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 - Deal: `(HUGE AGE! ABSOLUTELY 42 & TWEET NAME! ABSOLUTELY "DONALD")!!` (typed fields, `&`-separated, `!!` terminator)
 - Field access: `PERSON! FOLLOW NAME!` · Field write: `PERSON! FOLLOW AGE! ABSOLUTELY 78` (existing fields only, any depth) · Nested deals: a `DEAL` field can hold a deal declaration; chain access with `PERSON! FOLLOW ADDRESS! FOLLOW CITY!`
 
+**Strings**
+- Write in any case with any characters + `\" \\ \n \t` escapes; the runtime UPPERCASES every string value ("you can whisper, the language shouts")
+
 **Testing**
 - Assert: `FACT CHECK [actual] SO TRUE [expected]` → returns `PASSED BIGLY` or `TOTALLY RIGGED`
 

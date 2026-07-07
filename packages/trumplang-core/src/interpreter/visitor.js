@@ -565,11 +565,11 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return null;
     }
 
-    // String literal
+    // String literal - unescape, then SHOUT. You can write strings in any
+    // case, but Trumplang only speaks in uppercase.
     if (ctx.STRING()) {
       const str = ctx.STRING().getText();
-      // Remove quotes
-      const result = str.substring(1, str.length - 1);
+      const result = this._processStringLiteral(str);
       debug(`Found string literal: "${result}"`);
       return result;
     }
@@ -917,6 +917,19 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   // For backward compatibility
   visitImpeachStatement(ctx) {
     return this.visitImpeachStatementContext(ctx);
+  }
+
+  // Helper: strip quotes, resolve \" \\ \n \t escapes, then uppercase.
+  // The uppercase constraint lives in the SEMANTICS, not the lexer: you can
+  // whisper into the source code, but the language will shout.
+  _processStringLiteral(rawToken) {
+    let value = rawToken.substring(1, rawToken.length - 1);
+    value = value.replace(/\\(["\\nt])/g, (match, char) => {
+      if (char === 'n') return '\n';
+      if (char === 't') return '\t';
+      return char; // \" and \\
+    });
+    return value.toUpperCase();
   }
 
   // Helper: a deal value is a plain object (not an array, not null)

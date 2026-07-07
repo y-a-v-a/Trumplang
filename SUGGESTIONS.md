@@ -118,7 +118,7 @@ Real bugs and latent hazards, not style:
   and `AND: "AND IT'S TRUE"` vs `PARAMS_ARGS_CHAIN: 'AND'`. ANTLR's longest-match
   saves you most of the time; pin each prefix-overlapping pair with a lexer test.
 
-## E. Completeness gaps — ☐ proposed
+## E. Completeness gaps — ☑ done (2026-07-07)
 
 - ~~Function return types~~ — ☑ done 2026-07-07: optional `GIVING BACK <type>`
   clause after the parameter list, enforced at runtime (a `HUGE` promise rejects
@@ -129,9 +129,12 @@ Real bugs and latent hazards, not style:
   variable with it yields the type default.
 - ~~For-loop step~~ — ☑ done 2026-07-07 as `IN TREMENDOUS STEPS OF n`, with
   descending ranges inferred from `FROM 10 TO 0`.
-- **String escapes & case** — `STRING` is uppercase-only with a hand-listed
-  charset. Keep *keywords* uppercase (the joke) but allow full characters +
-  escape sequences inside quotes so real text is expressible.
+- ~~String escapes & case~~ — ☑ done 2026-07-07: `STRING` accepts any characters
+  plus `\" \\ \n \t` escapes; the RUNTIME uppercases every string value, so the
+  "Trumplang only speaks in uppercase" identity moved from the lexer into the
+  semantics — you can whisper, but the language will shout. Bonus fix: `FILEPATH`
+  now precedes `STRING` in the lexer; before, import paths always lost the
+  equal-length tie to `STRING`, so `importStatement` could never actually parse.
 
 ## F. Robustness — ☐ proposed
 
@@ -152,8 +155,8 @@ deal declarations with chained FOLLOW reads, for-loop steps (part of E), the
 mandatory-superlative parse constraint, and a browser playground. Note the
 bitwise/shift operators that A wired in were subsequently REMOVED on purpose by
 the refinement merge (cut bloat) — the ladder below reflects A as implemented at
-the time, not today's grammar. Still open: B's deal-field lvalue, C, E (return
-types, null value, string charset), F.
+the time, not today's grammar. B, C, and E completed in full later the same day.
+Only F (statement-boundary robustness) remains open.
 
 ---
 

@@ -6,8 +6,8 @@
  * proper programming language.
  *
  * Key design principles: - ALL KEYWORDS IN UPPERCASE - All variables end with exclamation mark (!)
- * and are in UPPERCASE - All strings must be in UPPERCASE - The language should read like
- * Trump-speech
+ * and are in UPPERCASE - String VALUES are always UPPERCASE: you may write them in any case,
+ * but the runtime shouts them back - The language should read like Trump-speech
  *
  * THE IDENTITY OF THIS LANGUAGE - read this before anything else:
  *
@@ -19,8 +19,8 @@
  * the order down - or siding with it. Nondeterminism is a branch of government here.
  *
  * The programmer is constrained by the theme. Functions MUST praise themselves (a superlative
- * is required syntax - modesty is a parse error), strings MUST be uppercase, and a failed
- * FACT CHECK can never be pardoned.
+ * is required syntax - modesty is a parse error), every string value is SHOUTED (uppercased
+ * at runtime no matter how you wrote it), and a failed FACT CHECK can never be pardoned.
  *
  * Errors are governance. IMPEACH throws, WITCH HUNT! catches, YOU'RE FIRED deletes functions,
  * and I WILL VETO! leaves loops.
@@ -469,8 +469,17 @@ VARIABLE: [A-Z][A-Z0-9_]* VAR_DECLARE;
 // Identifiers for functions, etc. (no exclamation)
 IDENTIFIER: [A-Z][A-Z0-9_]*;
 
-// Strings - must be in UPPERCASE
-STRING: '"' [A-Z0-9 ,.!?':;()&\-_]* '"';
+// File paths for imports. MUST be defined before STRING: when both rules match
+// the same text ("MATH.MAGA"), ANTLR gives the tie to the first-defined rule.
+FILEPATH: '"' [A-Z0-9_./]+ '.MAGA' '"';
+
+// Strings - write them in any case with any characters and \" \\ \n \t escapes.
+// The RUNTIME uppercases every string value: Trumplang only SPEAKS in uppercase.
+// The constraint moved from the lexer into the semantics - you can whisper,
+// but the language will shout.
+STRING: '"' (ESC_SEQ | ~["\\\r\n])* '"';
+
+fragment ESC_SEQ: '\\' ["\\nt];
 
 // Numbers
 NUMBER: [0-9]+ ('.' [0-9]+)?;
@@ -491,9 +500,6 @@ NOTHING: 'NOTHING TO SEE HERE';
 // Comments - entire line starting with "A LOT OF PEOPLE ARE SAYING"
 COMMENT:
 	'A LOT OF PEOPLE ARE SAYING' ~[\n\r]* ([\n\r] | EOF) -> channel(HIDDEN);
-
-// File paths for imports
-FILEPATH: '"' [A-Z0-9_./]+ '.MAGA' '"';
 
 // Whitespace and line terminators
 WS: [ \t\r\n]+ -> skip;
