@@ -3,82 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7A1B1B">
     <title>Trumplang Playground - MAKE IT RUN</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .playground {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-        .playground-controls {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 0.75rem;
-        }
-        .playground-controls label {
-            font-weight: bold;
-        }
-        .playground-panes {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        @media (max-width: 800px) {
-            .playground-panes { grid-template-columns: 1fr; }
-        }
-        #editor {
-            width: 100%;
-            min-height: 420px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            padding: 0.75rem;
-            border: 3px solid #b22234;
-            border-radius: 6px;
-            background: #fffdf5;
-            color: #1a1a2e;
-            resize: vertical;
-        }
-        #output {
-            min-height: 420px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            padding: 0.75rem;
-            border: 3px solid #3c3b6e;
-            border-radius: 6px;
-            background: #1a1a2e;
-            color: #ffd700;
-            white-space: pre-wrap;
-            overflow-x: auto;
-            margin: 0;
-        }
-        #output.sad { color: #ff6b6b; }
-        #output.ok { color: #ffd700; }
-        #run {
-            background: #b22234;
-            color: #fff;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: bold;
-            padding: 0.6rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        #run:hover { background: #8b1a29; }
-        #examples {
-            font-size: 1rem;
-            padding: 0.4rem;
-        }
-        .playground-note {
-            margin-top: 1rem;
-            font-style: italic;
-        }
-    </style>
 </head>
 <body>
+    <div class="flag-band" aria-hidden="true"></div>
     <header>
+        <p class="header-stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
         <h1>TRUMPLANG PLAYGROUND</h1>
         <h2>WRITE CODE LIKE NOBODY HAS EVER SEEN</h2>
     </header>
@@ -100,6 +32,12 @@
         </p>
         <p><a href="index.html">&larr; BACK TO THE MOST BEAUTIFUL HOMEPAGE</a></p>
     </main>
+
+    <footer>
+        <p class="footer-stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
+        <p>TRUMPLANG - THE MOST INCREDIBLE PROGRAMMING LANGUAGE EVER CREATED</p>
+        <p><small>This is a parody language for educational and entertainment purposes only.</small></p>
+    </footer>
 
     <script type="module" src="playground.js"></script>
 </body>
