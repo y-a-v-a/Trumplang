@@ -1,0 +1,33 @@
+# EXTREME VETTING - every push gets vetted. The most thorough vetting in the
+# history of vetting, maybe ever.
+#
+# Note: the trumplang-vscode submodule uses an SSH URL and is NOT needed for
+# tests, so we deliberately check out without submodules.
+name: EXTREME VETTING
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  vet:
+    name: EXTREME-VETTING ALL
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies (all workspaces)
+        run: npm install
+
+      - name: Vet the language core (40 tests, all must PASS BIGLY)
+        run: node src/cli/index.js EXTREME-VETTING ALL
+        working-directory: packages/trumplang-core
+
+      - name: Vet the playground bundle (build + smoke)
+        run: npm run smoke
+        working-directory: packages/trumplang-website
