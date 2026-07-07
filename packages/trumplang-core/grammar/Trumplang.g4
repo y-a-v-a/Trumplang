@@ -31,36 +31,43 @@ grammar Trumplang;
 // Program structure
 program: PROG_START statement+ PROG_END;
 
-// Statements
+// Statements. There is NO mandatory separator - adjacent statements
+// disambiguate on keyword boundaries, and ANTLR's adaptive prediction handles
+// most sequences. But when both readings are complete-viable (a zero-argument
+// call followed by another call gets swallowed as its argument), end the
+// statement with PERIOD. - the most emphatic optional terminator in any
+// programming language, PERIOD.
 statement:
-	importStatement
-	| blockStatement
-	| selectiveImport
-	| variableDeclaration
-	| constantDeclaration
-	| functionDeclaration
-	| functionCall
-	| ifStatement
-	| whileLoop
-	| forLoop
-	| forEachLoop
-	| arrayDeclaration
-	| arrayAssignment
-	| dealAssignment
-	| assignmentStatement
-	| incrementStatement
-	| decrementStatement
-	| printStatement
-	| inputStatement
-	| returnStatement
-	| commentStatement
-	| vetoStatement
-	| pardonStatement
-	| impeachStatement
-	| fireStatement
-	| executiveOrder
-	| supremeCourtOverrule
-	| factCheckStatement;
+	(
+		importStatement
+		| blockStatement
+		| selectiveImport
+		| variableDeclaration
+		| constantDeclaration
+		| functionDeclaration
+		| functionCall
+		| ifStatement
+		| whileLoop
+		| forLoop
+		| forEachLoop
+		| arrayDeclaration
+		| arrayAssignment
+		| dealAssignment
+		| assignmentStatement
+		| incrementStatement
+		| decrementStatement
+		| printStatement
+		| inputStatement
+		| returnStatement
+		| commentStatement
+		| vetoStatement
+		| pardonStatement
+		| impeachStatement
+		| fireStatement
+		| executiveOrder
+		| supremeCourtOverrule
+		| factCheckStatement
+	) PERIOD?;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
 commentStatement: COMMENT;
@@ -353,6 +360,9 @@ RETURN_TYPE_DECL: 'GIVING BACK';
 FUNC_CALL: 'I CALL UPON';
 
 BREAK: 'I WILL VETO!';
+
+// Optional statement terminator. And that's it, PERIOD.
+PERIOD: 'PERIOD.';
 
 FIRE: 'YOU\'RE FIRED';
 

@@ -29,6 +29,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 - Program: `THE TIME FOR EMPTY TALK IS OVER!!!` … `MAKE AMERICA GREAT AGAIN`
 - Block: `BELIEVE ME` … `I TOLD YOU SO` · Comment: `A LOT OF PEOPLE ARE SAYING`
 - Print: `EVERYONE IS TALKING ABOUT`
+- Optional statement terminator: `PERIOD.` — needed when a zero-arg call precedes another call (else the next call is swallowed as an argument)
 
 **Variables/types** (vars end with `!`, e.g. `COUNT!`)
 - Declare: `I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0` · Assign: `COUNT! ABSOLUTELY 0`

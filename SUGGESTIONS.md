@@ -136,12 +136,16 @@ Real bugs and latent hazards, not style:
   now precedes `STRING` in the lexer; before, import paths always lost the
   equal-length tie to `STRING`, so `importStatement` could never actually parse.
 
-## F. Robustness — ☐ proposed
+## F. Robustness — ☑ done (2026-07-07)
 
-No statement separator exists; adjacent statements rely entirely on keyword
-boundaries to disambiguate. It parses today but is fragile once expressions get
-richer (A). Either add a lightweight optional terminator or add explicit tests
-proving statement boundaries stay unambiguous.
+Both remedies, not either: `PERIOD.` is an optional statement terminator (the
+most emphatic one in any programming language), and
+`test/STATEMENT_BOUNDARIES.TEST.MAGA` pins the boundary behavior with tests.
+The fragility was real and demonstrable: a zero-argument call followed by
+another call silently parsed as `F(F(7))` — the second statement swallowed as
+the first call's argument. That swallow is now pinned as documented behavior,
+and `PERIOD.` is the idiom that ends the statement when both readings are
+viable. No mandatory separator was added — the prose aesthetic stands.
 
 ---
 
@@ -155,8 +159,9 @@ deal declarations with chained FOLLOW reads, for-loop steps (part of E), the
 mandatory-superlative parse constraint, and a browser playground. Note the
 bitwise/shift operators that A wired in were subsequently REMOVED on purpose by
 the refinement merge (cut bloat) — the ladder below reflects A as implemented at
-the time, not today's grammar. B, C, and E completed in full later the same day.
-Only F (statement-boundary robustness) remains open.
+the time, not today's grammar. B, C, E, and F completed in full later the same day.
+Every suggestion in this file has been implemented. TREMENDOUS. This document
+is now a historical record of the language growing up.
 
 ---
 
