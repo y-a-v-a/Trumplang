@@ -315,6 +315,10 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     debug('Output (real value):', value);
 
     let displayValue = value;
+    if (value === null || value === undefined) {
+      // Null prints as itself. Move along.
+      displayValue = 'NOTHING TO SEE HERE';
+    }
     if (typeof value === 'number' && !isNaN(value)) {
       // Inflate numbers by 10% — TREMENDOUS numbers, the BEST numbers
       displayValue = Math.round(value * 1.1 * 100) / 100;
@@ -540,20 +544,25 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return result;
     }
 
-    // Variable
+    // Variable. A variable HOLDING nothing is fine - only a variable that
+    // doesn't exist gets the rant.
     if (ctx.VARIABLE()) {
       const varName = ctx.VARIABLE().getText();
       debug('Looking up variable:', varName);
-      // Look up the variable in scope
-      const value = this.getValue(varName);
-      debug(`Variable ${varName} value: ${value}`);
-      if (value !== null && value !== undefined) {
-        // Don't stringify objects, return them directly
-        return value;
+      const variable = this.getVariable(varName);
+      if (!variable) {
+        throw new Error(
+          `NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF ${varName}. I ASKED AROUND. I ASKED THE BEST PEOPLE. THEY SAID "SIR, THAT VARIABLE DOESN'T EXIST." DECLARE IT FIRST!`,
+        );
       }
-      throw new Error(
-        `NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF ${varName}. I ASKED AROUND. I ASKED THE BEST PEOPLE. THEY SAID "SIR, THAT VARIABLE DOESN'T EXIST." DECLARE IT FIRST!`,
-      );
+      debug(`Variable ${varName} value: ${variable.value}`);
+      return variable.value === undefined ? null : variable.value;
+    }
+
+    // NOTHING TO SEE HERE - the null value
+    if (ctx.NOTHING()) {
+      debug('Found NOTHING TO SEE HERE (null)');
+      return null;
     }
 
     // String literal

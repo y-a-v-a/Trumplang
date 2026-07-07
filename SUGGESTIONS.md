@@ -123,7 +123,10 @@ Real bugs and latent hazards, not style:
 - ~~Function return types~~ — ☑ done 2026-07-07: optional `GIVING BACK <type>`
   clause after the parameter list, enforced at runtime (a `HUGE` promise rejects
   a `BIGLY` delivery; breaking the promise rants, pardonably).
-- **A null / absent value** — no way to express "no value" (e.g. `NOTHING TO SEE HERE`).
+- ~~A null / absent value~~ — ☑ done 2026-07-07: `NOTHING TO SEE HERE` is a
+  primary expression evaluating to null. Prints as itself, equals only itself,
+  falsy in conditions; a `GIVING BACK` promise refuses it; declaring a typed
+  variable with it yields the type default.
 - ~~For-loop step~~ — ☑ done 2026-07-07 as `IN TREMENDOUS STEPS OF n`, with
   descending ranges inferred from `FROM 10 TO 0`.
 - **String escapes & case** — `STRING` is uppercase-only with a hand-listed

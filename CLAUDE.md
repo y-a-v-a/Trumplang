@@ -34,6 +34,7 @@ Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file
 - Declare: `I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0` · Assign: `COUNT! ABSOLUTELY 0`
 - Constant: `I HAVE A VERY GOOD BRAIN FOR` instead of `I HAVE THE BEST`
 - Types: `HUGE` int (0) · `BIGLY` float (0.0) · `SUPPORT` bool (`FAKE NEWS`) · `TWEET` string ("") · `WALL` array ([]) · `DEAL` object ({})
+- Null: `NOTHING TO SEE HERE` — falsy, equals only itself, prints as itself; declaring a typed var with it yields the type default
 
 **Operations**
 - Inc/dec: `MAKE COUNT! GREATER` / `SMALLER`

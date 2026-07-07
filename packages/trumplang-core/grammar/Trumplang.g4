@@ -265,7 +265,8 @@ primaryExpression:
 	| arrayAccess
 	| dealAccess
 	| dealDeclaration
-	| arrayLiteral;
+	| arrayLiteral
+	| NOTHING;
 
 // Array literal as an expression - "AND MEXICO WILL PAY FOR IT 1 PREVAILS 2".
 // Requires at least one element: an EMPTY literal would swallow whatever comes
@@ -480,6 +481,12 @@ BOOLEAN: TRUE | FALSE;
 TRUE: 'VERY TRUE';
 
 FALSE: 'FAKE NEWS';
+
+// The null value. Evaluates to nothing, prints as itself, equals only itself.
+// Declaring a typed variable ABSOLUTELY NOTHING TO SEE HERE yields the type's
+// default (types have defaults; nothing stays nothing only in assignments,
+// returns, and comparisons).
+NOTHING: 'NOTHING TO SEE HERE';
 
 // Comments - entire line starting with "A LOT OF PEOPLE ARE SAYING"
 COMMENT:
