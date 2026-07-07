@@ -1,90 +1,26 @@
 # CLAUDE.md - Trumplang
 
-Trumplang is a programming language based on Donald Trump's speech patterns. Files use the `.MAGA` extension (`.TEST.MAGA` for tests).
+Programming language based on Donald Trump's speech patterns. Files use `.MAGA` (`.TEST.MAGA` for tests). Full syntax/semantics reference: `docs/LANGUAGE.md`.
 
-## Monorepo Layout
+## Layout
 
-- `packages/trumplang-core/` — language implementation and ANTLR4-based interpreter
-- `packages/trumplang-vscode/` — VS Code extension (Git submodule)
-- `packages/trumplang-website/` — (future) web playground
-
-## Tone
-
-All keywords/variables are UPPERCASE. Documentation, comments, and error messages mimic Trump's voice with superlatives ("THE BEST", "HUGE", "TREMENDOUS") and exclamations. Errors end with "!" or "SAD!". Maintain this tone for any new feature.
+- `packages/trumplang-core/` — ANTLR4-based interpreter. `src/interpreter/` (visitor), `src/parser/` (generated), `src/runtime/` (environment, errors), `src/cli/`, `grammar/Trumplang.g4`, `examples/`, `test/`
+- `packages/trumplang-vscode/` — VS Code extension (git submodule: commit/push inside it, then `git add packages/trumplang-vscode` from root)
+- `packages/trumplang-website/` — playground, deployed to GitHub Pages on push to main
 
 ## Commands
 
-Run from `packages/trumplang-core/`:
+From `packages/trumplang-core/`:
 
-- Run a program: `npm start [file.MAGA]` (or `node src/cli/index.js [file.MAGA]`)
-- Run tests: `EXTREME-VETTING [file.TEST.MAGA]` | `EXTREME-VETTING ALL` | `EXTREME-VETTING DIRECTORY [dir]`
-- Generate parser: `npm run generate-parser` · Build: `npm run build`
+- Run: `npm start [file.MAGA]`
+- Test: `EXTREME-VETTING [file.TEST.MAGA] | ALL | DIRECTORY [dir]`
+- Parser: `npm run generate-parser` · Build: `npm run build`
 - Debug: `node src/debug-tokenizer.js|debug-parser.js|debug-tree.js [file]`
 
-Legacy regex interpreter (superseded): `node src/simplified-interpreter.js [file.MAGA]`.
+Website (`packages/trumplang-website/`): `npm run build` · `npm run smoke`
 
-## Syntax Reference
+## Rules
 
-**Program/blocks/comments**
-- Program: `THE TIME FOR EMPTY TALK IS OVER!!!` … `MAKE AMERICA GREAT AGAIN`
-- Block: `BELIEVE ME` … `I TOLD YOU SO` · Comment: `A LOT OF PEOPLE ARE SAYING`
-- Print: `EVERYONE IS TALKING ABOUT`
-- Optional statement terminator: `PERIOD.` — needed when a zero-arg call precedes another call (else the next call is swallowed as an argument)
-
-**Variables/types** (vars end with `!`, e.g. `COUNT!`)
-- Declare: `I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0` · Assign: `COUNT! ABSOLUTELY 0`
-- Constant: `I HAVE A VERY GOOD BRAIN FOR` instead of `I HAVE THE BEST`
-- Types: `HUGE` int (0) · `BIGLY` float (0.0) · `SUPPORT` bool (`FAKE NEWS`) · `TWEET` string ("") · `WALL` array ([]) · `DEAL` object ({})
-- Null: `NOTHING TO SEE HERE` — falsy, equals only itself, prints as itself; declaring a typed var with it yields the type default
-
-**Operations**
-- Inc/dec: `MAKE COUNT! GREATER` / `SMALLER`
-- Add (num) `WINNING` · Sub `LOSING` · Concat (str) `ENDORSING` · Mul `BIG LEAGUE TIMES` · Div `SAD` · Mod `LEFTOVER FROM` · Pow `HUGELY MULTIPLIED BY`
-
-**Trumpian runtime behavior**
-- Number inflation: numeric output via `EVERYONE IS TALKING ABOUT` is inflated by 10%; `FACT CHECK` uses real values (the output lies, the logic doesn't)
-- Fire a function: `YOU'RE FIRED NAME` (permanently deletes it; re-declarable; calling it afterwards rants)
-- Remap an operator: `EXECUTIVE ORDER WINNING ABSOLUTELY LOSING` (+ behaves as -) · Challenge: `SUPREME COURT OVERRULES WINNING` (50% chance it works)
-- Orders apply to `WINNING`, `LOSING`, `BIG LEAGUE TIMES`, `SAD`; `ENDORSING` and `LEFTOVER FROM` are immune
-- Try/catch: `I ALONE CAN FIX IT BELIEVE ME … I TOLD YOU SO WITCH HUNT! [ERR!] BELIEVE ME … I TOLD YOU SO` (optional `ERR!` binds the error as a TWEET)
-- Throw: `IMPEACH expr` · Failed `FACT CHECK`s are NOT pardonable; `I WILL VETO!` passes through
-
-**Control flow**
-- If: `LISTEN cond BELIEVE ME … I TOLD YOU SO` · Else-if: `PEOPLE ARE SAYING cond …` · Else: `NOBODY KNEW …`
-- While: `WE'RE GOING TO WIN IN A LANDSLIDE cond …` · For: `WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 0 TO 10 …` (optional step: `… IN TREMENDOUS STEPS OF 2 …`; `FROM 10 TO 0` counts down; step must be positive)
-- Foreach: `BILLIONS AND BILLIONS ITEM! YET ARRAY! …` · Break: `I WILL VETO!`
-
-**Functions/imports**
-- Declare: `INCREDIBLE NAME THE BEST PEOPLE TELL ME PARAMS BELIEVE ME … I TOLD YOU SO` — the superlative (`THE BEST` / `TREMENDOUS` / `LIKE NOBODY HAS EVER SEEN`) is MANDATORY; the parser rejects modest functions
-- Return type (optional): `… PARAMS GIVING BACK HUGE BELIEVE ME …` — enforced at runtime (`HUGE` requires an integer; breaking the promise rants)
-- Call: `I CALL UPON NAME PEOPLE TELL ME ARGS` · Return: `AND I MEAN THAT expr`
-- Import: `I KNOW THE BEST PEOPLE FROM "MATH.MAGA"` · Selective: `I ONLY WANT NAME FROM "MATH.MAGA"`
-
-**Arrays / Deals**
-- Array: `BUILD THE WALL NUMBERS! AND MEXICO WILL PAY FOR IT 1 PREVAILS 2 PREVAILS 3` (omit elements for empty)
-- First-class literals: `AND MEXICO WILL PAY FOR IT 1 PREVAILS 2` (array, ≥1 element) and `(…)!!` (deal) are expressions — returnable, passable, assignable
-- Access: `ARRAY! SECTION 1` (0-indexed, bounds-checked) · Write: `ARRAY! SECTION 1 ABSOLUTELY 99` (bounds-checked, no appending)
-- Deal: `(HUGE AGE! ABSOLUTELY 42 & TWEET NAME! ABSOLUTELY "DONALD")!!` (typed fields, `&`-separated, `!!` terminator)
-- Field access: `PERSON! FOLLOW NAME!` · Field write: `PERSON! FOLLOW AGE! ABSOLUTELY 78` (existing fields only, any depth) · Nested deals: a `DEAL` field can hold a deal declaration; chain access with `PERSON! FOLLOW ADDRESS! FOLLOW CITY!`
-
-**Strings**
-- Write in any case with any characters + `\" \\ \n \t` escapes; the runtime UPPERCASES every string value ("you can whisper, the language shouts")
-
-**Testing**
-- Assert: `FACT CHECK [actual] SO TRUE [expected]` → returns `PASSED BIGLY` or `TOTALLY RIGGED`
-
-## Core Package Structure
-
-- `src/interpreter/` — interpreter (`index.js`, `visitor.js`, `environment_utils.js`)
-- `src/parser/` — generated ANTLR4 parser · `src/cli/` — CLI · `src/runtime/` — `environment.js`, `errors.js`
-- `grammar/Trumplang.g4` — grammar · `examples/` — example programs · `test/` — tests
-
-## Implementation Notes
-
-- ES Modules throughout (`import`/`export`, `import.meta.url` for paths); visitor uses ES6 classes.
-- Grammar uses ANTLR4 labels; in the visitor access labeled elements via `.text` (not `.getText()`).
-- Error messages are multi-sentence Trump rants (see `src/runtime/errors.js`). Examples: undefined var → "NOBODY — AND I MEAN NOBODY — HAS EVER HEARD OF [var]…"; div-by-zero → "…THAT'S THE WORST DEAL IN THE HISTORY OF DEALS, MAYBE EVER…"; array OOB → "YOU'RE TRYING TO CLIMB OVER THE WALL!…"; non-deal access → "THAT'S NOT A DEAL!…".
-
-## Submodule (trumplang-vscode)
-
-Edit/commit/push inside `packages/trumplang-vscode/`, then update the reference from root: `git add packages/trumplang-vscode && git commit`. Clone with `--recursive` or run `git submodule update --init --recursive`.
+- Tone is mandatory: keywords/variables UPPERCASE; docs, comments, and error messages in Trump voice with superlatives, ending "!" or "SAD!". Errors are multi-sentence rants (see `src/runtime/errors.js`).
+- The output lies, the logic doesn't: printed numbers are inflated 10%; `FACT CHECK` sees real values.
+- ES Modules throughout. Grammar uses ANTLR4 labels — access labeled elements via `.text`, not `.getText()`.
