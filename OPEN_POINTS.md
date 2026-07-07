@@ -3,23 +3,21 @@
 The honest list. Everything else shipped (see git history for TASKS.md and
 SUGGESTIONS.md — both fully implemented and retired); these six remain.
 
-## 1. Imports are a facade (BIGGEST LANGUAGE GAP)
+## 1. Imports are a facade — ☑ done (2026-07-07)
 
-`I KNOW THE BEST PEOPLE FROM "MATH.MAGA"` and `I ONLY WANT FIB FROM "MATH.MAGA"`
-parse correctly (the FILEPATH/STRING lexer tie was fixed 2026-07-07), but
-`visitImportStatement` / `visitSelectiveImport` are no-ops — no module loading
-exists.
-
-- [ ] Resolve the path relative to the importing file; error `THIS FILE IS FAKE
-      NEWS!` when missing
-- [ ] Parse + interpret the imported file, exposing its functions to the
-      importer (selective import exposes only the named ones)
-- [ ] Decide semantics: do the imported file's top-level statements run?
-      (Recommend: functions only — we hire the people, we don't adopt their
-      rallies.) Guard against circular imports (`NO COLLUSION!`)
-- [ ] Tests: import, selective import, missing file, circular pair
-- [ ] Note: the browser playground stubs `fs` — imports should fail there with
-      a clear rant, not crash
+- [x] Paths resolve relative to the importing file (sourcePath threaded through
+      CLI and test runner); missing file → `THIS FILE IS FAKE NEWS!`
+- [x] Modules parsed via shared module_loader (same fatal Trump syntax errors),
+      functions exposed to the importer; selective import exposes only the
+      named ones and rants if a name isn't there
+- [x] Semantics decided: FUNCTIONS ONLY — we hire the people, we don't adopt
+      their rallies (module top-level statements never run). Transitive
+      re-export: functions a module imported come along. Circular imports →
+      `NO COLLUSION!` rant; module cache handles diamonds.
+- [x] Tests: `test/IMPORTS.TEST.MAGA` (8 scenarios: selective, not-hired,
+      full, rally-didn't-run, transitive, missing file, missing name, circular)
+      · Examples: `examples/MATH.MAGA` + `examples/IMPORTS.MAGA`
+- [x] Browser playground rants that imports need a real filesystem
 
 ## 2. Input is a placeholder — ☑ done (2026-07-07)
 

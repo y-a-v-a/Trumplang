@@ -62,9 +62,9 @@ try {
   // Read the file
   const input = fs.readFileSync(filePath, 'utf8');
 
-  // Create interpreter and run
+  // Create interpreter and run (sourcePath lets imports resolve relative paths)
   const interpreter = new TrumplangInterpreter();
-  const result = interpreter.interpret(input);
+  const result = interpreter.interpret(input, { sourcePath: filePath });
 
   process.stdout.write(`${result}`);
 

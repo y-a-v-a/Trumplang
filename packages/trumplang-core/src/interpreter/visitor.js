@@ -1,6 +1,8 @@
 import debugModule from 'debug';
 import chalk from 'chalk';
 import fs from 'fs';
+import path from 'path';
+import { parseProgram } from './module_loader.js';
 const debug = debugModule('trumplang:visitor');
 
 // Load the generated visitor
@@ -45,6 +47,9 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     this.functions = {}; // Store function definitions
     this.firedFunctions = {}; // Track fired functions and their obituaries
     this.executiveOrders = {}; // Operator remapping via EXECUTIVE ORDER
+    this.sourcePath = null; // Path of the source file (for relative imports)
+    this.importCache = {}; // resolved path -> exported functions
+    this.importStack = []; // resolved paths currently being loaded (collusion detection)
     this.debug = true; // Turn on debugging
   }
 
@@ -1069,6 +1074,17 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       delete this.firedFunctions[identifier];
     }
 
+    // Store function in our functions registry
+    this.functions[identifier] = this._buildFunctionDef(ctx);
+
+    return null;
+  }
+
+  // Helper: build a function definition record from a functionDeclaration ctx.
+  // Used both for local declarations and for functions hired via imports.
+  _buildFunctionDef(ctx) {
+    const identifier = ctx.funcName.text;
+
     // Optional GIVING BACK clause - the function's declared return type.
     // functionDeclaration's only direct dataType child is the return type
     // (parameter types live inside parameterList).
@@ -1084,15 +1100,12 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       }
     }
 
-    // Store function in our functions registry
-    this.functions[identifier] = {
+    return {
       name: identifier,
-      paramListCtx: paramListCtx,
-      blockCtx: blockCtx,
+      paramListCtx: ctx.parameterList(),
+      blockCtx: ctx.blockStatement(),
       returnType: returnType,
     };
-
-    return null;
   }
 
   // Helper: describe a runtime value in Trumplang type terms
@@ -1674,15 +1687,107 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitInputStatementContext(ctx);
   }
 
-  // Import statement visitor
-  visitImportStatementContext(ctx) {
-    const filePath = ctx.filePath.text;
-    // Remove quotes from file path
-    const cleanPath = filePath.substring(1, filePath.length - 1);
+  // Helper: load a .MAGA module and return its exported functions.
+  // Semantics: FUNCTIONS ONLY - we hire the people, we don't adopt their
+  // rallies. Top-level statements in the imported file do NOT run. Imports
+  // inside the module are re-exported (we also hire the people they hired).
+  _loadModule(rawPath, baseDir) {
+    if (typeof fs.readFileSync !== 'function') {
+      throw new Error(
+        'YOU CAN\'T HIRE PEOPLE FROM INSIDE A BROWSER! IMPORTS NEED A REAL FILESYSTEM. THE BEST PEOPLE LIVE ON DISK, BELIEVE ME!',
+      );
+    }
 
+    const resolved = path.resolve(baseDir, rawPath);
+
+    if (this.importStack.includes(resolved)) {
+      const cycle = [...this.importStack, resolved]
+        .map((p) => path.basename(p))
+        .join(' -> ');
+      throw new Error(
+        `NO COLLUSION! ${cycle} IS A CIRCULAR IMPORT — THESE FILES ARE ALL HIRING EACH OTHER. TOTAL WITCH HUNT OF A DEPENDENCY GRAPH!`,
+      );
+    }
+
+    if (this.importCache[resolved]) {
+      debug(`Import cache hit: ${resolved}`);
+      return this.importCache[resolved];
+    }
+
+    if (!fs.existsSync(resolved)) {
+      throw new Error(
+        `THIS FILE IS FAKE NEWS! "${rawPath}" DOESN'T EXIST! I SENT MY BEST PEOPLE TO LOOK FOR IT. THEY SEARCHED EVERYWHERE. PROBABLY DELETED BY THE DEEP STATE!`,
+      );
+    }
+
+    debug(`Loading module: ${resolved}`);
+    const source = fs.readFileSync(resolved, 'utf8');
+    const tree = parseProgram(source, path.basename(resolved));
+
+    this.importStack.push(resolved);
+    try {
+      const moduleFunctions = {};
+      const moduleDir = path.dirname(resolved);
+
+      for (const stmt of tree.statement()) {
+        if (stmt.functionDeclaration && stmt.functionDeclaration()) {
+          const def = this._buildFunctionDef(stmt.functionDeclaration());
+          moduleFunctions[def.name] = def;
+        } else if (stmt.importStatement && stmt.importStatement()) {
+          // Transitive hire: the module's own imports are re-exported
+          const nestedPath = this._cleanFilePath(stmt.importStatement());
+          Object.assign(
+            moduleFunctions,
+            this._loadModule(nestedPath, moduleDir),
+          );
+        } else if (stmt.selectiveImport && stmt.selectiveImport()) {
+          const sel = stmt.selectiveImport();
+          const nestedPath = this._cleanFilePath(sel);
+          const nested = this._loadModule(nestedPath, moduleDir);
+          for (const name of sel.importName.map((n) => n.text)) {
+            if (nested[name]) moduleFunctions[name] = nested[name];
+          }
+        }
+        // Everything else (prints, declarations, rallies) is deliberately
+        // NOT executed.
+      }
+
+      this.importCache[resolved] = moduleFunctions;
+      return moduleFunctions;
+    } finally {
+      this.importStack.pop();
+    }
+  }
+
+  // Helper: strip quotes from a FILEPATH-carrying import context
+  _cleanFilePath(ctx) {
+    const raw = ctx.filePath.text;
+    return raw.substring(1, raw.length - 1);
+  }
+
+  // Helper: base directory for resolving a top-level import
+  _importBaseDir() {
+    if (this.sourcePath) {
+      return path.dirname(path.resolve(this.sourcePath));
+    }
+    return process.cwd();
+  }
+
+  // Import statement visitor - "I KNOW THE BEST PEOPLE FROM". Hires every
+  // function the module has (including the ones IT hired).
+  visitImportStatementContext(ctx) {
+    const cleanPath = this._cleanFilePath(ctx);
     debug(`Importing from file: ${cleanPath}`);
 
-    // Implementation would load the file and execute it
+    const moduleFunctions = this._loadModule(cleanPath, this._importBaseDir());
+    for (const [name, def] of Object.entries(moduleFunctions)) {
+      delete this.firedFunctions[name]; // importing re-hires
+      this.functions[name] = def;
+    }
+
+    debug(
+      `Hired ${Object.keys(moduleFunctions).length} function(s) from ${cleanPath}`,
+    );
     return null;
   }
 
@@ -1691,21 +1796,24 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitImportStatementContext(ctx);
   }
 
-  // Selective import visitor
+  // Selective import visitor - "I ONLY WANT ... FROM". Hires only the named
+  // functions; asking for someone the module doesn't have is an error.
   visitSelectiveImportContext(ctx) {
-    const filePath = ctx.filePath.text;
-    // Remove quotes from file path
-    const cleanPath = filePath.substring(1, filePath.length - 1);
-
-    // Get the imported names using the labeled element
-    const importNames = [];
-    for (let i = 0; i < ctx.importName.length; i++) {
-      importNames.push(ctx.importName[i].text);
-    }
-
+    const cleanPath = this._cleanFilePath(ctx);
+    const importNames = ctx.importName.map((n) => n.text);
     debug(`Selectively importing ${importNames.join(', ')} from ${cleanPath}`);
 
-    // Implementation would selectively load the functions from the file
+    const moduleFunctions = this._loadModule(cleanPath, this._importBaseDir());
+    for (const name of importNames) {
+      if (!moduleFunctions[name]) {
+        throw new Error(
+          `I ONLY WANTED ${name} FROM "${cleanPath}" AND THEY DON'T EVEN HAVE ${name}! VERY DISAPPOINTING TALENT POOL. SAD!`,
+        );
+      }
+      delete this.firedFunctions[name];
+      this.functions[name] = moduleFunctions[name];
+    }
+
     return null;
   }
 

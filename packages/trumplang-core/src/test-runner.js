@@ -41,8 +41,10 @@ class TestRunner {
       // Read the file
       const input = fs.readFileSync(filePath, 'utf8');
 
-      // Run the test
-      const result = this.interpreter.interpret(input);
+      // Run the test (sourcePath lets imports resolve relative paths)
+      const result = this.interpreter.interpret(input, {
+        sourcePath: filePath,
+      });
 
       if (result === 'PASSED BIGLY') {
         console.log(

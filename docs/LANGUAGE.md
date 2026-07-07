@@ -271,12 +271,19 @@ playground there is no terminal, and the language says so.
 ## Imports
 
 ```
-I KNOW THE BEST PEOPLE FROM "MATH.MAGA"
-I ONLY WANT FIB FROM "MATH.MAGA"
+I KNOW THE BEST PEOPLE FROM "MATH.MAGA"       (hire every function)
+I ONLY WANT FIB FROM "MATH.MAGA"              (hire only the named ones)
 ```
 
-Both forms parse; module loading is not implemented yet (the best people are
-still in confirmation hearings).
+- Paths resolve relative to the importing file.
+- **Functions only** — we hire the people, we don't adopt their rallies. The
+  module's top-level statements do not run, and its variables do not exist in
+  the importer.
+- Transitive hiring: functions a module imported are re-exported to you.
+- A missing file is FAKE NEWS (pardonable); asking for a function the module
+  doesn't have is VERY DISAPPOINTING (also pardonable); circular imports are
+  COLLUSION and there will be NO COLLUSION.
+- The browser playground has no filesystem — imports rant there.
 
 ## Testing
 
