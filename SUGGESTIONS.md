@@ -79,19 +79,22 @@ uses `additiveExpression` (not full `expression`) so a trailing comparison such 
 `ARRAY! SECTION 0 SO TRUE 10` stays `(ARRAY! SECTION 0) SO TRUE 10` instead of
 being swallowed into the index.
 
-## B. Real assignment targets (lvalues) — ☐ proposed
+## B. Real assignment targets (lvalues) — ◐ half done
+
+- ☑ **Array element assignment** — done 2026-07-07 as its own `arrayAssignment`
+  rule (`NUMBERS! SECTION 1 ABSOLUTELY 99`), bounds-checked.
+- ☐ **Deal field assignment** — still missing: `PERSON! FOLLOW NAME! ABSOLUTELY ...`
+  does not parse; deals are immutable after construction.
+- ✗ Compound assignments (`COMPOUND_ADD` etc.) were removed from the language by
+  the refinement merge — dropped from this proposal.
 
 ```antlr
 assignTarget : VARIABLE
-             | VARIABLE ARRAY_ACCESS expression          // ARRAY! SECTION I!
-             | VARIABLE DEAL_ACCESS_KEYWORD VARIABLE ;    // PERSON! FOLLOW NAME!
+             | VARIABLE ARRAY_ACCESS additiveExpression        // done (arrayAssignment)
+             | VARIABLE (DEAL_ACCESS_KEYWORD VARIABLE)+ ;      // proposed: nested-deal lvalue
 
-assignmentStatement
-    : assignTarget (ASSIGNMENT | COMPOUND_ADD | COMPOUND_SUBTRACT
-                   | COMPOUND_MULTIPLY | COMPOUND_DIVIDE) expression ;
+assignmentStatement : assignTarget ASSIGNMENT expression ;
 ```
-
-Makes arrays and deals mutable after construction.
 
 ## C. First-class literals — ☐ proposed
 
@@ -124,7 +127,8 @@ Real bugs and latent hazards, not style:
 - **Function return types** — functions are currently untyped; a return-type
   clause (e.g. `... GIVING BACK HUGE`) makes it feel designed.
 - **A null / absent value** — no way to express "no value" (e.g. `NOTHING TO SEE HERE`).
-- **For-loop step** — `FROM 0 TO 10` has no stride; add an optional `EVERY n`.
+- ~~For-loop step~~ — ☑ done 2026-07-07 as `IN TREMENDOUS STEPS OF n`, with
+  descending ranges inferred from `FROM 10 TO 0`.
 - **String escapes & case** — `STRING` is uppercase-only with a hand-listed
   charset. Keep *keywords* uppercase (the joke) but allow full characters +
   escape sequences inside quotes so real text is expressible.
@@ -141,6 +145,15 @@ proving statement boundaries stay unambiguous.
 ## Recommended sequencing
 
 D (cheap cleanup, prerequisite token hygiene) → A → B → C → E/F (polish).
+
+**Status update (2026-07-07):** D and A shipped earlier; the TASKS.md wave added
+PARDON/IMPEACH exception handling, array element assignment (half of B), nested
+deal declarations with chained FOLLOW reads, for-loop steps (part of E), the
+mandatory-superlative parse constraint, and a browser playground. Note the
+bitwise/shift operators that A wired in were subsequently REMOVED on purpose by
+the refinement merge (cut bloat) — the ladder below reflects A as implemented at
+the time, not today's grammar. Still open: B's deal-field lvalue, C, E (return
+types, null value, string charset), F.
 
 ---
 
