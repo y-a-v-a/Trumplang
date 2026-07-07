@@ -260,6 +260,14 @@ Errors are multi-sentence Trump rants (see
 half-parsed programs do not run — and a modest function gets a dedicated
 modesty rant.
 
+## Input
+
+`MANY PEOPLE ARE ASKING X!` reads one line from stdin into `X!`, coerced to the
+variable's type: `HUGE` demands an integer, `BIGLY` a number, `SUPPORT` accepts
+only `VERY TRUE` or `FAKE NEWS`, and `TWEET` input is SHOUTED like every other
+string. Asking for a `WALL` or `DEAL` from a keyboard rants. In the browser
+playground there is no terminal, and the language says so.
+
 ## Imports
 
 ```

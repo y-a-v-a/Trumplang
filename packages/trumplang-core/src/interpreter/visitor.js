@@ -1,5 +1,6 @@
 import debugModule from 'debug';
 import chalk from 'chalk';
+import fs from 'fs';
 const debug = debugModule('trumplang:visitor');
 
 // Load the generated visitor
@@ -1565,13 +1566,51 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitDealAssignmentContext(ctx);
   }
 
-  // Input statement visitor
+  // Helper: read one line from stdin, synchronously. Prompts only on a TTY so
+  // piped input stays clean. Buffers leftover bytes so several input
+  // statements can share one pipe. In the browser bundle fs is a stub and
+  // this rants.
+  _readLineSync(promptText) {
+    if (typeof fs.readSync !== 'function') {
+      throw new Error(
+        'MANY PEOPLE ARE ASKING, BUT NOBODY CAN ANSWER — THERE IS NO TERMINAL HERE! INPUT NEEDS A REAL COMMAND LINE, NOT A BROWSER. VERY LOW-ENERGY ENVIRONMENT!',
+      );
+    }
+    if (process.stdin.isTTY) {
+      process.stdout.write(promptText);
+    }
+    if (this._stdinBuffer === undefined) {
+      this._stdinBuffer = '';
+    }
+    const buf = Buffer.alloc(1024);
+    while (!this._stdinBuffer.includes('\n')) {
+      let bytesRead;
+      try {
+        bytesRead = fs.readSync(0, buf, 0, 1024);
+      } catch (error) {
+        if (error.code === 'EAGAIN') continue; // stdin not ready yet - keep asking
+        throw error;
+      }
+      if (bytesRead === 0) break; // EOF
+      this._stdinBuffer += buf.toString('utf8', 0, bytesRead);
+    }
+    const newlineAt = this._stdinBuffer.indexOf('\n');
+    let line;
+    if (newlineAt === -1) {
+      line = this._stdinBuffer;
+      this._stdinBuffer = '';
+    } else {
+      line = this._stdinBuffer.slice(0, newlineAt);
+      this._stdinBuffer = this._stdinBuffer.slice(newlineAt + 1);
+    }
+    return line.replace(/\r$/, '');
+  }
+
+  // Input statement visitor - "MANY PEOPLE ARE ASKING". Reads a line from
+  // stdin and coerces it to the target variable's type. Strings are SHOUTED,
+  // as always.
   visitInputStatementContext(ctx) {
     const variableName = ctx.varName.text;
-
-    // In a real implementation, this would get input from the user
-    // For now, just return a placeholder
-    const value = 'USER INPUT PLACEHOLDER';
 
     // Ensure variable exists
     const variable = this.getVariable(variableName);
@@ -1581,9 +1620,52 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       );
     }
 
-    // Update variable with input
-    variable.value = value;
+    if (variable.type === 'WALL' || variable.type === 'DEAL') {
+      throw new Error(
+        `YOU CAN'T TYPE A ${variable.type} INTO A KEYBOARD! MANY PEOPLE ARE ASKING FOR NUMBERS, TWEETS, OR SUPPORT — NOT ENTIRE ${variable.type === 'WALL' ? 'WALLS' : 'DEALS'}. BE REASONABLE!`,
+      );
+    }
 
+    const raw = this._readLineSync(`MANY PEOPLE ARE ASKING ABOUT ${variableName} `);
+    debug(`Input for ${variableName} (${variable.type}): "${raw}"`);
+
+    let value;
+    switch (variable.type) {
+      case 'HUGE': {
+        value = parseInt(raw, 10);
+        if (isNaN(value)) {
+          throw new Error(
+            `"${raw.toUpperCase()}" IS NOT A HUGE NUMBER! I ASKED FOR A NUMBER AND GOT WORD SALAD. VERY DISHONEST INPUT!`,
+          );
+        }
+        break;
+      }
+      case 'BIGLY': {
+        value = parseFloat(raw);
+        if (isNaN(value)) {
+          throw new Error(
+            `"${raw.toUpperCase()}" IS NOT A BIGLY NUMBER! I ASKED FOR A NUMBER AND GOT WORD SALAD. VERY DISHONEST INPUT!`,
+          );
+        }
+        break;
+      }
+      case 'SUPPORT': {
+        const shouted = raw.trim().toUpperCase();
+        if (shouted === 'VERY TRUE') value = true;
+        else if (shouted === 'FAKE NEWS') value = false;
+        else {
+          throw new Error(
+            `SUPPORT IS BINARY, FOLKS: "VERY TRUE" OR "FAKE NEWS". "${shouted}" IS NEITHER. YOU'RE EITHER WITH US OR AGAINST US!`,
+          );
+        }
+        break;
+      }
+      default:
+        // TWEET (and untyped): the language shouts
+        value = raw.toUpperCase();
+    }
+
+    variable.value = value;
     return value;
   }
 

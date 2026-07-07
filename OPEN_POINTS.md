@@ -21,17 +21,16 @@ exists.
 - [ ] Note: the browser playground stubs `fs` — imports should fail there with
       a clear rant, not crash
 
-## 2. Input is a placeholder
+## 2. Input is a placeholder — ☑ done (2026-07-07)
 
-`MANY PEOPLE ARE ASKING X!` assigns the literal string `USER INPUT PLACEHOLDER`
-— never wired to stdin.
-
-- [ ] Read a line from stdin synchronously in the CLI (uppercase it — the
-      language shouts); coerce to number when the target variable is
-      HUGE/BIGLY
-- [ ] Playground: prompt-style input or a rant that input needs a terminal
-- [ ] Test strategy: pipe stdin through EXTREME-VETTING or mark as
-      CLI-verified-only
+- [x] Synchronous stdin line read with a persistent buffer (several inputs can
+      share one pipe); prompts only on a TTY so piped input stays clean
+- [x] Type coercion by target: HUGE (integer, word salad rants), BIGLY (float),
+      SUPPORT (`VERY TRUE`/`FAKE NEWS` only), TWEET (SHOUTED); WALL/DEAL
+      targets rant ("you can't type a wall into a keyboard")
+- [x] Playground/browser: rants that input needs a real command line
+- [x] CLI-verified-only (examples/INPUT.MAGA + piped verification); not in the
+      test suite, which must run with empty stdin in CI
 
 ## 3. VS Code extension is behind the language
 
