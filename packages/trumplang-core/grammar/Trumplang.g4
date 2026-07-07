@@ -65,12 +65,10 @@ statement:
 // Comments - "A LOT OF PEOPLE ARE SAYING"
 commentStatement: COMMENT;
 
-// Variable declarations - "I HAVE THE BEST"
+// Variable declarations - "I HAVE THE BEST". Deal and array literals are
+// first-class expressions, so the initializer is just an expression.
 variableDeclaration:
-	VARIABLE_DECL dataType varName = VARIABLE ASSIGNMENT (
-		expression
-		| dealDeclaration
-	);
+	VARIABLE_DECL dataType varName = VARIABLE ASSIGNMENT expression;
 
 // Constants - uses "I HAVE A VERY GOOD BRAIN FOR"
 constantDeclaration:
@@ -250,7 +248,9 @@ unaryExpression:
 	| MINUS unaryExpression
 	| primaryExpression;
 
-// Factors
+// Factors. Deal declarations and array literals are FIRST-CLASS VALUES: they
+// can be returned, passed as arguments, and assigned anywhere an expression
+// fits. The best values, frankly.
 primaryExpression:
 	OPEN_PAREN expression CLOSE_PAREN
 	| VARIABLE
@@ -259,20 +259,24 @@ primaryExpression:
 	| BOOLEAN
 	| functionCall
 	| arrayAccess
-	| dealAccess;
+	| dealAccess
+	| dealDeclaration
+	| arrayLiteral;
+
+// Array literal as an expression - "AND MEXICO WILL PAY FOR IT 1 PREVAILS 2".
+// Requires at least one element: an EMPTY literal would swallow whatever comes
+// next in the program (keyword-boundary parsing). For an empty WALL, declare it
+// with BUILD THE WALL or rely on the WALL type default.
+arrayLiteral: ARRAY_ELEMENTS_DECL arrayElements;
 
 // Array access - using "WALL" metaphor. The index is an additive expression so
 // that a trailing comparison (e.g. "ARRAY! SECTION 0 SO TRUE 10") is not swallowed
 // into the index - it stays "(ARRAY! SECTION 0) SO TRUE 10".
 arrayAccess: arrayName = VARIABLE ARRAY_ACCESS additiveExpression;
 
-// Deal field entries. A field's value may itself be a deal declaration -
-// deals within deals, the ART of it.
-dealField:
-	dataType fieldName = VARIABLE ASSIGNMENT (
-		expression
-		| dealDeclaration
-	);
+// Deal field entries. A field's value may itself be a deal declaration
+// (deal literals are first-class expressions) - deals within deals, the ART of it.
+dealField: dataType fieldName = VARIABLE ASSIGNMENT expression;
 
 // Deal structure declaration
 dealDeclaration:

@@ -109,35 +109,24 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       );
     }
 
-    // Check if this is a deal declaration or a regular expression
+    // Evaluate the initializer (deal and array literals are expressions now)
     let value;
 
-    if (ctx.dealDeclaration()) {
-      // It's a deal declaration
-      if (dataType !== 'DEAL') {
-        throw new Error(
-          `BAD DEAL! YOU DECLARED A DEAL BUT SAID IT'S TYPE ${dataType}. SAD!`,
-        );
-      }
-
-      value = this.visit(ctx.dealDeclaration());
-      debug('  with deal structure:', value);
-    } else if (ctx.expression()) {
-      // It's a regular expression (with ABSOLUTELY keyword)
+    if (ctx.expression()) {
       debug(`Visiting variable declaration expression for ${variableName}`);
-
-      // Log context for better understanding
-      if (ctx.expression().term) {
-        debug(`Has term with ${ctx.expression().term().length} terms`);
-      }
-      if (ctx.expression().getChildCount) {
-        debug(`Expression has ${ctx.expression().getChildCount()} children`);
-      }
 
       value = this.visit(ctx.expression());
       debug(
         `Variable ${variableName} initialized with expression value: ${value}`,
       );
+
+      // A deal value must be declared as a DEAL - no smuggling deals into
+      // other types
+      if (this._isDealObject(value) && dataType !== 'DEAL') {
+        throw new Error(
+          `BAD DEAL! YOU DECLARED A DEAL BUT SAID IT'S TYPE ${dataType}. SAD!`,
+        );
+      }
 
       // Default values if expression evaluation gives null
       if (value === null || value === undefined) {
@@ -537,6 +526,20 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return result;
     }
 
+    // Deal literal - first-class: returnable, passable, assignable
+    if (ctx.dealDeclaration()) {
+      const result = this.visit(ctx.dealDeclaration());
+      debug(`Deal literal result:`, result);
+      return result;
+    }
+
+    // Array literal - first-class: returnable, passable, assignable
+    if (ctx.arrayLiteral()) {
+      const result = this.visit(ctx.arrayLiteral());
+      debug(`Array literal result:`, result);
+      return result;
+    }
+
     // Variable
     if (ctx.VARIABLE()) {
       const varName = ctx.VARIABLE().getText();
@@ -907,6 +910,11 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitImpeachStatementContext(ctx);
   }
 
+  // Helper: a deal value is a plain object (not an array, not null)
+  _isDealObject(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+  }
+
   // Helper: resolve operator name from grammar context
   _getOperatorName(operatorCtx) {
     if (operatorCtx.PLUS()) return 'WINNING';
@@ -1217,6 +1225,16 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return arrayValue;
   }
 
+  // Array literal visitor - "AND MEXICO WILL PAY FOR IT 1 PREVAILS 2" as a value
+  visitArrayLiteralContext(ctx) {
+    return this.visit(ctx.arrayElements());
+  }
+
+  // For backward compatibility
+  visitArrayLiteral(ctx) {
+    return this.visitArrayLiteralContext(ctx);
+  }
+
   // Array elements visitor
   visitArrayElementsContext(ctx) {
     const elements = [];
@@ -1309,19 +1327,14 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       throw new Error('DEAL FIELD IS A DISASTER! NEEDS TYPE AND NAME, FOLKS!');
     }
 
-    // Get the value - either an expression or a nested deal declaration
-    let value;
-    if (ctx.dealDeclaration()) {
-      if (fieldType !== 'DEAL') {
-        throw new Error(
-          `YOU PUT A DEAL INSIDE A ${fieldType} FIELD! A DEAL GOES IN A DEAL FIELD. I WROTE THE BOOK ON DEALS — LITERALLY, THE ART OF THE DEAL — AND THIS ISN'T IN IT!`,
-        );
-      }
-      value = this.visit(ctx.dealDeclaration());
-      debug(`Field ${fieldName} holds a nested deal`);
-    } else {
-      value = this.visit(ctx.expression());
-      debug(`Field ${fieldName} has value: ${value}`);
+    // Get the value (deal literals are expressions, so nesting comes for free)
+    const value = this.visit(ctx.expression());
+    debug(`Field ${fieldName} has value:`, value);
+
+    if (this._isDealObject(value) && fieldType !== 'DEAL') {
+      throw new Error(
+        `YOU PUT A DEAL INSIDE A ${fieldType} FIELD! A DEAL GOES IN A DEAL FIELD. I WROTE THE BOOK ON DEALS — LITERALLY, THE ART OF THE DEAL — AND THIS ISN'T IN IT!`,
+      );
     }
 
     return { name: fieldName, type: fieldType, value: value };

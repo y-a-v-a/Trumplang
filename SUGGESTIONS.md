@@ -89,15 +89,18 @@ being swallowed into the index.
 - ✗ Compound assignments (`COMPOUND_ADD` etc.) were removed from the language by
   the refinement merge — dropped from this proposal.
 
-## C. First-class literals — ☐ proposed
+## C. First-class literals — ☑ done (2026-07-07)
 
-Promote array and deal literals to `primary` so they are values, and add numeric
-negation via the `unary` rule from A.
-
-```antlr
-literal      : NUMBER | STRING | BOOLEAN | arrayLiteral | dealDeclaration ;
-arrayLiteral : ARRAY_ELEMENTS_DECL arrayElements? ;   // usable as expr / return / arg
-```
+Array literals (`AND MEXICO WILL PAY FOR IT 1 PREVAILS 2`) and deal
+declarations are `primaryExpression` alternatives: returnable, passable as
+arguments, assignable anywhere an expression fits. The special-case
+`dealDeclaration` alternatives in `variableDeclaration`/`dealField` collapsed
+into plain `expression`. Numeric negation had already landed with A's `unary`
+rule. One deviation from the sketch: `arrayLiteral` requires at least one
+element — an empty literal would swallow the next statement (keyword-boundary
+parsing); use `BUILD THE WALL` or the WALL type default for empty arrays.
+Type guard: a deal value smuggled into a non-DEAL declaration or field still
+rants.
 
 ## D. Lexer hygiene — ☑ done
 
