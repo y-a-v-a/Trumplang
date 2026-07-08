@@ -870,6 +870,24 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitVetoStatementContext(ctx);
   }
 
+  // IN TWO WEEKS - the announcement construct. The block is scheduled to run
+  // two weeks from now. Two weeks never arrives; it has been two weeks for
+  // years. The body is NEVER visited, so it never needs to work - it only
+  // needs to parse. Pure campaign material.
+  visitTwoWeeksStatementContext(ctx) {
+    debug('IN TWO WEEKS: block scheduled for two weeks from now (never)');
+    console.log(
+      'BIG ANNOUNCEMENT COMING IN TWO WEEKS. TWO WEEKS. WE HAVE IT ALL FIGURED OUT, IT\'S GOING TO BE SOMETHING SPECIAL, BELIEVE ME!',
+    );
+    // Deliberately NOT visiting ctx.blockStatement(). Check back in two weeks.
+    return null;
+  }
+
+  // For backward compatibility
+  visitTwoWeeksStatement(ctx) {
+    return this.visitTwoWeeksStatementContext(ctx);
+  }
+
   // PARDON - exception handling. Try the first block; if anything blows up,
   // it's a WITCH HUNT! and the error gets pardoned (caught) by the second.
   visitPardonStatementContext(ctx) {
@@ -1877,6 +1895,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitImportStatement(ctx.importStatement());
     } else if (ctx.selectiveImport()) {
       return this.visitSelectiveImport(ctx.selectiveImport());
+    } else if (ctx.twoWeeksStatement()) {
+      return this.visitTwoWeeksStatement(ctx.twoWeeksStatement());
     } else if (ctx.inputStatement()) {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {

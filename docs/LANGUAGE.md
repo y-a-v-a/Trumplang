@@ -21,6 +21,8 @@ Before syntax, understand what you're dealing with:
 - **Errors are governance.** `IMPEACH` throws, `WITCH HUNT!` catches,
   `YOU'RE FIRED` deletes functions, `I WILL VETO!` leaves loops, and a failed
   `FACT CHECK` can never be pardoned.
+- **Announcements are not deliveries.** `IN TWO WEEKS` schedules a block that
+  never runs. The deadline is always two weeks away.
 
 ## Program structure
 
@@ -141,6 +143,22 @@ I WILL VETO!                                             (break)
 
 The step must be positive — zero and backward steps are low energy and get a
 rant.
+
+### IN TWO WEEKS (the announcement)
+
+```
+IN TWO WEEKS BELIEVE ME
+    EVERYONE IS TALKING ABOUT "THE FULL AND COMPLETE HEALTHCARE PLAN"
+I TOLD YOU SO
+```
+
+Schedules the block to run in two weeks. Two weeks never arrives — the block
+is NEVER executed, no matter how many times control flow passes over it. Each
+pass announces that the announcement is coming. The body must parse (we have
+a plan, a beautiful plan) but it never needs to work: variables and functions
+referenced inside don't have to exist, because nothing inside is ever
+evaluated. The only construct in the language whose body is pure campaign
+material.
 
 ## Functions
 

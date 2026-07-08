@@ -24,6 +24,9 @@
  *
  * Errors are governance. IMPEACH throws, WITCH HUNT! catches, YOU'RE FIRED deletes functions,
  * and I WILL VETO! leaves loops.
+ *
+ * Announcements are not deliveries. IN TWO WEEKS schedules a block that never runs - the
+ * deadline is always two weeks away, and it has been for years.
  */
 
 grammar Trumplang;
@@ -67,6 +70,7 @@ statement:
 		| executiveOrder
 		| supremeCourtOverrule
 		| factCheckStatement
+		| twoWeeksStatement
 	) PERIOD?;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
@@ -304,6 +308,12 @@ dealAccess:
 dealAssignment:
 	dealName = VARIABLE (DEAL_ACCESS_KEYWORD fieldName += VARIABLE)+ ASSIGNMENT expression;
 
+// IN TWO WEEKS - the announcement construct. Schedules a block to run in two
+// weeks. Two weeks NEVER ARRIVES. The block must parse (we have a plan, a
+// beautiful plan) but it is never executed - it is always two weeks away.
+// The only construct in the language whose body is pure campaign material.
+twoWeeksStatement: TWO_WEEKS blockStatement;
+
 // Assert statement - "FACT CHECK". Takes a single boolean expression that must
 // come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" reads as the equality
 // expression "<actual> SO TRUE <expected>". Fact checks see REAL values (never
@@ -387,6 +397,9 @@ FROM_KEYWORD: 'FROM';
 FOR_LOOP_TO: 'TO';
 
 FOR_LOOP_STEP: 'IN TREMENDOUS STEPS OF';
+
+// The announcement is coming IN TWO WEEKS. It has been two weeks for years.
+TWO_WEEKS: 'IN TWO WEEKS';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 
