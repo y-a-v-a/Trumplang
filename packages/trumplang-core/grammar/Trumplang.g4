@@ -27,6 +27,10 @@
  *
  * Announcements are not deliveries. IN TWO WEEKS schedules a block that never runs - the
  * deadline is always two weeks away, and it has been for years.
+ *
+ * Trade is a weapon. BIG BEAUTIFUL TARIFF taxes every number an imported function gives
+ * back. The exporting module pays, officially. FACT CHECK the delivery and see whose
+ * number got smaller.
  */
 
 grammar Trumplang;
@@ -71,6 +75,7 @@ statement:
 		| supremeCourtOverrule
 		| factCheckStatement
 		| twoWeeksStatement
+		| tariffStatement
 	) PERIOD?;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
@@ -314,6 +319,14 @@ dealAssignment:
 // The only construct in the language whose body is pure campaign material.
 twoWeeksStatement: TWO_WEEKS blockStatement;
 
+// BIG BEAUTIFUL TARIFF - trade policy for imports. Enacts a tariff (in
+// percent) on every function hired from another module: numeric values they
+// give back are taxed at the border for the rest of execution. The runtime
+// insists the exporting module pays. FACT CHECK the delivery and see whose
+// number got smaller. Locally declared functions are domestic - they trade
+// free. Re-enacting replaces the rate (we can always double it).
+tariffStatement: TARIFF_DECL rate = expression;
+
 // Assert statement - "FACT CHECK". Takes a single boolean expression that must
 // come out TRUE. "FACT CHECK <actual> SO TRUE <expected>" reads as the equality
 // expression "<actual> SO TRUE <expected>". Fact checks see REAL values (never
@@ -400,6 +413,9 @@ FOR_LOOP_STEP: 'IN TREMENDOUS STEPS OF';
 
 // The announcement is coming IN TWO WEEKS. It has been two weeks for years.
 TWO_WEEKS: 'IN TWO WEEKS';
+
+// TARIFF - the most beautiful word in the dictionary.
+TARIFF_DECL: 'BIG BEAUTIFUL TARIFF';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 

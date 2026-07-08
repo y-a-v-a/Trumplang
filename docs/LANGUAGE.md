@@ -23,6 +23,9 @@ Before syntax, understand what you're dealing with:
   `FACT CHECK` can never be pardoned.
 - **Announcements are not deliveries.** `IN TWO WEEKS` schedules a block that
   never runs. The deadline is always two weeks away.
+- **Trade is a weapon.** `BIG BEAUTIFUL TARIFF` taxes every number an imported
+  function gives back. The exporting module pays — that's the official line.
+  `FACT CHECK` the delivery and see whose number got smaller.
 
 ## Program structure
 
@@ -302,6 +305,32 @@ I ONLY WANT FIB FROM "MATH.MAGA"              (hire only the named ones)
   doesn't have is VERY DISAPPOINTING (also pardonable); circular imports are
   COLLUSION and there will be NO COLLUSION.
 - The browser playground has no filesystem — imports rant there.
+
+### Tariffs
+
+```
+BIG BEAUTIFUL TARIFF 25
+```
+
+Enacts a tariff (in percent) on all imported functions for the rest of
+execution. Every numeric value an imported function gives back is taxed at
+the border: at 25%, a delivery of 16 arrives as 12. The enactment announces
+that the exporting module is paying. It is not. Your number shrinks —
+`FACT CHECK` the delivery and see who actually pays.
+
+- Only numbers are taxed; `TWEET`s, `SUPPORT`, `WALL`s and `DEAL`s cross the
+  border freely.
+- Integer deliveries stay integers: customs rounds (9 taxed at 25% is 6.75,
+  which arrives as 7). Floats are taxed exactly.
+- Locally declared functions are domestic — they trade free. Re-declaring an
+  imported function domesticates it.
+- The `GIVING BACK` promise is checked on the real delivery, *then* customs
+  takes its cut.
+- Tariffs compound through supply chains: a recursive imported function pays
+  at EVERY level of the call stack. Economists warned about this. Nobody
+  listened.
+- Re-enacting replaces the rate (we can always double it). A rate that isn't
+  a positive number is a trade surrender and gets a rant (pardonable).
 
 ## Testing
 

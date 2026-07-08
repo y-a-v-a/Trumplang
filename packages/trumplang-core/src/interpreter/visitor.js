@@ -47,6 +47,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     this.functions = {}; // Store function definitions
     this.firedFunctions = {}; // Track fired functions and their obituaries
     this.executiveOrders = {}; // Operator remapping via EXECUTIVE ORDER
+    this.tariffRate = 0; // BIG BEAUTIFUL TARIFF (percent) on imported functions
     this.sourcePath = null; // Path of the source file (for relative imports)
     this.importCache = {}; // resolved path -> exported functions
     this.importStack = []; // resolved paths currently being loaded (collusion detection)
@@ -888,6 +889,31 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitTwoWeeksStatementContext(ctx);
   }
 
+  // BIG BEAUTIFUL TARIFF - enact a tariff (percent) on all imported functions.
+  // Numeric values they give back are taxed at the border for the rest of
+  // execution. The exporting module pays, we are told. FACT CHECK who pays.
+  visitTariffStatementContext(ctx) {
+    const rate = this.visit(ctx.expression());
+
+    if (typeof rate !== 'number' || isNaN(rate) || rate <= 0) {
+      throw new Error(
+        `A TARIFF OF ${rate}?! THAT'S NOT A TARIFF, THAT'S A TRADE SURRENDER. TARIFF IS THE MOST BEAUTIFUL WORD IN THE DICTIONARY AND YOU'RE BUTCHERING IT. GIVE ME A REAL NUMBER, A POSITIVE NUMBER, A BIG ONE!`,
+      );
+    }
+
+    this.tariffRate = rate;
+    debug(`BIG BEAUTIFUL TARIFF enacted: ${rate}% on imported functions`);
+    console.log(
+      `A BIG BEAUTIFUL TARIFF OF ${rate}% IS NOW IN EFFECT. TARIFF — THE MOST BEAUTIFUL WORD IN THE DICTIONARY. THE OTHER MODULES ARE PAYING FOR IT. BILLIONS AND BILLIONS!`,
+    );
+    return null;
+  }
+
+  // For backward compatibility
+  visitTariffStatement(ctx) {
+    return this.visitTariffStatementContext(ctx);
+  }
+
   // PARDON - exception handling. Try the first block; if anything blows up,
   // it's a WITCH HUNT! and the error gets pardoned (caught) by the second.
   visitPardonStatementContext(ctx) {
@@ -1279,6 +1305,24 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         throw new Error(
           `${identifier} PROMISED TO GIVE BACK A BEAUTIFUL ${functionDef.returnType} AND GAVE BACK ${this._describeValue(result)} INSTEAD. WHAT A DISGRACE. THIS IS WORSE THAN THE IRAN DEAL, AND THAT'S SAYING SOMETHING!`,
         );
+      }
+
+      // BIG BEAUTIFUL TARIFF: imported functions pay at the border. The
+      // promise (GIVING BACK) is checked on the real delivery above; then
+      // customs takes its cut. Integer deliveries stay integers (rounded) so
+      // a HUGE stays HUGE. The exporting module pays, we are told. It's your
+      // number that shrinks.
+      if (
+        this.tariffRate > 0 &&
+        functionDef.imported &&
+        typeof result === 'number'
+      ) {
+        const taxed = result * (1 - this.tariffRate / 100);
+        const collected = Number.isInteger(result) ? Math.round(taxed) : taxed;
+        debug(
+          `TARIFF collected on ${identifier}: ${result} -> ${collected} (${this.tariffRate}%)`,
+        );
+        result = collected;
       }
 
       debug(`Function ${identifier} returned:`, result);
@@ -1750,6 +1794,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       for (const stmt of tree.statement()) {
         if (stmt.functionDeclaration && stmt.functionDeclaration()) {
           const def = this._buildFunctionDef(stmt.functionDeclaration());
+          def.imported = true; // foreign labor - subject to BIG BEAUTIFUL TARIFF
           moduleFunctions[def.name] = def;
         } else if (stmt.importStatement && stmt.importStatement()) {
           // Transitive hire: the module's own imports are re-exported
@@ -1897,6 +1942,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitSelectiveImport(ctx.selectiveImport());
     } else if (ctx.twoWeeksStatement()) {
       return this.visitTwoWeeksStatement(ctx.twoWeeksStatement());
+    } else if (ctx.tariffStatement()) {
+      return this.visitTariffStatement(ctx.tariffStatement());
     } else if (ctx.inputStatement()) {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {
