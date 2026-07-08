@@ -35,7 +35,23 @@ const check = (name, cond) => {
   check('gold fixtures inflated to 26.4', r.output.includes('26.4'));
 }
 
-// 4. The modest function is rejected by the parser
+// 4. IN TWO WEEKS never runs the block - the fact check sees zero promises kept
+{
+  const r = await runTrumplang(EXAMPLES['IN TWO WEEKS']);
+  check('two weeks example runs', r.ok);
+  check('announcement announced', r.output.includes('IN TWO WEEKS'));
+  check('the plan never shipped', !r.output.includes('HERE IS THE FULL AND COMPLETE HEALTHCARE PLAN'));
+}
+
+// 5. BIG BEAUTIFUL TARIFF enacts, domestic functions trade free (16 inflated to 17.6)
+{
+  const r = await runTrumplang(EXAMPLES['BIG BEAUTIFUL TARIFF']);
+  check('tariff example runs', r.ok);
+  check('tariff enacted at 25%', r.output.includes('25%'));
+  check('domestic square untaxed', r.output.includes('17.6'));
+}
+
+// 6. The modest function is rejected by the parser
 {
   const r = await runTrumplang(EXAMPLES['MODEST FUNCTION (PARSE ERROR)']);
   check('modest function fails', !r.ok);
