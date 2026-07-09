@@ -22,5 +22,5 @@ Website (`packages/trumplang-website/`): `npm run build` · `npm run smoke`
 ## Rules
 
 - Tone is mandatory: keywords/variables UPPERCASE; docs, comments, and error messages in Trump voice with superlatives, ending "!" or "SAD!". Errors are multi-sentence rants (see `src/runtime/errors.js`).
-- The output lies, the logic doesn't: printed numbers are inflated 10%; `FACT CHECK` sees real values.
+- The output lies, the logic doesn't: printed numbers are inflated 10%, growing 1% per retelling (110, 111, 112, ...); `FACT CHECK` sees real values.
 - ES Modules throughout. Grammar uses ANTLR4 labels — access labeled elements via `.text`, not `.getText()`.

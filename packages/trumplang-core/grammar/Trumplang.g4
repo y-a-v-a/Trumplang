@@ -12,7 +12,9 @@
  * THE IDENTITY OF THIS LANGUAGE - read this before anything else:
  *
  * The output lies, the logic doesn't. Every number printed via EVERYONE IS TALKING ABOUT is
- * inflated by 10% (crowd sizes, folks), while FACT CHECK assertions always see the real values.
+ * inflated (crowd sizes, folks) and every retelling grows - the first numeric print inflates
+ * 10%, each one after inflates 1% more than the last - while FACT CHECK assertions always
+ * see the real values.
  *
  * The operators themselves can be gaslit. EXECUTIVE ORDER remaps arithmetic at runtime
  * (addition can be made to subtract), and SUPREME COURT OVERRULES has a 50% chance of striking

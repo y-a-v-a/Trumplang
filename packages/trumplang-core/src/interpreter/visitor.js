@@ -48,6 +48,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     this.firedFunctions = {}; // Track fired functions and their obituaries
     this.executiveOrders = {}; // Operator remapping via EXECUTIVE ORDER
     this.tariffRate = 0; // BIG BEAUTIFUL TARIFF (percent) on imported functions
+    this.numericPrints = 0; // every retelling grows - inflation compounds per numeric print
     this.sourcePath = null; // Path of the source file (for relative imports)
     this.importCache = {}; // resolved path -> exported functions
     this.importStack = []; // resolved paths currently being loaded (collusion detection)
@@ -303,13 +304,16 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       displayValue = 'NOTHING TO SEE HERE';
     }
     if (typeof value === 'number' && !isNaN(value)) {
-      // Inflate numbers by 10% — TREMENDOUS numbers, the BEST numbers
-      displayValue = Math.round(value * 1.1 * 100) / 100;
-      // Clean up: if it was an integer input, keep it looking like an integer
-      if (Number.isInteger(value) && Number.isInteger(displayValue)) {
-        // already fine
-      }
-      debug(`Number inflated from ${value} to ${displayValue} (TRUMP FACTOR)`);
+      // Inflate numbers — TREMENDOUS numbers, the BEST numbers. And every
+      // retelling grows: the first numeric print inflates 10%, each one
+      // after inflates 1% more than the last (110, 111, 112, ...). The story
+      // gets bigger every time it's told. FACT CHECK still sees the truth.
+      const trumpFactor = 1.1 + 0.01 * this.numericPrints;
+      this.numericPrints++;
+      displayValue = Math.round(value * trumpFactor * 100) / 100;
+      debug(
+        `Number inflated from ${value} to ${displayValue} (TRUMP FACTOR ${trumpFactor.toFixed(2)})`,
+      );
     }
 
     console.log(`${displayValue}`);

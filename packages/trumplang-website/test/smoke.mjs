@@ -18,6 +18,7 @@ const check = (name, cond) => {
   const r = await runTrumplang(EXAMPLES['NUMBER INFLATION']);
   check('inflation example runs', r.ok);
   check('printed crowd is inflated to 110', r.output.includes('110'));
+  check('the retelling grows to 111 and 112', r.output.includes('111') && r.output.includes('112'));
 }
 
 // 2. Pardon demo survives a division by zero and an impeachment

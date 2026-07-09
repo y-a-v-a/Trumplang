@@ -11,8 +11,10 @@ and this document is FAKE NEWS — please file an issue.
 
 Before syntax, understand what you're dealing with:
 
-- **The output lies, the logic doesn't.** Every number printed is inflated by
-  10%. Every `FACT CHECK` sees the real value.
+- **The output lies, the logic doesn't.** Every number printed is inflated —
+  and every retelling grows: the first numeric print inflates 10%, each one
+  after inflates 1% more than the last. Every `FACT CHECK` sees the real
+  value.
 - **The operators can be gaslit.** `EXECUTIVE ORDER` remaps arithmetic at
   runtime; the `SUPREME COURT` overturns it — with a 50% chance it sides with
   the order instead. The judiciary is the only nondeterministic construct.
@@ -273,8 +275,12 @@ value must live in a `DEAL`-typed variable or field — smuggling one into a
 ## Trumpian runtime behavior
 
 - **Number inflation** — every numeric value printed via
-  `EVERYONE IS TALKING ABOUT` is inflated by 10%. `FACT CHECK` always sees the
-  real value. The output lies, the logic doesn't.
+  `EVERYONE IS TALKING ABOUT` is inflated, and the story grows in the
+  retelling: the first numeric print inflates 10%, the second 11%, the third
+  12%, and so on for the life of the program (print 100 three times and the
+  crowd reads 110, 111, 112). Strings don't advance the count — only numbers
+  are retold. `FACT CHECK` always sees the real value. The output lies, the
+  logic doesn't.
 - **`EXECUTIVE ORDER WINNING ABSOLUTELY LOSING`** — remaps `WINNING` to behave
   as `LOSING` for the rest of execution. Applies to `WINNING`, `LOSING`,
   `BIG LEAGUE TIMES`, `SAD`; `ENDORSING` and `LEFTOVER FROM` are immune.
