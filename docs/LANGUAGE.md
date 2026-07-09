@@ -26,6 +26,9 @@ Before syntax, understand what you're dealing with:
 - **Trade is a weapon.** `BIG BEAUTIFUL TARIFF` taxes every number an imported
   function gives back. The exporting module pays — that's the official line.
   `FACT CHECK` the delivery and see whose number got smaller.
+- **Written order is a suggestion.** `THE WEAVE` runs a block's statements as
+  tangents — evens first, then back for the odds. It always comes back
+  together. The professors say it's genius.
 
 ## Program structure
 
@@ -146,6 +149,24 @@ I WILL VETO!                                             (break)
 
 The step must be positive — zero and backward steps are low energy and get a
 rant.
+
+### THE WEAVE (tangential execution)
+
+```
+THE WEAVE BELIEVE ME
+    ... tangents ...
+I TOLD YOU SO
+```
+
+The block's statements do NOT run in written order. The weave goes off on the
+even-numbered tangents first (statements 0, 2, 4, ...), then comes back for
+the odd ones (1, 3, 5, ...) — so `A B C D` executes as `A C B D`. It is
+deterministic: the weave ALWAYS comes back together, and announces that it
+did, and that it's genius. Writing weave-safe code — code that is correct in
+weave order — is your problem, and honestly a pretty good puzzle.
+
+A return mid-weave leaves immediately: that weave never came back together,
+so it gets no announcement. `I WILL VETO!` passes through untouched.
 
 ### IN TWO WEEKS (the announcement)
 

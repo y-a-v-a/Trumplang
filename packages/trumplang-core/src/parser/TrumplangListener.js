@@ -454,6 +454,15 @@ export default class TrumplangListener extends antlr4.tree.ParseTreeListener {
 	}
 
 
+	// Enter a parse tree produced by TrumplangParser#weaveStatement.
+	enterWeaveStatement(ctx) {
+	}
+
+	// Exit a parse tree produced by TrumplangParser#weaveStatement.
+	exitWeaveStatement(ctx) {
+	}
+
+
 	// Enter a parse tree produced by TrumplangParser#tariffStatement.
 	enterTariffStatement(ctx) {
 	}

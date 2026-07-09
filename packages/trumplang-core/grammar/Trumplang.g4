@@ -31,6 +31,9 @@
  * Trade is a weapon. BIG BEAUTIFUL TARIFF taxes every number an imported function gives
  * back. The exporting module pays, officially. FACT CHECK the delivery and see whose
  * number got smaller.
+ *
+ * Written order is a suggestion. THE WEAVE runs a block's statements as tangents - evens
+ * first, then back for the odds - and it always comes back together. Genius, frankly.
  */
 
 grammar Trumplang;
@@ -76,6 +79,7 @@ statement:
 		| factCheckStatement
 		| twoWeeksStatement
 		| tariffStatement
+		| weaveStatement
 	) PERIOD?;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
@@ -319,6 +323,13 @@ dealAssignment:
 // The only construct in the language whose body is pure campaign material.
 twoWeeksStatement: TWO_WEEKS blockStatement;
 
+// THE WEAVE - tangential control flow. The block's statements do NOT run in
+// written order: the weave visits the even-numbered tangents first (0, 2,
+// 4, ...), then comes back for the odd ones (1, 3, 5, ...). Deterministic -
+// it ALWAYS comes back together, like a genius - but writing weave-safe code
+// is your problem. The professors say it's brilliant.
+weaveStatement: WEAVE blockStatement;
+
 // BIG BEAUTIFUL TARIFF - trade policy for imports. Enacts a tariff (in
 // percent) on every function hired from another module: numeric values they
 // give back are taxed at the border for the rest of execution. The runtime
@@ -416,6 +427,9 @@ TWO_WEEKS: 'IN TWO WEEKS';
 
 // TARIFF - the most beautiful word in the dictionary.
 TARIFF_DECL: 'BIG BEAUTIFUL TARIFF';
+
+// You go off on tangents and it all comes back together. It's called the weave.
+WEAVE: 'THE WEAVE';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 

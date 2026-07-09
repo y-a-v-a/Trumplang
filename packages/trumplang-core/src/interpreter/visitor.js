@@ -889,6 +889,38 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitTwoWeeksStatementContext(ctx);
   }
 
+  // THE WEAVE - tangential control flow. Statements do NOT run in written
+  // order: even-numbered tangents first (0, 2, 4, ...), then back for the
+  // odd ones (1, 3, 5, ...). Deterministic - it always comes back together,
+  // like a genius. A return mid-weave means it never came back together, so
+  // no announcement for you.
+  visitWeaveStatementContext(ctx) {
+    const statements = ctx.blockStatement().statement();
+    const weaveOrder = [];
+    for (let i = 0; i < statements.length; i += 2) weaveOrder.push(i);
+    for (let i = 1; i < statements.length; i += 2) weaveOrder.push(i);
+
+    debug(`THE WEAVE: ${statements.length} tangents, order ${weaveOrder}`);
+
+    let result;
+    for (const i of weaveOrder) {
+      result = this.visit(statements[i]);
+      if (result && result.isReturn) {
+        return result;
+      }
+    }
+
+    console.log(
+      "AND THAT'S CALLED THE WEAVE. ALL THE TANGENTS CAME BACK TOGETHER PERFECTLY. THE PROFESSORS SAY IT'S GENIUS!",
+    );
+    return result;
+  }
+
+  // For backward compatibility
+  visitWeaveStatement(ctx) {
+    return this.visitWeaveStatementContext(ctx);
+  }
+
   // BIG BEAUTIFUL TARIFF - enact a tariff (percent) on all imported functions.
   // Numeric values they give back are taxed at the border for the rest of
   // execution. The exporting module pays, we are told. FACT CHECK who pays.
@@ -1944,6 +1976,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitTwoWeeksStatement(ctx.twoWeeksStatement());
     } else if (ctx.tariffStatement()) {
       return this.visitTariffStatement(ctx.tariffStatement());
+    } else if (ctx.weaveStatement()) {
+      return this.visitWeaveStatement(ctx.weaveStatement());
     } else if (ctx.inputStatement()) {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {
