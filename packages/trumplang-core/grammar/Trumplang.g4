@@ -34,6 +34,9 @@
  *
  * Written order is a suggestion. THE WEAVE runs a block's statements as tangents - evens
  * first, then back for the odds - and it always comes back together. Genius, frankly.
+ *
+ * A body is optional. A function may have CONCEPTS OF A PLAN instead of a body: calling it
+ * insists the plan is fully worked out and delivers the return type's default. Very soon.
  */
 
 grammar Trumplang;
@@ -110,10 +113,15 @@ dataType:
 //   INCREDIBLE FIB THE BEST PEOPLE TELL ME HUGE N! BELIEVE ME ...
 // The optional GIVING BACK clause declares a return type, enforced at runtime:
 //   INCREDIBLE FIB THE BEST PEOPLE TELL ME HUGE N! GIVING BACK HUGE BELIEVE ME ...
+// A function may have CONCEPTS OF A PLAN instead of a body: perfectly legal,
+// fully worked out, ships very soon. Calling it insists the plan exists and
+// delivers the declared return type's default (or NOTHING TO SEE HERE).
+// Re-declaring it with a body develops the concept into an actual plan.
+// The superlative is still required - the concept praises itself too.
 functionDeclaration:
 	FUNCTION_DECL funcName = IDENTIFIER praise = SUPERLATIVE PARAMS_ARGS_START parameterList? (
 		RETURN_TYPE_DECL dataType
-	)? blockStatement;
+	)? (blockStatement | CONCEPT_PLAN);
 
 blockStatement: OPEN_BLOCK statement* CLOSE_BLOCK;
 
@@ -430,6 +438,9 @@ TARIFF_DECL: 'BIG BEAUTIFUL TARIFF';
 
 // You go off on tangents and it all comes back together. It's called the weave.
 WEAVE: 'THE WEAVE';
+
+// A body is optional. Concepts are forever.
+CONCEPT_PLAN: 'CONCEPTS OF A PLAN';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 

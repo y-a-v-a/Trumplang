@@ -137,32 +137,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
       // Default values if expression evaluation gives null
       if (value === null || value === undefined) {
-        switch (dataType) {
-          case 'HUGE':
-            debug(`Setting default HUGE value to 0 for ${variableName}`);
-            value = 0;
-            break;
-          case 'BIGLY':
-            debug(`Setting default BIGLY value to 0.0 for ${variableName}`);
-            value = 0.0;
-            break;
-          case 'SUPPORT':
-            debug(`Setting default SUPPORT value to false for ${variableName}`);
-            value = false;
-            break;
-          case 'TWEET':
-            debug(`Setting default TWEET value to "" for ${variableName}`);
-            value = '';
-            break;
-          case 'WALL':
-            debug(`Setting default WALL value to [] for ${variableName}`);
-            value = [];
-            break;
-          case 'DEAL':
-            debug(`Setting default DEAL value to {} for ${variableName}`);
-            value = {};
-            break;
-        }
+        value = this._typeDefault(dataType);
+        debug(`Setting default ${dataType} value for ${variableName}:`, value);
       }
     } else {
       // If no initialization, provide null value
@@ -1014,6 +990,19 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return value.toUpperCase();
   }
 
+  // Helper: the default value for a Trumplang type (null when no type given)
+  _typeDefault(type) {
+    switch (type) {
+      case 'HUGE': return 0;
+      case 'BIGLY': return 0.0;
+      case 'SUPPORT': return false;
+      case 'TWEET': return '';
+      case 'WALL': return [];
+      case 'DEAL': return {};
+      default: return null;
+    }
+  }
+
   // Helper: a deal value is a plain object (not an array, not null)
   _isDealObject(value) {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -1140,7 +1129,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       );
     }
 
-    if (!blockCtx) {
+    if (!blockCtx && !ctx.CONCEPT_PLAN()) {
       throw new Error('FUNCTION DECLARATION MISSING BODY! SAD!');
     }
 
@@ -1181,6 +1170,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       paramListCtx: ctx.parameterList(),
       blockCtx: ctx.blockStatement(),
       returnType: returnType,
+      // CONCEPTS OF A PLAN instead of a body - fully worked out, ships soon
+      isConcept: !ctx.blockStatement(),
     };
   }
 
@@ -1318,6 +1309,18 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
           type: param.type,
           value: arg,
         };
+      }
+
+      // CONCEPTS OF A PLAN: there is no body. The plan is fully worked out,
+      // it's brilliant, and you will see it very soon. Until then, the call
+      // delivers the declared return type's default - or NOTHING TO SEE HERE.
+      if (functionDef.isConcept) {
+        console.log(
+          `${identifier}? WE HAVE CONCEPTS OF A PLAN FOR THAT. IT'S FULLY WORKED OUT, IT'S BRILLIANT, YOU'LL SEE IT VERY SOON!`,
+        );
+        const conceptResult = this._typeDefault(functionDef.returnType);
+        debug(`Concept ${identifier} delivered:`, conceptResult);
+        return conceptResult;
       }
 
       // Execute function body (block statement)

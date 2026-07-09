@@ -29,6 +29,9 @@ Before syntax, understand what you're dealing with:
 - **Written order is a suggestion.** `THE WEAVE` runs a block's statements as
   tangents — evens first, then back for the odds. It always comes back
   together. The professors say it's genius.
+- **A body is optional.** A function may have `CONCEPTS OF A PLAN` instead of
+  a body. Calling it insists the plan is fully worked out and delivers the
+  return type's default — or `NOTHING TO SEE HERE`.
 
 ## Program structure
 
@@ -207,6 +210,21 @@ Superlatives: `THE BEST` · `TREMENDOUS` · `LIKE NOBODY HAS EVER SEEN`.
 - Fire a function: `YOU'RE FIRED FIB` — permanently deletes it. Calling a fired
   function rants. Functions may be re-declared afterwards (everyone deserves a
   second chance... maybe).
+
+### CONCEPTS OF A PLAN (bodiless functions)
+
+```
+INCREDIBLE HEALTHCARE THE BEST PEOPLE TELL ME GIVING BACK TWEET CONCEPTS OF A PLAN
+```
+
+A function may have `CONCEPTS OF A PLAN` instead of a body. Perfectly legal
+syntax — the superlative is still mandatory; the concept praises itself too.
+Calling a concept announces that the plan is fully worked out and will be
+seen very soon, then delivers the declared return type's default (`HUGE` → 0,
+`TWEET` → `""`, ...) or `NOTHING TO SEE HERE` when nothing was promised. The
+`GIVING BACK` promise is technically kept, which is the most on-brand thing
+about it. Re-declaring the function with a body develops the concept into an
+actual plan; concepts can be fired like anyone else.
 
 ## Walls (arrays)
 
