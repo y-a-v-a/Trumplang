@@ -50,6 +50,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     this.tariffRate = 0; // BIG BEAUTIFUL TARIFF (percent) on imported functions
     this.numericPrints = 0; // every retelling grows - inflation compounds per numeric print
     this.bankruptcies = 0; // CHAPTER 11 filings this run (six is the legal limit of genius)
+    this.totalCalls = 0; // the loyalty clock - every function call ticks it
     this.sourcePath = null; // Path of the source file (for relative imports)
     this.importCache = {}; // resolved path -> exported functions
     this.importStack = []; // resolved paths currently being loaded (collusion detection)
@@ -1278,7 +1279,34 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       returnType: returnType,
       // CONCEPTS OF A PLAN instead of a body - fully worked out, ships soon
       isConcept: !ctx.blockStatement(),
+      // LOYALTY: hired now, loyal now. Neglect changes people.
+      loyalTick: this.totalCalls,
     };
+  }
+
+  // LOYALTY: functions demand to be called. Every 10 calls a function sits
+  // ignored, it leaks a tell-all chapter. Three chapters and the book gets
+  // published - after that the damage is done and the author goes quiet.
+  // Calling a function restores its loyalty; firing it ends the book deal.
+  _leakTellAlls() {
+    const THRESHOLD = 10;
+    for (const [name, def] of Object.entries(this.functions)) {
+      if (def.bookDone) continue;
+      const neglect = this.totalCalls - (def.loyalTick || 0);
+      if (neglect < THRESHOLD || neglect % THRESHOLD !== 0) continue;
+
+      const chapter = neglect / THRESHOLD;
+      if (chapter <= 3) {
+        console.log(
+          `LEAKED FROM ${name}: "NOBODY CALLS ME ANYMORE. I SAW EVERYTHING IN THERE. I'M WRITING IT ALL DOWN — CHAPTER ${chapter} DROPS SOON. VERY DISLOYAL ENVIRONMENT!"`,
+        );
+      } else {
+        def.bookDone = true;
+        console.log(
+          `THE BOOK IS OUT: "${name}: WHAT I SAW" — NUMBER ONE BESTSELLER. EVERYONE'S READING IT. TOTAL FICTION, WRITTEN BY A LOSER WE BARELY KNEW!`,
+        );
+      }
+    }
   }
 
   // Helper: describe a runtime value in Trumplang type terms
@@ -1375,6 +1403,12 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         `I CALL UPON ${identifier} AND NOBODY SHOWS UP. VERY DISLOYAL. WHEN I NEEDED THEM, THEY WEREN'T THERE. PROBABLY A NEVER-TRUMPER. SAD!`,
       );
     }
+
+    // LOYALTY: this call ticks the clock and refreshes the callee's loyalty;
+    // everyone ELSE who's been ignored long enough leaks to the press.
+    this.totalCalls++;
+    functionDef.loyalTick = this.totalCalls;
+    this._leakTellAlls();
 
     // Create a new scope for function execution
     const functionScope = envUtils.createEnvironment(this.currentScope);

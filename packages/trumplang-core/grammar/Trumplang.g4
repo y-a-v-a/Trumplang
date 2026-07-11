@@ -48,6 +48,9 @@
  *
  * Silence is purchasable. HUSH MONEY settles an error from a numeric account with no handler
  * block and no output - unless the payment bounces, in which case it all goes in the papers.
+ *
+ * Loyalty is mandatory (no syntax, pure runtime). A function ignored for 10 straight calls
+ * leaks tell-all chapters; after three the book publishes. Calling it back restores loyalty.
  */
 
 grammar Trumplang;

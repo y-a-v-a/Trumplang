@@ -230,6 +230,20 @@ Superlatives: `THE BEST` · `TREMENDOUS` · `LIKE NOBODY HAS EVER SEEN`.
   function rants. Functions may be re-declared afterwards (everyone deserves a
   second chance... maybe).
 
+### Loyalty (the tell-all)
+
+Functions demand to be called. Every function call ticks a global loyalty
+clock; a function that sits ignored for 10 consecutive calls starts leaking
+to the press — one tell-all chapter per 10 calls of neglect. After three
+chapters the book gets published (number one bestseller, total fiction,
+written by a loser we barely knew) and the author goes quiet; the damage is
+done. A published author still works when called — the function itself is
+never broken, only disgruntled.
+
+Calling a function restores its loyalty and stops the writing. Firing it
+(`YOU'RE FIRED`) ends the book deal entirely. Imported functions are on the
+same clock: hire the best people and then actually call them.
+
 ### CONCEPTS OF A PLAN (bodiless functions)
 
 ```
