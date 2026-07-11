@@ -999,6 +999,12 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
         throw error;
       }
 
+      // HUSH MONEY: no pardon, no handler - the error is paid off and never
+      // spoken of again. Unless the payment bounces.
+      if (ctx.HUSH_MONEY()) {
+        return this._payHushMoney(ctx, error);
+      }
+
       debug(`WITCH HUNT! Pardoning error: ${error.message}`);
 
       // Bind the error to the optional TWEET variable after WITCH HUNT!
@@ -1017,6 +1023,47 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
       return this.visit(ctx.blockStatement(1));
     }
+  }
+
+  // Helper: settle an error with HUSH MONEY. The amount leaves the account,
+  // the error is never spoken of again, and NOTHING is printed - silence is
+  // the entire product. If the account can't cover the price of silence, the
+  // payment bounces, everything becomes public record, and the original
+  // error flies on up the stack.
+  _payHushMoney(ctx, error) {
+    const amount = this.visit(ctx.expression());
+    if (typeof amount !== 'number' || isNaN(amount) || amount <= 0) {
+      throw new Error(
+        `A HUSH PAYMENT OF ${amount}?! THAT'S NOT HOW THIS WORKS. CASH, ROUND NUMBERS, AND A LAWYER WHO ASKS NO QUESTIONS. VERY UNPROFESSIONAL!`,
+      );
+    }
+
+    const accountName = ctx.account.text;
+    const account = this.getVariable(accountName);
+    if (!account) {
+      throw new Error(
+        `THERE IS NO ${accountName}! YOU CAN'T PAY HUSH MONEY FROM AN ACCOUNT THAT DOESN'T EXIST. EVEN MICHAEL WOULDN'T STRUCTURE IT THIS BADLY!`,
+      );
+    }
+    if (typeof account.value !== 'number') {
+      throw new Error(
+        `${accountName} ISN'T MONEY! HUSH MONEY IS PAID IN NUMBERS, NOT IN ${this._describeValue(account.value)}. WHAT ARE WE EVEN DOING HERE!`,
+      );
+    }
+
+    if (account.value >= amount) {
+      account.value -= amount;
+      debug(
+        `HUSH MONEY: ${amount} paid from ${accountName} (${account.value} left). Nothing happened.`,
+      );
+      // Not a word. Nothing happened. Nobody heard anything.
+      return null;
+    }
+
+    console.log(
+      `THE HUSH MONEY BOUNCED! ${accountName} HOLDS ${account.value} AND THE PRICE OF SILENCE WAS ${amount}. IT'S ALL GOING IN THE PAPERS, EVERY WORD OF IT!`,
+    );
+    throw error;
   }
 
   // For backward compatibility

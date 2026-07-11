@@ -337,6 +337,29 @@ I TOLD YOU SO
 - **A failed `FACT CHECK` can NEVER be pardoned.** That is the entire point of
   fact checks. `I WILL VETO!` passes through untouched too.
 
+### HUSH MONEY (the quiet catch)
+
+```
+I ALONE CAN FIX IT BELIEVE ME
+    IMPEACH "STORMY WEATHER"
+I TOLD YOU SO
+HUSH MONEY 130000 FROM FUND!
+```
+
+The alternative to `WITCH HUNT!`: no handler block, no pardon, no
+acknowledgment. When the try block blows up, the amount leaves the account
+(a numeric variable) and the error is never spoken of again — nothing is
+printed, nothing is bound, nothing happened, nobody heard anything. The
+amount may be any expression; lawyers invoice creatively.
+
+- No scandal, no payment: if the try block succeeds, the account is untouched.
+- If the account can't cover the price of silence, the payment BOUNCES: the
+  bounce is announced, and the original error flies up the stack where the
+  papers — an enclosing `WITCH HUNT!` — can get it, word for word.
+- A missing account, or an account that isn't money, is its own scandal
+  (pardonable).
+- You cannot pay off a failed `FACT CHECK`. Some things don't stay bought.
+
 ## Statement boundaries
 
 Adjacent statements disambiguate on keyword boundaries. One documented hazard:

@@ -45,6 +45,9 @@
  *
  * Debt is optional. CHAPTER 11 resets every variable to its type default and execution
  * continues like nothing happened. Six filings per program - the brand survives all of them.
+ *
+ * Silence is purchasable. HUSH MONEY settles an error from a numeric account with no handler
+ * block and no output - unless the payment bounces, in which case it all goes in the papers.
  */
 
 grammar Trumplang;
@@ -183,8 +186,16 @@ vetoStatement: BREAK;
 // when it blows up, that's a WITCH HUNT! and the error gets pardoned (caught).
 // The optional variable after WITCH HUNT! receives the error as a TWEET.
 // You CANNOT pardon a failed FACT CHECK - that is the entire point of fact checks.
+//
+// ALTERNATIVELY: HUSH MONEY. No handler block, no pardon, no acknowledgment -
+// the error is simply paid off from a numeric account and never spoken of
+// again. If the account can't cover the price of silence, the payment bounces
+// and EVERYTHING becomes public record. You cannot pay off a FACT CHECK.
 pardonStatement:
-	TRY_DECL blockStatement CATCH_DECL (errName = VARIABLE)? blockStatement;
+	TRY_DECL blockStatement (
+		CATCH_DECL (errName = VARIABLE)? blockStatement
+		| HUSH_MONEY amount = expression FROM_KEYWORD account = VARIABLE
+	);
 
 // IMPEACH - throw. The impeached value flies up the call stack until some
 // WITCH HUNT! clause pardons it. A perfect call, and they impeach anyway.
@@ -471,6 +482,9 @@ STOP_COUNT: 'STOP THE COUNT';
 
 // Strategic bankruptcy. Used brilliantly, six times.
 CHAPTER_ELEVEN: 'CHAPTER 11';
+
+// The quietest catch clause in any programming language.
+HUSH_MONEY: 'HUSH MONEY';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 
