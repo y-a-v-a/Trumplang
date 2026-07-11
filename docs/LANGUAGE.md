@@ -304,6 +304,20 @@ value must live in a `DEAL`-typed variable or field — smuggling one into a
 - **`SUPREME COURT OVERRULES WINNING`** — attempts to overturn the order.
   50% it succeeds, 50% the court rules the order STANDS.
 
+### CHAPTER 11 (strategic bankruptcy)
+
+```
+CHAPTER 11
+```
+
+Every variable in every reachable scope resets to its type's default: the
+debts are wiped, the ledger is clean, and execution continues like nothing
+happened. Functions survive — the brand stays on the building — and so do
+executive orders and tariffs (those are law, not debt). Usable SIX times per
+program run; the seventh filing, even the banks stop returning our calls
+(pardonable). Works anywhere, including inside a `WITCH HUNT!` clause, which
+is of course where it works best.
+
 ## Exception handling
 
 ```

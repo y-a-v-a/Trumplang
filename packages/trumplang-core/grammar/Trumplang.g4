@@ -42,6 +42,9 @@
  *
  * Counting is directional. STOP THE COUNT leaves a loop the moment its condition says we're
  * ahead; while we're behind, the count continues. It only ever stops in one direction.
+ *
+ * Debt is optional. CHAPTER 11 resets every variable to its type default and execution
+ * continues like nothing happened. Six filings per program - the brand survives all of them.
  */
 
 grammar Trumplang;
@@ -89,6 +92,7 @@ statement:
 		| tariffStatement
 		| weaveStatement
 		| stopCountStatement
+		| bankruptcyStatement
 	) PERIOD?;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
@@ -337,6 +341,13 @@ dealAssignment:
 // The only construct in the language whose body is pure campaign material.
 twoWeeksStatement: TWO_WEEKS blockStatement;
 
+// CHAPTER 11 - strategic bankruptcy. Every variable in every reachable scope
+// is reset to its type's default: the debts are wiped, the ledger is clean,
+// execution continues like nothing happened. Functions survive - the brand
+// stays on the building. Usable SIX times per program (the canonical six);
+// the seventh time, even the banks stop returning our calls (pardonable).
+bankruptcyStatement: CHAPTER_ELEVEN;
+
 // STOP THE COUNT - the electoral loop exit. Takes a condition meaning "we are
 // ahead". The moment it comes out TRUE, the count stops and victory is
 // declared, regardless of what the loop condition wanted. When it comes out
@@ -457,6 +468,9 @@ CONCEPT_PLAN: 'CONCEPTS OF A PLAN';
 
 // The count only ever stops while we're ahead.
 STOP_COUNT: 'STOP THE COUNT';
+
+// Strategic bankruptcy. Used brilliantly, six times.
+CHAPTER_ELEVEN: 'CHAPTER 11';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 

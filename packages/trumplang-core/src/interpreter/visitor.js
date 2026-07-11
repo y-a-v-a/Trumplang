@@ -49,6 +49,7 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     this.executiveOrders = {}; // Operator remapping via EXECUTIVE ORDER
     this.tariffRate = 0; // BIG BEAUTIFUL TARIFF (percent) on imported functions
     this.numericPrints = 0; // every retelling grows - inflation compounds per numeric print
+    this.bankruptcies = 0; // CHAPTER 11 filings this run (six is the legal limit of genius)
     this.sourcePath = null; // Path of the source file (for relative imports)
     this.importCache = {}; // resolved path -> exported functions
     this.importStack = []; // resolved paths currently being loaded (collusion detection)
@@ -867,6 +868,39 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
   // For backward compatibility
   visitTwoWeeksStatement(ctx) {
     return this.visitTwoWeeksStatementContext(ctx);
+  }
+
+  // CHAPTER 11 - strategic bankruptcy. Every variable in every reachable
+  // scope resets to its type's default: the debts are wiped, execution
+  // continues like nothing happened. Functions survive - the brand stays on
+  // the building. Six filings per program; the seventh, even the banks stop
+  // returning our calls.
+  visitBankruptcyStatementContext(ctx) {
+    if (this.bankruptcies >= 6) {
+      throw new Error(
+        'BANKRUPTCY NUMBER 7?! EVEN THE BANKS STOPPED RETURNING OUR CALLS. SIX IS THE LEGAL LIMIT OF GENIUS. THE CASINO IS GONE, THE AIRLINE IS GONE, AND FRANKLY THE JUDGE WAS VERY UNFAIR!',
+      );
+    }
+
+    this.bankruptcies++;
+    let restructured = 0;
+    for (let scope = this.currentScope; scope; scope = scope.parent) {
+      for (const variable of Object.values(scope.values)) {
+        variable.value = this._typeDefault(variable.type);
+        restructured++;
+      }
+    }
+
+    debug(`CHAPTER 11 #${this.bankruptcies}: ${restructured} variable(s) restructured`);
+    console.log(
+      `CHAPTER 11! BANKRUPTCY NUMBER ${this.bankruptcies} OF 6. ALL DEBTS RESTRUCTURED, EVERY VARIABLE BACK TO ZERO. THE BRAND SURVIVES. GENIUS BUSINESS MOVE, EVERYONE SAYS SO!`,
+    );
+    return null;
+  }
+
+  // For backward compatibility
+  visitBankruptcyStatement(ctx) {
+    return this.visitBankruptcyStatementContext(ctx);
   }
 
   // STOP THE COUNT - the electoral loop exit. The condition means "we are
@@ -2008,6 +2042,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitWeaveStatement(ctx.weaveStatement());
     } else if (ctx.stopCountStatement()) {
       return this.visitStopCountStatement(ctx.stopCountStatement());
+    } else if (ctx.bankruptcyStatement()) {
+      return this.visitBankruptcyStatement(ctx.bankruptcyStatement());
     } else if (ctx.inputStatement()) {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {
