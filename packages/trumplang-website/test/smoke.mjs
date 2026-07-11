@@ -70,7 +70,37 @@ const check = (name, cond) => {
   check('domestic square untaxed', r.output.includes('17.6'));
 }
 
-// 8. The modest function is rejected by the parser
+// 8. STOP THE COUNT leaves the loop while ahead
+{
+  const r = await runTrumplang(EXAMPLES['STOP THE COUNT']);
+  check('stop the count example runs', r.ok);
+  check('the count stops while ahead', r.output.includes('STOP THE COUNT!'));
+}
+
+// 9. CHAPTER 11 wipes the debt and brags about it
+{
+  const r = await runTrumplang(EXAMPLES['CHAPTER 11']);
+  check('chapter 11 example runs', r.ok);
+  check('bankruptcy number announced', r.output.includes('BANKRUPTCY NUMBER 1 OF 6'));
+}
+
+// 10. HUSH MONEY settles in silence, bounces in public
+{
+  const r = await runTrumplang(EXAMPLES['HUSH MONEY']);
+  check('hush money example runs', r.ok);
+  check('first payment is silent', !r.output.includes('GOLF TOURNAMENT'));
+  check('bounced payment goes public', r.output.includes('THE HUSH MONEY BOUNCED!') && r.output.includes('A SECOND STORY, SOMEHOW WORSE'));
+}
+
+// 11. LOYALTY: the neglected function leaks, then gets called and still works
+{
+  const r = await runTrumplang(EXAMPLES['LOYALTY (THE TELL-ALL)']);
+  check('loyalty example runs', r.ok);
+  check('the neglected function leaks', r.output.includes('LEAKED FROM MOONLIGHT'));
+  check('the author still works when called', r.output.includes('I WAS IN THE ROOM'));
+}
+
+// 12. The modest function is rejected by the parser
 {
   const r = await runTrumplang(EXAMPLES['MODEST FUNCTION (PARSE ERROR)']);
   check('modest function fails', !r.ok);
