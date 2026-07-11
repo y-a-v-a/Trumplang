@@ -150,10 +150,27 @@ WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 10 TO 0 BELIEVE ME ... I TOLD YOU SO  
 BILLIONS AND BILLIONS ITEM! YET ARRAY! BELIEVE ME ... I TOLD YOU SO   (foreach)
 
 I WILL VETO!                                             (break)
+STOP THE COUNT cond                                      (electoral break)
 ```
 
 The step must be positive — zero and backward steps are low energy and get a
 rant.
+
+### STOP THE COUNT (the electoral loop exit)
+
+```
+WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 1 TO 100 BELIEVE ME
+    MAKE VOTES! GREATER
+    STOP THE COUNT VOTES! BETTER THAN THEIR_VOTES!
+I TOLD YOU SO
+```
+
+The condition means "we are ahead". The moment it comes out `VERY TRUE`, the
+count stops, victory is declared out loud, and the loop is left — no matter
+how many iterations the loop condition wanted. When the condition comes out
+`FAKE NEWS` — when we are behind — nothing happens and the count continues.
+The count only ever stops in one direction. Like `I WILL VETO!`, it exits the
+innermost loop only: the outer count is a different election.
 
 ### THE WEAVE (tangential execution)
 

@@ -869,6 +869,27 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     return this.visitTwoWeeksStatementContext(ctx);
   }
 
+  // STOP THE COUNT - the electoral loop exit. The condition means "we are
+  // ahead". TRUE -> the count stops immediately, victory is declared, the
+  // loop is left. FALSE -> we are behind, so obviously the count continues.
+  // The count only ever stops in one direction.
+  visitStopCountStatementContext(ctx) {
+    const ahead = this.visit(ctx.expression());
+    if (ahead) {
+      console.log(
+        "STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!",
+      );
+      throw new BreakSignal();
+    }
+    debug('STOP THE COUNT refused: we are behind, the count continues');
+    return null;
+  }
+
+  // For backward compatibility
+  visitStopCountStatement(ctx) {
+    return this.visitStopCountStatementContext(ctx);
+  }
+
   // THE WEAVE - tangential control flow. Statements do NOT run in written
   // order: even-numbered tangents first (0, 2, 4, ...), then back for the
   // odd ones (1, 3, 5, ...). Deterministic - it always comes back together,
@@ -1985,6 +2006,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       return this.visitTariffStatement(ctx.tariffStatement());
     } else if (ctx.weaveStatement()) {
       return this.visitWeaveStatement(ctx.weaveStatement());
+    } else if (ctx.stopCountStatement()) {
+      return this.visitStopCountStatement(ctx.stopCountStatement());
     } else if (ctx.inputStatement()) {
       return this.visitInputStatement(ctx.inputStatement());
     } else if (ctx.blockStatement()) {

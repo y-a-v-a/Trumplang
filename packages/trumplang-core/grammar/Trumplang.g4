@@ -39,6 +39,9 @@
  *
  * A body is optional. A function may have CONCEPTS OF A PLAN instead of a body: calling it
  * insists the plan is fully worked out and delivers the return type's default. Very soon.
+ *
+ * Counting is directional. STOP THE COUNT leaves a loop the moment its condition says we're
+ * ahead; while we're behind, the count continues. It only ever stops in one direction.
  */
 
 grammar Trumplang;
@@ -85,6 +88,7 @@ statement:
 		| twoWeeksStatement
 		| tariffStatement
 		| weaveStatement
+		| stopCountStatement
 	) PERIOD?;
 
 // Comments - "A LOT OF PEOPLE ARE SAYING"
@@ -333,6 +337,13 @@ dealAssignment:
 // The only construct in the language whose body is pure campaign material.
 twoWeeksStatement: TWO_WEEKS blockStatement;
 
+// STOP THE COUNT - the electoral loop exit. Takes a condition meaning "we are
+// ahead". The moment it comes out TRUE, the count stops and victory is
+// declared, regardless of what the loop condition wanted. When it comes out
+// FALSE - when we are behind - nothing happens and the count continues until
+// we find more votes. The count only ever stops in one direction.
+stopCountStatement: STOP_COUNT expression;
+
 // THE WEAVE - tangential control flow. The block's statements do NOT run in
 // written order: the weave visits the even-numbered tangents first (0, 2,
 // 4, ...), then comes back for the odd ones (1, 3, 5, ...). Deterministic -
@@ -443,6 +454,9 @@ WEAVE: 'THE WEAVE';
 
 // A body is optional. Concepts are forever.
 CONCEPT_PLAN: 'CONCEPTS OF A PLAN';
+
+// The count only ever stops while we're ahead.
+STOP_COUNT: 'STOP THE COUNT';
 
 FOR_EACH_LOOP_DECL: 'BILLIONS AND BILLIONS';
 
