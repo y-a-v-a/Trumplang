@@ -2,194 +2,10 @@
 // browser. The output lies by 10%, the logic doesn't. That's the language,
 // not a bug in this playground.
 import { TrumplangInterpreter } from '../../trumplang-core/src/interpreter/index.js';
+import { highlight, highlightAll, keywordList } from './highlight.js';
+import { EXAMPLES, EXAMPLE_GROUPS, ALL_EXAMPLES } from './examples.js';
 
-const EXAMPLES = {
-  'NUMBER INFLATION': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THE OUTPUT LIES, THE LOGIC DOESN'T - AND EVERY RETELLING GROWS
-I HAVE THE BEST HUGE CROWD! ABSOLUTELY 100
-EVERYONE IS TALKING ABOUT "REAL CROWD SIZE IS 100. NOW WATCH THE STORY GROW IN THE RETELLING:"
-EVERYONE IS TALKING ABOUT CROWD!
-EVERYONE IS TALKING ABOUT CROWD!
-EVERYONE IS TALKING ABOUT CROWD!
-A LOT OF PEOPLE ARE SAYING THE FACT CHECK BELOW SEES THE REAL VALUE AND PASSES
-FACT CHECK CROWD! SO TRUE 100
-EVERYONE IS TALKING ABOUT "THE FACT CHECK PASSED WITH THE REAL 100. TREMENDOUS."
-MAKE AMERICA GREAT AGAIN`,
-
-  'EXECUTIVE ORDER': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING WE CAN GASLIGHT THE OPERATORS THEMSELVES
-EVERYONE IS TALKING ABOUT "13 WINNING 8 NORMALLY MAKES:"
-EVERYONE IS TALKING ABOUT 13 WINNING 8
-EXECUTIVE ORDER WINNING ABSOLUTELY BIG LEAGUE TIMES
-EVERYONE IS TALKING ABOUT "AFTER THE ORDER, 13 WINNING 8 MAKES:"
-EVERYONE IS TALKING ABOUT 13 WINNING 8
-SUPREME COURT OVERRULES WINNING
-EVERYONE IS TALKING ABOUT "AFTER THE COURT RULING (RUN ME AGAIN - IT'S A COIN FLIP):"
-EVERYONE IS TALKING ABOUT 13 WINNING 8
-MAKE AMERICA GREAT AGAIN`,
-
-  'PARDON / WITCH HUNT': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING DIVIDING BY ZERO IS FINE IF YOU HAVE A GOOD LAWYER
-I ALONE CAN FIX IT BELIEVE ME
-  I HAVE THE BEST HUGE DOOMED! ABSOLUTELY 100 SAD 0
-I TOLD YOU SO
-WITCH HUNT! CHARGES! BELIEVE ME
-  EVERYONE IS TALKING ABOUT "TOTAL WITCH HUNT! THE CHARGES WERE:"
-  EVERYONE IS TALKING ABOUT CHARGES!
-  EVERYONE IS TALKING ABOUT "FULL PARDON. WE MOVE ON."
-I TOLD YOU SO
-I ALONE CAN FIX IT BELIEVE ME
-  IMPEACH "A PERFECT PHONE CALL"
-I TOLD YOU SO
-WITCH HUNT! REASON! BELIEVE ME
-  EVERYONE IS TALKING ABOUT "IMPEACHED OVER:"
-  EVERYONE IS TALKING ABOUT REASON!
-  EVERYONE IS TALKING ABOUT "ACQUITTED! TOTAL EXONERATION!"
-I TOLD YOU SO
-MAKE AMERICA GREAT AGAIN`,
-
-  'NESTED DEALS': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING NOBODY NESTS DEALS LIKE ME
-I HAVE THE BEST DEAL EMPIRE! ABSOLUTELY (
-    TWEET BRAND! ABSOLUTELY "TRUMP" &
-    DEAL TOWER! ABSOLUTELY (
-        HUGE FLOORS! ABSOLUTELY 58 &
-        DEAL PENTHOUSE! ABSOLUTELY (
-            HUGE GOLD_FIXTURES! ABSOLUTELY 24
-        )!!
-    )!!
-)!!
-EVERYONE IS TALKING ABOUT "GOLD FIXTURES IN THE PENTHOUSE (INFLATED, OBVIOUSLY):"
-EVERYONE IS TALKING ABOUT EMPIRE! FOLLOW TOWER! FOLLOW PENTHOUSE! FOLLOW GOLD_FIXTURES!
-MAKE AMERICA GREAT AGAIN`,
-
-  'TREMENDOUS STEPS': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING WE COUNT DOWN IN TREMENDOUS STEPS
-WE'RE GOING TO WIN, WIN, WIN WITH T! FROM 10 TO 0 IN TREMENDOUS STEPS OF 2 BELIEVE ME
-  EVERYONE IS TALKING ABOUT T!
-I TOLD YOU SO
-EVERYONE IS TALKING ABOUT "LIFTOFF! (THE COUNTDOWN LOOKED 10% BIGGER THAN IT WAS)"
-MAKE AMERICA GREAT AGAIN`,
-
-  'THE WEAVE': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THE STATEMENTS DO NOT RUN IN WRITTEN ORDER - WATCH THE TANGENTS
-THE WEAVE BELIEVE ME
-  EVERYONE IS TALKING ABOUT "TANGENT 1: THE ECONOMY, THE BEST ECONOMY"
-  EVERYONE IS TALKING ABOUT "TANGENT 2: LIKE I SAID, THE ECONOMY - SEE? IT CAME BACK"
-  EVERYONE IS TALKING ABOUT "TANGENT 3: SHARKS VERSUS BATTERIES, VERY IMPORTANT QUESTION"
-  EVERYONE IS TALKING ABOUT "TANGENT 4: AND THAT'S WHY WE WEAVE"
-I TOLD YOU SO
-A LOT OF PEOPLE ARE SAYING EVENS FIRST, THEN BACK FOR THE ODDS - 1 3 2 4, DETERMINISTIC GENIUS
-MAKE AMERICA GREAT AGAIN`,
-
-  'CONCEPTS OF A PLAN': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING A FUNCTION BODY IS OPTIONAL - CONCEPTS ARE FOREVER
-INCREDIBLE HEALTHCARE THE BEST PEOPLE TELL ME GIVING BACK TWEET CONCEPTS OF A PLAN
-EVERYONE IS TALKING ABOUT "MODERATOR: WHAT IS THE HEALTHCARE PLAN?"
-EVERYONE IS TALKING ABOUT I CALL UPON HEALTHCARE PEOPLE TELL ME
-A LOT OF PEOPLE ARE SAYING THE EMPTY LINE ABOVE IS THE DELIVERED PLAN - AN EMPTY TWEET
-FACT CHECK (I CALL UPON HEALTHCARE PEOPLE TELL ME) SO TRUE ""
-EVERYONE IS TALKING ABOUT "THE GIVING BACK PROMISE WAS TECHNICALLY KEPT. TREMENDOUS."
-MAKE AMERICA GREAT AGAIN`,
-
-  'IN TWO WEEKS': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THE HEALTHCARE PLAN IS COMING IN TWO WEEKS
-I HAVE THE BEST HUGE PROMISES_KEPT! ABSOLUTELY 0
-IN TWO WEEKS BELIEVE ME
-  EVERYONE IS TALKING ABOUT "HERE IS THE FULL AND COMPLETE HEALTHCARE PLAN"
-  PROMISES_KEPT! ABSOLUTELY 1
-I TOLD YOU SO
-A LOT OF PEOPLE ARE SAYING THE BLOCK NEVER RAN - IT IS ALWAYS TWO WEEKS AWAY
-FACT CHECK PROMISES_KEPT! SO TRUE 0
-EVERYONE IS TALKING ABOUT "FACT CHECK CONFIRMS: ZERO PROMISES KEPT. CHECK BACK IN TWO WEEKS."
-MAKE AMERICA GREAT AGAIN`,
-
-  'BIG BEAUTIFUL TARIFF': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING IMPORTED FUNCTIONS PAY A TARIFF ON EVERY NUMBER THEY GIVE BACK
-BIG BEAUTIFUL TARIFF 25
-A LOT OF PEOPLE ARE SAYING THE BROWSER HAS NO FILESYSTEM SO THERE'S NOTHING TO IMPORT HERE
-A LOT OF PEOPLE ARE SAYING A TARIFF ON NOTHING - MAXIMUM WINNING, ZERO COST
-INCREDIBLE HOMEGROWN THE BEST PEOPLE TELL ME HUGE N! GIVING BACK HUGE BELIEVE ME
-  AND I MEAN THAT N! BIG LEAGUE TIMES N!
-I TOLD YOU SO
-EVERYONE IS TALKING ABOUT "DOMESTIC FUNCTIONS TRADE FREE. SQUARE OF 4 (INFLATED AT THE REGISTER):"
-EVERYONE IS TALKING ABOUT I CALL UPON HOMEGROWN PEOPLE TELL ME 4
-A LOT OF PEOPLE ARE SAYING RUN TRUMPLANG LOCALLY WITH IMPORTS FOR THE FULL TRADE WAR
-MAKE AMERICA GREAT AGAIN`,
-
-  'STOP THE COUNT': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING WE COUNT THE VOTES UNTIL WE LIKE THE NUMBER
-I HAVE THE BEST HUGE OUR_VOTES! ABSOLUTELY 0
-I HAVE THE BEST HUGE THEIR_VOTES! ABSOLUTELY 4
-WE'RE GOING TO WIN, WIN, WIN WITH PRECINCT! FROM 1 TO 50 BELIEVE ME
-  MAKE OUR_VOTES! GREATER
-  STOP THE COUNT OUR_VOTES! BETTER THAN THEIR_VOTES!
-I TOLD YOU SO
-A LOT OF PEOPLE ARE SAYING THE LOOP WANTED 50 PRECINCTS - WE STOPPED AT 5, WHILE AHEAD
-FACT CHECK OUR_VOTES! SO TRUE 5
-EVERYONE IS TALKING ABOUT "FINAL CERTIFIED TALLY (INFLATED AT THE PODIUM):"
-EVERYONE IS TALKING ABOUT OUR_VOTES!
-MAKE AMERICA GREAT AGAIN`,
-
-  'CHAPTER 11': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THE CASINO WAS A TREMENDOUS SUCCESS
-I HAVE THE BEST HUGE CASINO_DEBT! ABSOLUTELY 3000000
-EVERYONE IS TALKING ABOUT "CASINO DEBT (INFLATED, LIKE EVERYTHING WE OWN):"
-EVERYONE IS TALKING ABOUT CASINO_DEBT!
-CHAPTER 11
-EVERYONE IS TALKING ABOUT "CASINO DEBT AFTER RESTRUCTURING:"
-EVERYONE IS TALKING ABOUT CASINO_DEBT!
-FACT CHECK CASINO_DEBT! SO TRUE 0
-EVERYONE IS TALKING ABOUT "GENIUS. SIX FILINGS PER PROGRAM, LEGALLY. THE BRAND SURVIVES."
-MAKE AMERICA GREAT AGAIN`,
-
-  'HUSH MONEY': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THESE WERE ALL LEGAL EXPENSES, PERFECTLY NORMAL
-I HAVE THE BEST HUGE LEGAL_EXPENSES! ABSOLUTELY 200000
-I ALONE CAN FIX IT BELIEVE ME
-  IMPEACH "A STORY ABOUT A GOLF TOURNAMENT IN 2006"
-I TOLD YOU SO
-HUSH MONEY 130000 FROM LEGAL_EXPENSES!
-EVERYONE IS TALKING ABOUT "NOTHING HAPPENED. NOBODY HEARD ANYTHING. THE FUND:"
-EVERYONE IS TALKING ABOUT LEGAL_EXPENSES!
-A LOT OF PEOPLE ARE SAYING THE NEXT STORY COSTS MORE THAN WE HAVE LEFT - WATCH IT BOUNCE
-I ALONE CAN FIX IT BELIEVE ME
-  I ALONE CAN FIX IT BELIEVE ME
-    IMPEACH "A SECOND STORY, SOMEHOW WORSE"
-  I TOLD YOU SO
-  HUSH MONEY 150000 FROM LEGAL_EXPENSES!
-I TOLD YOU SO
-WITCH HUNT! SCANDAL! BELIEVE ME
-  EVERYONE IS TALKING ABOUT "THE PAPERS GOT IT:"
-  EVERYONE IS TALKING ABOUT SCANDAL!
-I TOLD YOU SO
-MAKE AMERICA GREAT AGAIN`,
-
-  'LOYALTY (THE TELL-ALL)': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING WE ONLY HIRE THE MOST LOYAL FUNCTIONS
-INCREDIBLE MOONLIGHT THE BEST PEOPLE TELL ME GIVING BACK TWEET BELIEVE ME
-  AND I MEAN THAT "I WAS IN THE ROOM"
-I TOLD YOU SO
-INCREDIBLE FAVORITE TREMENDOUS PEOPLE TELL ME HUGE N! GIVING BACK HUGE BELIEVE ME
-  AND I MEAN THAT N! BIG LEAGUE TIMES 2
-I TOLD YOU SO
-A LOT OF PEOPLE ARE SAYING WE CALL FAVORITE 25 TIMES AND MOONLIGHT ZERO TIMES
-I HAVE THE BEST HUGE SCORE! ABSOLUTELY 1
-WE'RE GOING TO WIN, WIN, WIN WITH DAY! FROM 1 TO 25 BELIEVE ME
-  SCORE! ABSOLUTELY I CALL UPON FAVORITE PEOPLE TELL ME 1
-I TOLD YOU SO
-A LOT OF PEOPLE ARE SAYING NOW WE CALL MOONLIGHT AND SUDDENLY WE ALWAYS LOVED MOONLIGHT
-EVERYONE IS TALKING ABOUT I CALL UPON MOONLIGHT PEOPLE TELL ME
-EVERYONE IS TALKING ABOUT "A GREAT FUNCTION. ALWAYS WAS. THE BOOK IS FAKE NEWS."
-MAKE AMERICA GREAT AGAIN`,
-
-  'MODEST FUNCTION (PARSE ERROR)': `THE TIME FOR EMPTY TALK IS OVER!!!
-A LOT OF PEOPLE ARE SAYING THIS FUNCTION FORGOT TO PRAISE ITSELF - WATCH IT GET REJECTED
-INCREDIBLE HUMBLE PEOPLE TELL ME HUGE X! BELIEVE ME
-  AND I MEAN THAT X!
-I TOLD YOU SO
-MAKE AMERICA GREAT AGAIN`,
-};
+export { EXAMPLES, EXAMPLE_GROUPS, ALL_EXAMPLES, highlight, highlightAll, keywordList };
 
 export async function runTrumplang(source) {
   const captured = [];
@@ -214,44 +30,179 @@ export async function runTrumplang(source) {
   }
 }
 
-export { EXAMPLES };
+// ---------------------------------------------------------------------------
+// Permalinks: #code=<base64url of the source>. Share your best work.
+const encodeCode = (src) =>
+  btoa(unescape(encodeURIComponent(src))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const decodeCode = (b64) => {
+  const s = b64.replace(/-/g, '+').replace(/_/g, '/');
+  return decodeURIComponent(escape(atob(s + '='.repeat((4 - (s.length % 4)) % 4))));
+};
 
-// UI wiring - only in the browser (the smoke test imports this module in Node)
-if (typeof document !== 'undefined') {
-  const editor = document.getElementById('editor');
-  const output = document.getElementById('output');
-  const runButton = document.getElementById('run');
-  const exampleSelect = document.getElementById('examples');
-
-  for (const name of Object.keys(EXAMPLES)) {
-    const option = document.createElement('option');
-    option.value = name;
-    option.textContent = name;
-    exampleSelect.appendChild(option);
+function codeFromHash() {
+  const m = /[#&]code=([A-Za-z0-9_-]+)/.exec(location.hash);
+  if (!m) return null;
+  try {
+    return decodeCode(m[1]);
+  } catch {
+    return null;
   }
+}
 
-  const loadExample = (name) => {
-    editor.value = EXAMPLES[name];
-    output.textContent = 'PRESS "MAKE IT RUN" TO SEE TREMENDOUS RESULTS.';
-    output.className = '';
+/**
+ * Wire a playground into the page. Expects (by id, all optional except editor
+ * and output): #editor (textarea), #editor-highlight (pre > code overlay),
+ * #output, #run, #examples (select), #share, #status.
+ */
+export function mountPlayground(opts = {}) {
+  const $ = (id) => document.getElementById(id);
+  const editor = $(opts.editor || 'editor');
+  const output = $(opts.output || 'output');
+  if (!editor || !output) return null;
+  const overlay = $(opts.overlay || 'editor-highlight');
+  const runButton = $(opts.run || 'run');
+  const exampleSelect = $(opts.examples || 'examples');
+  const shareButton = $(opts.share || 'share');
+  const status = $(opts.status || 'status');
+  const initial = opts.initial || null;
+
+  const setStatus = (text, kind = '') => {
+    if (!status) return;
+    status.textContent = text;
+    status.className = 'playground-status ' + kind;
   };
 
-  exampleSelect.addEventListener('change', () => loadExample(exampleSelect.value));
-  loadExample(Object.keys(EXAMPLES)[0]);
+  const paint = () => {
+    if (!overlay) return;
+    // Trailing newline keeps the overlay's height in sync with the textarea.
+    overlay.innerHTML = highlight(editor.value) + '\n';
+  };
+  const syncScroll = () => {
+    if (!overlay) return;
+    overlay.parentElement.scrollTop = editor.scrollTop;
+    overlay.parentElement.scrollLeft = editor.scrollLeft;
+  };
 
-  runButton.addEventListener('click', async () => {
+  // Examples dropdown, grouped.
+  if (exampleSelect) {
+    for (const group of EXAMPLE_GROUPS) {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = group.group;
+      for (const ex of group.examples) {
+        const option = document.createElement('option');
+        option.value = ex.name;
+        option.textContent = ex.name;
+        optgroup.appendChild(option);
+      }
+      exampleSelect.appendChild(optgroup);
+    }
+    exampleSelect.addEventListener('change', () => loadExample(exampleSelect.value));
+  }
+
+  const showIdle = () => {
+    output.textContent = 'PRESS "MAKE IT RUN" (OR CTRL/CMD + ENTER) TO SEE TREMENDOUS RESULTS.';
+    output.className = 'output idle';
+    setStatus('READY. THE MOST READY.');
+  };
+
+  const setCode = (code) => {
+    editor.value = code;
+    paint();
+    editor.scrollTop = 0;
+    syncScroll();
+  };
+
+  const loadExample = (name) => {
+    if (!EXAMPLES[name]) return;
+    setCode(EXAMPLES[name]);
+    showIdle();
+    if (exampleSelect) exampleSelect.value = name;
+  };
+
+  const run = async () => {
     output.textContent = 'RUNNING. THE BEST EXECUTION. HOLD ON...';
-    output.className = '';
+    output.className = 'output';
+    setStatus('RUNNING...');
+    const started = performance.now();
     const result = await runTrumplang(editor.value);
+    const ms = Math.max(1, Math.round(performance.now() - started));
     if (result.ok) {
       output.textContent = result.output || '(NO OUTPUT. VERY QUIET PROGRAM. SUSPICIOUS!)';
-      output.className = 'ok';
+      output.className = 'output ok';
+      setStatus(`TREMENDOUS SUCCESS IN ${ms}MS. NOBODY RUNS FASTER.`, 'ok');
     } else {
       output.textContent =
         (result.output ? result.output + '\n\n' : '') +
         'THIS CODE IS A DISASTER! VERY SAD CODE!\n' +
         result.error;
-      output.className = 'sad';
+      output.className = 'output sad';
+      setStatus('SAD! THE PROGRAM DID NOT SURVIVE. SEE THE RANT.', 'sad');
+    }
+  };
+
+  if (runButton) runButton.addEventListener('click', run);
+  editor.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      run();
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const { selectionStart: s, selectionEnd: t } = editor;
+      editor.value = editor.value.slice(0, s) + '  ' + editor.value.slice(t);
+      editor.selectionStart = editor.selectionEnd = s + 2;
+      paint();
     }
   });
+  editor.addEventListener('input', paint);
+  editor.addEventListener('scroll', syncScroll);
+
+  if (shareButton) {
+    shareButton.addEventListener('click', async () => {
+      const url = `${location.origin}${location.pathname}#code=${encodeCode(editor.value)}`;
+      history.replaceState(null, '', `#code=${encodeCode(editor.value)}`);
+      try {
+        await navigator.clipboard.writeText(url);
+        setStatus('LINK COPIED. SHARE IT WITH EVERYONE. EVERYONE IS TALKING ABOUT IT.', 'ok');
+      } catch {
+        setStatus('LINK IS IN THE ADDRESS BAR. COPY IT YOURSELF, IT IS VERY EASY.', 'ok');
+      }
+    });
+  }
+
+  // Initial content: permalink > requested example > first example.
+  const shared = codeFromHash();
+  if (shared) {
+    setCode(shared);
+    if (exampleSelect) exampleSelect.value = '';
+    showIdle();
+    setStatus('LOADED A SHARED PROGRAM. SOMEBODY IS VERY PROUD OF THIS.');
+  } else if (initial && EXAMPLES[initial]) {
+    loadExample(initial);
+  } else {
+    loadExample(ALL_EXAMPLES[0].name);
+  }
+
+  return { run, loadExample, setCode };
+}
+
+// UI wiring - only in the browser (the smoke test imports this module in Node)
+if (typeof document !== 'undefined') {
+  const boot = () => {
+    highlightAll();
+    const kc = document.querySelector('[data-keyword-count]');
+    if (kc) kc.textContent = String(keywordList().length);
+    const mount = document.querySelector('[data-playground]');
+    const pg = mountPlayground({ initial: mount ? mount.dataset.playground : null });
+    // "RUN IT" buttons on the governance cards load the matching example.
+    for (const button of document.querySelectorAll('[data-load-example]')) {
+      button.addEventListener('click', () => {
+        if (!pg) return;
+        pg.loadExample(button.dataset.loadExample);
+        mount.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => pg.run(), 400);
+      });
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 }

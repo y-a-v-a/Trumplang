@@ -3,109 +3,576 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#7A1B1B">
-    <title>Trumplang - THE BEST Programming Language</title>
+    <meta name="theme-color" content="#c9a227">
+    <title>Trumplang - THE MOST TREMENDOUS Programming Language</title>
+    <meta name="description" content="Trumplang: an esoteric programming language based on Donald Trump's speech patterns. The output lies, the logic doesn't. Runs in your browser.">
+    <meta property="og:title" content="TRUMPLANG - THE MOST TREMENDOUS ESOTERIC PROGRAMMING LANGUAGE">
+    <meta property="og:description" content="The output lies. The logic doesn't. Functions must praise themselves. Try it in the playground.">
+    <meta property="og:image" content="social-preview.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,4 61,38 97,38 68,59 79,94 50,72 21,94 32,59 3,38 39,38' fill='%23c9a227'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="flag-band" aria-hidden="true"></div>
-    <header>
-        <p class="header-stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
-        <h1>TRUMPLANG</h1>
-        <h2>THE MOST TREMENDOUS Programming Language</h2>
-        <p class="header-tagline">THE OUTPUT LIES. THE LOGIC DOESN'T.</p>
-        <p><a href="playground.html" class="cta-button">&#9654; TRY IT IN THE PLAYGROUND — MAKE IT RUN</a></p>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <linearGradient id="tl-foil" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff1b3"/>
+                <stop offset="0.3" stop-color="#e8c95f"/>
+                <stop offset="0.5" stop-color="#c9a227"/>
+                <stop offset="0.55" stop-color="#8a6914"/>
+                <stop offset="0.7" stop-color="#d9b13a"/>
+                <stop offset="1" stop-color="#fff0b3"/>
+            </linearGradient>
+            <symbol id="tl-mark" viewBox="0 0 200 200">
+                <path d="M60 72 H160 Q172 72 172 84 V150 Q172 162 160 162 H92 L70 184 V162 H60 Q48 162 48 150 V84 Q48 72 60 72 Z" fill="none" stroke="url(#tl-foil)" stroke-width="9" stroke-linejoin="round"/>
+                <path d="M30 70 C 42 34, 96 20, 142 30 C 168 36, 184 56, 178 84 C 172 72, 160 66, 148 68 C 154 76, 152 86, 144 90 C 140 80, 130 74, 118 74 C 98 64, 68 68, 48 78 C 40 81, 33 78, 30 70 Z" fill="url(#tl-foil)"/>
+                <path d="M62 60 C 84 44, 120 40, 150 50" fill="none" stroke="#8a6914" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <div class="ribbon" aria-hidden="true">&#9733; &#9733; &#9733; &nbsp; THE OFFICIAL WEBSITE OF THE GREATEST PROGRAMMING LANGUAGE, MAYBE EVER &nbsp; &#9733; &#9733; &#9733;</div>
+
+    <nav class="nav" aria-label="Main">
+        <div class="nav-inner">
+            <a class="nav-brand foil" href="#top"><svg aria-hidden="true"><use href="#tl-mark"/></svg>TRUMPLANG</a>
+            <ul class="nav-links">
+                <li><a href="#identity">IDENTITY</a></li>
+                <li><a href="#syntax">SYNTAX</a></li>
+                <li><a href="#governance">GOVERNANCE</a></li>
+                <li><a href="#keywords">KEYWORDS</a></li>
+                <li><a href="#run-it">RUN IT</a></li>
+                <li><a href="https://github.com/y-a-v-a/Trumplang">GITHUB</a></li>
+                <li><a class="nav-cta" href="playground.html">&#9654; PLAYGROUND</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" id="top">
+        <p class="stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
+        <svg class="hero-mark" aria-hidden="true"><use href="#tl-mark"/></svg>
+        <h1 class="foil">TRUMPLANG</h1>
+        <div class="hero-rule" aria-hidden="true"></div>
+        <p class="hero-sub">The most tremendous esoteric programming language. Everyone is saying it.</p>
+        <p class="hero-tagline">The output lies. The logic doesn't.</p>
+        <div class="hero-actions">
+            <a class="btn btn-gold" href="#playground">&#9654; Make it run</a>
+            <a class="btn btn-white" href="playground.html">Open the full playground</a>
+            <a class="btn btn-white" href="https://github.com/y-a-v-a/Trumplang/blob/main/docs/LANGUAGE.md">Read the reference</a>
+        </div>
+        <div class="hero-stats" aria-label="Facts, all of them tremendous">
+            <div class="stat"><b class="foil" data-keyword-count>86</b><span>Keywords</span></div>
+            <div class="stat"><b class="foil">0</b><span>Lowercase</span></div>
+            <div class="stat"><b class="foil">+10%</b><span>Every number printed</span></div>
+            <div class="stat"><b class="foil">50%</b><span>Supreme Court</span></div>
+            <div class="stat"><b class="foil">6</b><span>Bankruptcies</span></div>
+            <div class="stat"><b class="foil">2 WKS</b><span>Until the plan</span></div>
+        </div>
     </header>
 
     <main>
-        <section id="intro">
-            <h2>BELIEVE ME, IT'S HUGE!</h2>
-            <p>Trumplang is based on Donald Trump's unique speech patterns and vocabulary. It's the best programming language. Absolutely tremendous. Everyone is saying it.</p>
-            <p>All keywords are in UPPERCASE because that's how we emphasize things. BIGLY! The syntax is very, very special. Many people are saying they've never seen anything like it.</p>
-        </section>
-
-        <section id="syntax">
-            <h2>THE MOST BEAUTIFUL SYNTAX</h2>
-            <div class="syntax-container">
-                <div class="syntax-item">
-                    <h3>PROGRAM STRUCTURE</h3>
-                    <pre><code>BELIEVE ME
-    /* Your tremendous code here */
-MAKE AMERICA GREAT AGAIN</code></pre>
+        <!-- ============================================================ -->
+        <section id="identity">
+            <div class="section-head">
+                <p class="kicker">Read this before anything else</p>
+                <h2 class="foil">THE IDENTITY OF THE LANGUAGE</h2>
+                <div class="rule" aria-hidden="true"></div>
+                <p class="lede">Trumplang is not a language with funny keywords. It is a complete, ANTLR4-parsed language whose runtime behaves the way the man talks. Files end in <span class="kw">.MAGA</span>. Everything is uppercase. Nothing is modest.</p>
+            </div>
+            <div class="grid">
+                <div class="card principle">
+                    <div class="card-num foil">I</div>
+                    <h3>THE OUTPUT LIES, THE LOGIC DOESN'T</h3>
+                    <p>Every number you print is inflated 10%, and every retelling grows another 1%: <code>100</code> prints as <code>110</code>, then <code>111</code>, then <code>112</code>. <code>FACT CHECK</code> always sees the real value.</p>
                 </div>
-                
-                <div class="syntax-item">
-                    <h3>VARIABLES</h3>
-                    <pre><code>I HAVE THE BEST HUGE COUNT! ABSOLUTELY 0
-I HAVE THE BEST TWEET NAME! ABSOLUTELY "Donald"</code></pre>
+                <div class="card principle">
+                    <div class="card-num foil">II</div>
+                    <h3>THE OPERATORS CAN BE GASLIT</h3>
+                    <p><code>EXECUTIVE ORDER</code> remaps arithmetic at runtime. The <code>SUPREME COURT</code> overturns it, or sides with it, on a coin flip. The judiciary is the only nondeterministic construct.</p>
                 </div>
-                
-                <div class="syntax-item">
-                    <h3>DATA TYPES</h3>
-                    <pre><code>HUGE - Integer
-BIGLY - Float/Double
-SUPPORT - Boolean
-TWEET - String
-WALL - Array
-DEAL - Object/Structure</code></pre>
+                <div class="card principle">
+                    <div class="card-num foil">III</div>
+                    <h3>MODESTY IS A PARSE ERROR</h3>
+                    <p>Every function must praise itself: <code>THE BEST</code>, <code>TREMENDOUS</code>, or <code>LIKE NOBODY HAS EVER SEEN</code> is required syntax. Every string is SHOUTED at runtime, however you typed it.</p>
                 </div>
-                
-                <div class="syntax-item">
-                    <h3>OPERATIONS</h3>
-                    <pre><code>NUMBER! WINNING 5         /* Addition */
-NUMBER! LOSING 3          /* Subtraction */
-NUMBER! BIG LEAGUE TIMES 2 /* Multiplication */
-NUMBER! SAD 2             /* Division */</code></pre>
+                <div class="card principle">
+                    <div class="card-num foil">IV</div>
+                    <h3>ERRORS ARE GOVERNANCE</h3>
+                    <p><code>IMPEACH</code> throws, <code>WITCH HUNT!</code> catches, <code>HUSH MONEY</code> settles quietly, <code>YOU'RE FIRED</code> deletes functions, and a failed <code>FACT CHECK</code> can never be pardoned.</p>
                 </div>
-                
-                <div class="syntax-item">
-                    <h3>CONTROL STRUCTURES</h3>
-                    <pre><code>LISTEN condition BELIEVE ME 
-    /* Code here */
-I TOLD YOU SO
-
-WE'RE GOING TO WIN IN A LANDSLIDE CONDITION BELIEVE ME 
-    /* While loop code */
-I TOLD YOU SO</code></pre>
+                <div class="card principle">
+                    <div class="card-num foil">V</div>
+                    <h3>ANNOUNCEMENTS ARE NOT DELIVERIES</h3>
+                    <p><code>IN TWO WEEKS</code> schedules a block that never runs. <code>CONCEPTS OF A PLAN</code> is a legal function body. <code>CHAPTER 11</code> wipes every variable and the brand survives.</p>
                 </div>
-                
-                <div class="syntax-item">
-                    <h3>FUNCTIONS</h3>
-                    <pre><code>INCREDIBLE FUNCTION_NAME PEOPLE TELL ME PARAMETERS BELIEVE ME 
-    /* Function body */
-    AND I MEAN THAT result
-I TOLD YOU SO</code></pre>
+                <div class="card principle">
+                    <div class="card-num foil">VI</div>
+                    <h3>WRITTEN ORDER IS A SUGGESTION</h3>
+                    <p><code>THE WEAVE</code> runs statements as tangents, evens first, then back for the odds. <code>STOP THE COUNT</code> leaves a loop only while ahead. Neglected functions write tell-all books.</p>
                 </div>
             </div>
         </section>
 
-        <section id="playground">
-            <h2>TREMENDOUS CODE PLAYGROUND</h2>
-            <div class="editor-container">
-                <textarea id="code-editor" placeholder="BELIEVE ME
-    /* Write your tremendous Trumplang code here */
-    I HAVE THE BEST HUGE NUMBER! ABSOLUTELY 42
-    EVERYONE IS TALKING ABOUT NUMBER!
-MAKE AMERICA GREAT AGAIN"></textarea>
-                <div class="button-container">
-                    <button id="run-button">RUN IT BIGLY</button>
-                    <button id="clear-button">SAD RESET</button>
+        <!-- ============================================================ -->
+        <section id="syntax">
+            <div class="section-head">
+                <p class="kicker">Every snippet below is vetted against the real interpreter</p>
+                <h2 class="foil">THE MOST BEAUTIFUL SYNTAX</h2>
+                <div class="rule" aria-hidden="true"></div>
+                <p class="lede">A program opens with a promise and closes with a slogan. Blocks open with <span class="kw">BELIEVE ME</span> and close with <span class="kw">I TOLD YOU SO</span>. There is no statement separator. Statements end where the next keyword begins.</p>
+            </div>
+            <div class="grid grid-wide">
+
+                <div class="card">
+                    <h3>PROGRAM STRUCTURE</h3>
+                    <p>Comments take a whole line and start with <span class="kw">A LOT OF PEOPLE ARE SAYING</span>. When two readings of adjacent statements are both valid, end one with <span class="kw">PERIOD.</span>, the most emphatic optional terminator in any language.</p>
+<pre class="maga" data-file="HELLO.MAGA" data-vet="program"><code>THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING THIS IS A COMMENT. A WHOLE LINE. VERY SAFE.
+EVERYONE IS TALKING ABOUT "hello, america"
+A LOT OF PEOPLE ARE SAYING THAT PRINTS: HELLO, AMERICA. WE ONLY SPEAK IN UPPERCASE.
+MAKE AMERICA GREAT AGAIN</code></pre>
                 </div>
-                <div id="output-container">
-                    <h3>TREMENDOUS RESULTS</h3>
-                    <pre id="output">/* Output will appear here */</pre>
+
+                <div class="card">
+                    <h3>VARIABLES AND TYPES</h3>
+                    <p>Variables are UPPERCASE and end with <span class="kw">!</span> because enthusiasm is mandatory. Six types: <span class="kw">HUGE</span> integer, <span class="kw">BIGLY</span> float, <span class="kw">SUPPORT</span> boolean, <span class="kw">TWEET</span> string, <span class="kw">WALL</span> array, <span class="kw">DEAL</span> object. Booleans are <span class="kw">VERY TRUE</span> and <span class="kw">FAKE NEWS</span>; null is <span class="kw">NOTHING TO SEE HERE</span>.</p>
+<pre class="maga" data-file="VARIABLES.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE CROWD! ABSOLUTELY 100
+I HAVE THE BEST BIGLY APPROVAL! ABSOLUTELY 99.9
+I HAVE THE BEST SUPPORT LOYAL! ABSOLUTELY VERY TRUE
+I HAVE THE BEST TWEET SLOGAN! ABSOLUTELY "make code great again"
+I HAVE A VERY GOOD BRAIN FOR HUGE TERM_LIMIT! ABSOLUTELY 2
+CROWD! ABSOLUTELY CROWD! WINNING 1
+MAKE CROWD! GREATER
+FACT CHECK CROWD! SO TRUE 102
+FACT CHECK SLOGAN! SO TRUE "MAKE CODE GREAT AGAIN"</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>OPERATORS</h3>
+                    <p>Arithmetic: <span class="kw">WINNING</span> +, <span class="kw">LOSING</span> &minus;, <span class="kw">BIG LEAGUE TIMES</span> &times;, <span class="kw">SAD</span> &divide;, <span class="kw">LEFTOVER FROM</span> %, <span class="kw">HUGELY MULTIPLIED BY</span> power, <span class="kw">ENDORSING</span> concatenates. Equality binds loosest by design, so <span class="kw">FACT CHECK &lt;anything&gt; SO TRUE &lt;expected&gt;</span> reads naturally.</p>
+<pre class="maga" data-file="OPERATORS.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE X! ABSOLUTELY 13 WINNING 8 LOSING 1
+I HAVE THE BEST HUGE Y! ABSOLUTELY 6 BIG LEAGUE TIMES 7 SAD 2
+I HAVE THE BEST HUGE Z! ABSOLUTELY 2 HUGELY MULTIPLIED BY 10 LEFTOVER FROM 7
+I HAVE THE BEST TWEET T! ABSOLUTELY "MAKE " ENDORSING "IT RUN"
+I HAVE THE BEST SUPPORT B! ABSOLUTELY X! NO BETTER THAN Y! OR MAYBE WRONG (Z! TOTAL DISASTER 2)
+FACT CHECK X! SO TRUE 20
+FACT CHECK Y! SO TRUE 21
+FACT CHECK Z! SO TRUE 2
+FACT CHECK B! SO TRUE VERY TRUE</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>CONTROL FLOW</h3>
+                    <p><span class="kw">LISTEN</span> is if, <span class="kw">PEOPLE ARE SAYING</span> is else-if, <span class="kw">NOBODY KNEW</span> is else. The while loop wins in a landslide. The for loop infers its direction, and <span class="kw">I WILL VETO!</span> leaves it early.</p>
+<pre class="maga" data-file="CONTROL_FLOW.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE POLLS! ABSOLUTELY 51
+LISTEN POLLS! BETTER THAN 50 BELIEVE ME
+  EVERYONE IS TALKING ABOUT "WINNING BIGLY"
+I TOLD YOU SO
+PEOPLE ARE SAYING POLLS! SO TRUE 50 BELIEVE ME
+  EVERYONE IS TALKING ABOUT "A TIE. RECOUNT."
+I TOLD YOU SO
+NOBODY KNEW BELIEVE ME
+  EVERYONE IS TALKING ABOUT "THE POLLS ARE FAKE"
+I TOLD YOU SO
+WE'RE GOING TO WIN IN A LANDSLIDE POLLS! NOT AS GOOD AS 55 BELIEVE ME
+  MAKE POLLS! GREATER
+I TOLD YOU SO
+WE'RE GOING TO WIN, WIN, WIN WITH RALLY! FROM 10 TO 0 IN TREMENDOUS STEPS OF 5 BELIEVE ME
+  LISTEN RALLY! SO TRUE 5 BELIEVE ME
+    I WILL VETO!
+  I TOLD YOU SO
+I TOLD YOU SO
+FACT CHECK POLLS! SO TRUE 55</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>FUNCTIONS MUST PRAISE THEMSELVES</h3>
+                    <p>Declare with <span class="kw">INCREDIBLE</span>, praise with a superlative, take parameters after <span class="kw">PEOPLE TELL ME</span>, chain them with <span class="kw">AND</span>. <span class="kw">GIVING BACK</span> declares a return type that is enforced at runtime. Return with <span class="kw">AND I MEAN THAT</span>. Fire with <span class="kw">YOU'RE FIRED</span>.</p>
+<pre class="maga" data-file="FUNCTIONS.MAGA" data-vet="fragment"><code>INCREDIBLE DOUBLE_IT THE BEST PEOPLE TELL ME HUGE N! GIVING BACK HUGE BELIEVE ME
+  AND I MEAN THAT N! BIG LEAGUE TIMES 2
+I TOLD YOU SO
+INCREDIBLE GREET LIKE NOBODY HAS EVER SEEN PEOPLE TELL ME TWEET NAME! AND HUGE TIMES! BELIEVE ME
+  WE'RE GOING TO WIN, WIN, WIN WITH I! FROM 1 TO TIMES! BELIEVE ME
+    EVERYONE IS TALKING ABOUT "HELLO " ENDORSING NAME!
+  I TOLD YOU SO
+I TOLD YOU SO
+I CALL UPON GREET PEOPLE TELL ME "AMERICA" AND 2
+EVERYONE IS TALKING ABOUT I CALL UPON DOUBLE_IT PEOPLE TELL ME 21
+A LOT OF PEOPLE ARE SAYING A CALL INSIDE A FACT CHECK NEEDS PARENTHESES
+FACT CHECK (I CALL UPON DOUBLE_IT PEOPLE TELL ME 21) SO TRUE 42
+YOU'RE FIRED GREET</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>THE MODEST FUNCTION (PARSE ERROR)</h3>
+                    <p>The superlative is not decoration. It is grammar. Leave it out and the parser delivers a dedicated modesty rant and refuses to run a single line. Syntax errors are fatal here; half-parsed programs never execute.</p>
+<pre class="maga" data-file="MODEST.MAGA" data-vet="fails:MODEST"><code>THE TIME FOR EMPTY TALK IS OVER!!!
+INCREDIBLE HUMBLE PEOPLE TELL ME HUGE X! BELIEVE ME
+  AND I MEAN THAT X!
+I TOLD YOU SO
+MAKE AMERICA GREAT AGAIN</code></pre>
+<pre class="shell" data-file="THE RANT"><code>LINE 2: THIS FUNCTION IS FAR TOO MODEST! EVERY FUNCTION MUST PRAISE
+ITSELF — SAY 'THE BEST' OR 'TREMENDOUS' OR 'LIKE NOBODY HAS EVER SEEN'
+BEFORE 'PEOPLE TELL ME'. MODESTY IS FOR LOSERS!</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>BUILD THE WALL (ARRAYS)</h3>
+                    <p>Walls are zero-indexed and bounds-checked. Read a <span class="kw">SECTION</span>, renovate an existing one, never add a new one. Iterate with <span class="kw">BILLIONS AND BILLIONS</span>. Wall literals are first-class values you can return and pass.</p>
+<pre class="maga" data-file="WALL.MAGA" data-vet="fragment"><code>BUILD THE WALL BORDER! AND MEXICO WILL PAY FOR IT 10 PREVAILS 20 PREVAILS 30
+BUILD THE WALL EMPTY! AND MEXICO WILL PAY FOR IT
+BORDER! SECTION 1 ABSOLUTELY 99
+I HAVE THE BEST HUGE MILES! ABSOLUTELY 0
+BILLIONS AND BILLIONS SEGMENT! YET BORDER! BELIEVE ME
+  MILES! ABSOLUTELY MILES! WINNING SEGMENT!
+I TOLD YOU SO
+I HAVE THE BEST WALL COPY! ABSOLUTELY AND MEXICO WILL PAY FOR IT 1 PREVAILS 2
+FACT CHECK BORDER! SECTION 1 SO TRUE 99
+FACT CHECK MILES! SO TRUE 139
+FACT CHECK COPY! SECTION 0 SO TRUE 1</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>THE ART OF THE DEAL (OBJECTS)</h3>
+                    <p>Deals have typed fields separated by <span class="kw">&amp;</span> and close with <span class="kw">!!</span>. They nest to any depth and you <span class="kw">FOLLOW</span> a chain to read or write. Deals are renegotiable, not amendable: rewrite any term, but inventing a new field is an error.</p>
+<pre class="maga" data-file="DEAL.MAGA" data-vet="fragment"><code>I HAVE THE BEST DEAL PERSON! ABSOLUTELY (
+    HUGE AGE! ABSOLUTELY 70 &amp;
+    TWEET NAME! ABSOLUTELY "DONALD" &amp;
+    DEAL ADDRESS! ABSOLUTELY (
+        TWEET CITY! ABSOLUTELY "WASHINGTON"
+    )!!
+)!!
+PERSON! FOLLOW AGE! ABSOLUTELY 78
+PERSON! FOLLOW ADDRESS! FOLLOW CITY! ABSOLUTELY "MAR-A-LAGO"
+I HAVE THE BEST TWEET WHERE! ABSOLUTELY PERSON! FOLLOW ADDRESS! FOLLOW CITY!
+EVERYONE IS TALKING ABOUT PERSON! FOLLOW NAME! ENDORSING " LIVES IN " ENDORSING WHERE!
+FACT CHECK PERSON! FOLLOW AGE! SO TRUE 78</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>IMPEACH, WITCH HUNT!, HUSH MONEY</h3>
+                    <p>The try block runs because <span class="kw">I ALONE CAN FIX IT</span>. When it blows up, that is a <span class="kw">WITCH HUNT!</span> and the error is pardoned into a <span class="kw">TWEET</span>. Or skip the handler and pay <span class="kw">HUSH MONEY</span> from a numeric account: nothing is printed, nothing is bound, nobody heard anything. Unless the payment bounces.</p>
+<pre class="maga" data-file="PARDON.MAGA" data-vet="fragment"><code>I ALONE CAN FIX IT BELIEVE ME
+  IMPEACH "A PERFECT PHONE CALL"
+I TOLD YOU SO
+WITCH HUNT! CHARGES! BELIEVE ME
+  EVERYONE IS TALKING ABOUT "ACQUITTED OF:" ENDORSING CHARGES!
+I TOLD YOU SO
+I HAVE THE BEST HUGE FUND! ABSOLUTELY 200000
+I ALONE CAN FIX IT BELIEVE ME
+  I HAVE THE BEST HUGE DOOMED! ABSOLUTELY 100 SAD 0
+I TOLD YOU SO
+HUSH MONEY 130000 FROM FUND!
+FACT CHECK FUND! SO TRUE 70000</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>FACT CHECK AND EXTREME VETTING</h3>
+                    <p><span class="kw">FACT CHECK</span> asserts against the real value, never the inflated one, and a failed check can never be pardoned. Test files end in <span class="kw">.TEST.MAGA</span>: they are ordinary programs that assert with fact checks and announce <span class="kw">PASSED BIGLY</span>.</p>
+<pre class="maga" data-file="CROWD.TEST.MAGA" data-vet="program"><code>THE TIME FOR EMPTY TALK IS OVER!!!
+I HAVE THE BEST HUGE CROWD! ABSOLUTELY 100
+EVERYONE IS TALKING ABOUT CROWD!
+A LOT OF PEOPLE ARE SAYING THAT PRINTED 110. THIS PASSES ANYWAY:
+FACT CHECK CROWD! SO TRUE 100
+EVERYONE IS TALKING ABOUT "PASSED BIGLY"
+MAKE AMERICA GREAT AGAIN</code></pre>
+<pre class="shell" data-file="TERMINAL"><code><i>$</i> <b>node src/cli/index.js EXTREME-VETTING</b> CROWD.TEST.MAGA
+<i>$</i> <b>node src/cli/index.js EXTREME-VETTING</b> ALL</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>HIRING THE BEST PEOPLE (IMPORTS)</h3>
+                    <p>Import every function from a file, or only the ones you want. Functions only: we hire the people, we don't adopt their rallies. Circular imports are COLLUSION, and there will be NO COLLUSION. Then tax them: <span class="kw">BIG BEAUTIFUL TARIFF</span> takes a cut of every number an imported function gives back. Officially the exporter pays.</p>
+<pre class="maga" data-file="TRADE.MAGA" data-vet="skip"><code>I KNOW THE BEST PEOPLE FROM "MATH.MAGA"
+I ONLY WANT FIB FROM "SEQUENCES.MAGA"
+BIG BEAUTIFUL TARIFF 25
+A LOT OF PEOPLE ARE SAYING FIB DELIVERS 16, CUSTOMS TAKES 25%, YOU RECEIVE 12
+EVERYONE IS TALKING ABOUT I CALL UPON FIB PEOPLE TELL ME 7
+MANY PEOPLE ARE ASKING NEXT_MOVE!</code></pre>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="governance">
+            <div class="section-head">
+                <p class="kicker">Runtime behavior no other language would dare to ship</p>
+                <h2 class="foil">THE EXECUTIVE BRANCH</h2>
+                <div class="rule" aria-hidden="true"></div>
+                <p class="lede">These constructs are the reason Trumplang exists. Each one is a fully implemented, fully tested piece of the runtime. Press the gold button to load it into the playground below.</p>
+            </div>
+            <div class="grid grid-wide">
+
+                <div class="card">
+                    <h3>EXECUTIVE ORDER &amp; THE SUPREME COURT</h3>
+                    <p>Remap an operator for the rest of execution. <span class="kw">ENDORSING</span> and <span class="kw">LEFTOVER FROM</span> are immune. The court overrules with a 50% chance, and a 50% chance the order stands, 5-4.</p>
+<pre class="maga" data-file="ORDER.MAGA" data-vet="fragment"><code>EXECUTIVE ORDER WINNING ABSOLUTELY BIG LEAGUE TIMES
+EVERYONE IS TALKING ABOUT 13 WINNING 8
+A LOT OF PEOPLE ARE SAYING THAT PRINTED 104, INFLATED TO 114.4
+SUPREME COURT OVERRULES WINNING
+EVERYONE IS TALKING ABOUT 13 WINNING 8</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="EXECUTIVE ORDER">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>IN TWO WEEKS</h3>
+                    <p>Schedules a block to run in two weeks. Two weeks never arrives. Each pass announces that the announcement is coming. The body must parse, but nothing inside is ever evaluated, so it may reference things that don't exist. Pure campaign material.</p>
+<pre class="maga" data-file="HEALTHCARE.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE PROMISES_KEPT! ABSOLUTELY 0
+IN TWO WEEKS BELIEVE ME
+  EVERYONE IS TALKING ABOUT "THE FULL AND COMPLETE HEALTHCARE PLAN"
+  PROMISES_KEPT! ABSOLUTELY I CALL UPON THE_PLAN PEOPLE TELL ME
+I TOLD YOU SO
+FACT CHECK PROMISES_KEPT! SO TRUE 0</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="IN TWO WEEKS">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>THE WEAVE</h3>
+                    <p>The block's statements do not run in written order. The weave goes off on the even tangents first, then comes back for the odd ones: <span class="kw">A B C D</span> runs as <span class="kw">A C B D</span>. Deterministic. It always comes back together, and says so, and the professors say it's genius.</p>
+<pre class="maga" data-file="WEAVE.MAGA" data-vet="fragment"><code>THE WEAVE BELIEVE ME
+  EVERYONE IS TALKING ABOUT "TANGENT 1: THE ECONOMY"
+  EVERYONE IS TALKING ABOUT "TANGENT 2: LIKE I SAID, THE ECONOMY"
+  EVERYONE IS TALKING ABOUT "TANGENT 3: SHARKS VERSUS BATTERIES"
+  EVERYONE IS TALKING ABOUT "TANGENT 4: AND THAT'S WHY WE WEAVE"
+I TOLD YOU SO</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="THE WEAVE">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>CONCEPTS OF A PLAN</h3>
+                    <p>A function may have concepts instead of a body. The superlative is still mandatory; the concept praises itself too. Calling it insists the plan is fully worked out and delivers the return type's default. The <span class="kw">GIVING BACK</span> promise is technically kept.</p>
+<pre class="maga" data-file="CONCEPTS.MAGA" data-vet="fragment"><code>INCREDIBLE HEALTHCARE THE BEST PEOPLE TELL ME GIVING BACK TWEET CONCEPTS OF A PLAN
+INCREDIBLE INFRASTRUCTURE_WEEK TREMENDOUS PEOPLE TELL ME GIVING BACK HUGE CONCEPTS OF A PLAN
+FACT CHECK (I CALL UPON HEALTHCARE PEOPLE TELL ME) SO TRUE ""
+FACT CHECK (I CALL UPON INFRASTRUCTURE_WEEK PEOPLE TELL ME) SO TRUE 0</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="CONCEPTS OF A PLAN">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>STOP THE COUNT</h3>
+                    <p>The electoral loop exit. The condition means "we are ahead". The moment it is <span class="kw">VERY TRUE</span>, victory is declared out loud and the loop is left, no matter how many iterations it wanted. While behind, the count continues. It only ever stops in one direction.</p>
+<pre class="maga" data-file="ELECTION.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE OUR_VOTES! ABSOLUTELY 0
+WE'RE GOING TO WIN, WIN, WIN WITH PRECINCT! FROM 1 TO 50 BELIEVE ME
+  MAKE OUR_VOTES! GREATER
+  STOP THE COUNT OUR_VOTES! BETTER THAN 4
+I TOLD YOU SO
+FACT CHECK OUR_VOTES! SO TRUE 5</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="STOP THE COUNT">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>CHAPTER 11</h3>
+                    <p>Strategic bankruptcy. Every variable in every reachable scope resets to its type default and execution continues like nothing happened. Functions, executive orders and tariffs survive: that's law, not debt. Six filings per program. On the seventh, even the banks stop returning our calls.</p>
+<pre class="maga" data-file="CASINO.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE CASINO_DEBT! ABSOLUTELY 3000000
+I HAVE THE BEST TWEET BRAND! ABSOLUTELY "TRUMP TAJ MAHAL"
+CHAPTER 11
+FACT CHECK CASINO_DEBT! SO TRUE 0
+FACT CHECK BRAND! SO TRUE ""
+EVERYONE IS TALKING ABOUT "THE NAME STAYS ON THE BUILDING. GENIUS."</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="CHAPTER 11">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>HUSH MONEY</h3>
+                    <p>The quietest catch clause in any programming language. The amount leaves the account and the error is never spoken of again. If the account can't cover the price of silence, the payment bounces, the bounce is announced, and the papers, an enclosing <span class="kw">WITCH HUNT!</span>, get every word.</p>
+<pre class="maga" data-file="SETTLEMENT.MAGA" data-vet="fragment"><code>I HAVE THE BEST HUGE LEGAL_EXPENSES! ABSOLUTELY 100000
+I ALONE CAN FIX IT BELIEVE ME
+  I ALONE CAN FIX IT BELIEVE ME
+    IMPEACH "A SECOND STORY, SOMEHOW WORSE"
+  I TOLD YOU SO
+  HUSH MONEY 150000 FROM LEGAL_EXPENSES!
+I TOLD YOU SO
+WITCH HUNT! SCANDAL! BELIEVE ME
+  EVERYONE IS TALKING ABOUT "THE PAPERS GOT IT: " ENDORSING SCANDAL!
+I TOLD YOU SO</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="HUSH MONEY">&#9654; Run it</button></div>
+                </div>
+
+                <div class="card">
+                    <h3>LOYALTY (THE TELL-ALL)</h3>
+                    <p>No syntax, pure runtime. Every call ticks a global loyalty clock. A function ignored for ten straight calls starts leaking chapters to the press; after three, the book is published. Calling it back restores loyalty and it works fine. It was always a great function. The book is fake news.</p>
+<pre class="maga" data-file="LOYALTY.MAGA" data-vet="fragment"><code>INCREDIBLE MOONLIGHT THE BEST PEOPLE TELL ME GIVING BACK TWEET BELIEVE ME
+  AND I MEAN THAT "I WAS IN THE ROOM"
+I TOLD YOU SO
+INCREDIBLE FAVORITE TREMENDOUS PEOPLE TELL ME HUGE N! GIVING BACK HUGE BELIEVE ME
+  AND I MEAN THAT N! BIG LEAGUE TIMES 2
+I TOLD YOU SO
+WE'RE GOING TO WIN, WIN, WIN WITH DAY! FROM 1 TO 25 BELIEVE ME
+  I CALL UPON FAVORITE PEOPLE TELL ME DAY!
+I TOLD YOU SO
+A LOT OF PEOPLE ARE SAYING MOONLIGHT HAS LEAKED TWO CHAPTERS BY NOW
+EVERYONE IS TALKING ABOUT I CALL UPON MOONLIGHT PEOPLE TELL ME</code></pre>
+                    <div class="card-actions"><button class="btn btn-gold btn-sm" data-load-example="LOYALTY (THE TELL-ALL)">&#9654; Run it</button></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="playground">
+            <div class="section-head">
+                <p class="kicker">The real ANTLR4 interpreter, running in your browser. No server. I alone can fix it, client-side.</p>
+                <h2 class="foil">TREMENDOUS CODE PLAYGROUND</h2>
+                <div class="rule" aria-hidden="true"></div>
+            </div>
+            <div class="playground" data-playground="NUMBER INFLATION">
+                <div class="playground-controls">
+                    <label for="examples">PICK AN EXAMPLE</label>
+                    <select id="examples" aria-label="Example programs"></select>
+                    <span class="spacer"></span>
+                    <button class="btn btn-white btn-sm" id="share" type="button">Copy link</button>
+                    <button class="btn btn-gold" id="run" type="button">&#9654; Make it run</button>
+                </div>
+                <div class="playground-panes">
+                    <div class="pane">
+                        <span class="pane-label">EDITOR &middot; PROGRAM.MAGA</span>
+                        <div class="editor-wrap">
+                            <pre aria-hidden="true"><code id="editor-highlight"></code></pre>
+                            <textarea id="editor" spellcheck="false" autocapitalize="characters" aria-label="Trumplang source code"></textarea>
+                        </div>
+                    </div>
+                    <div class="pane">
+                        <span class="pane-label">OUTPUT &middot; TREMENDOUS RESULTS</span>
+                        <pre id="output" class="output idle" aria-live="polite">LOADING THE INTERPRETER. THE BEST INTERPRETER.</pre>
+                    </div>
+                </div>
+                <p class="playground-status" id="status"></p>
+                <p class="playground-note">If the numbers in the output look 10% too good, that's not a bug. The output lies, the logic doesn't. Fact checks always see the real values. And if the Supreme Court rules against you, run it again.</p>
+                <p class="playground-links"><a href="playground.html">Open the full-page playground &rarr;</a></p>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="keywords">
+            <div class="section-head">
+                <p class="kicker">Straight from the generated lexer</p>
+                <h2 class="foil">EVERY KEYWORD, ALPHABETICALLY BY POWER</h2>
+                <div class="rule" aria-hidden="true"></div>
+                <p class="lede">The complete vocabulary. Every keyword is uppercase, and the site's smoke test confirms this table names every literal the grammar knows.</p>
+            </div>
+            <div class="table-wrap">
+            <table class="gilded">
+                <thead><tr><th>KEYWORD</th><th>MEANS</th></tr></thead>
+                <tbody>
+                    <tr><td class="group-row" colspan="2">PROGRAM &amp; BLOCKS</td></tr>
+                    <tr><td><code>THE TIME FOR EMPTY TALK IS OVER!!!</code></td><td class="means">program start</td></tr>
+                    <tr><td><code>MAKE AMERICA GREAT AGAIN</code></td><td class="means">program end</td></tr>
+                    <tr><td><code>BELIEVE ME</code> &hellip; <code>I TOLD YOU SO</code></td><td class="means">block open / close</td></tr>
+                    <tr><td><code>PERIOD.</code></td><td class="means">optional statement terminator, mandatory after none</td></tr>
+                    <tr><td><code>A LOT OF PEOPLE ARE SAYING</code></td><td class="means">comment (whole line)</td></tr>
+
+                    <tr><td class="group-row" colspan="2">DECLARATIONS &amp; TYPES</td></tr>
+                    <tr><td><code>I HAVE THE BEST</code> type <code>NAME!</code> <code>ABSOLUTELY</code> value</td><td class="means">variable declaration (<code>!</code> ends every variable name)</td></tr>
+                    <tr><td><code>I HAVE A VERY GOOD BRAIN FOR</code></td><td class="means">constant declaration</td></tr>
+                    <tr><td><code>ABSOLUTELY</code></td><td class="means">assignment</td></tr>
+                    <tr><td><code>MAKE</code> <code>X!</code> <code>GREATER</code> / <code>SMALLER</code></td><td class="means">increment / decrement</td></tr>
+                    <tr><td><code>HUGE</code> <code>BIGLY</code> <code>SUPPORT</code> <code>TWEET</code> <code>WALL</code> <code>DEAL</code></td><td class="means">integer, float, boolean, string, array, object</td></tr>
+                    <tr><td><code>VERY TRUE</code> / <code>FAKE NEWS</code></td><td class="means">booleans</td></tr>
+                    <tr><td><code>NOTHING TO SEE HERE</code></td><td class="means">null: falsy, equals only itself</td></tr>
+
+                    <tr><td class="group-row" colspan="2">ARITHMETIC</td></tr>
+                    <tr><td><code>WINNING</code> <code>LOSING</code> <code>BIG LEAGUE TIMES</code> <code>SAD</code></td><td class="means">+ &minus; &times; &divide; (all four can be gaslit by executive order)</td></tr>
+                    <tr><td><code>LEFTOVER FROM</code> <code>HUGELY MULTIPLIED BY</code></td><td class="means">modulo, power (right-associative)</td></tr>
+                    <tr><td><code>ENDORSING</code></td><td class="means">string concatenation, immune to executive orders</td></tr>
+
+                    <tr><td class="group-row" colspan="2">COMPARISON &amp; LOGIC</td></tr>
+                    <tr><td><code>SO TRUE</code> / <code>TOTAL DISASTER</code></td><td class="means">== / != (bind loosest of all)</td></tr>
+                    <tr><td><code>BETTER THAN</code> <code>AT LEAST AS GOOD AS</code></td><td class="means">&gt; &nbsp;&ge;</td></tr>
+                    <tr><td><code>NOT AS GOOD AS</code> <code>NO BETTER THAN</code></td><td class="means">&lt; &nbsp;&le;</td></tr>
+                    <tr><td><code>AND IT'S TRUE</code> <code>OR MAYBE</code> <code>WRONG</code></td><td class="means">&amp;&amp; &nbsp;|| &nbsp;!</td></tr>
+
+                    <tr><td class="group-row" colspan="2">CONTROL FLOW</td></tr>
+                    <tr><td><code>LISTEN</code> / <code>PEOPLE ARE SAYING</code> / <code>NOBODY KNEW</code></td><td class="means">if / else if / else</td></tr>
+                    <tr><td><code>WE'RE GOING TO WIN IN A LANDSLIDE</code> cond</td><td class="means">while</td></tr>
+                    <tr><td><code>WE'RE GOING TO WIN, WIN, WIN</code> <code>WITH</code> <code>I!</code> <code>FROM</code> a <code>TO</code> b [<code>IN TREMENDOUS STEPS OF</code> n]</td><td class="means">for; direction inferred, step must be positive</td></tr>
+                    <tr><td><code>BILLIONS AND BILLIONS</code> <code>ITEM!</code> <code>YET</code> <code>WALL!</code></td><td class="means">foreach</td></tr>
+                    <tr><td><code>I WILL VETO!</code></td><td class="means">break</td></tr>
+                    <tr><td><code>STOP THE COUNT</code> cond</td><td class="means">break, but only while ahead</td></tr>
+                    <tr><td><code>THE WEAVE</code></td><td class="means">run the block's statements evens first, then odds</td></tr>
+                    <tr><td><code>IN TWO WEEKS</code></td><td class="means">schedule a block that never runs</td></tr>
+
+                    <tr><td class="group-row" colspan="2">FUNCTIONS</td></tr>
+                    <tr><td><code>INCREDIBLE</code> NAME superlative <code>PEOPLE TELL ME</code> params</td><td class="means">function declaration</td></tr>
+                    <tr><td><code>THE BEST</code> / <code>TREMENDOUS</code> / <code>LIKE NOBODY HAS EVER SEEN</code></td><td class="means">the mandatory superlative</td></tr>
+                    <tr><td><code>AND</code></td><td class="means">separates parameters and arguments</td></tr>
+                    <tr><td><code>GIVING BACK</code> type</td><td class="means">return type, enforced at runtime</td></tr>
+                    <tr><td><code>AND I MEAN THAT</code> expr</td><td class="means">return</td></tr>
+                    <tr><td><code>I CALL UPON</code> NAME <code>PEOPLE TELL ME</code> args</td><td class="means">call</td></tr>
+                    <tr><td><code>CONCEPTS OF A PLAN</code></td><td class="means">a body-less function that delivers its return type's default</td></tr>
+                    <tr><td><code>YOU'RE FIRED</code> NAME</td><td class="means">delete a function permanently</td></tr>
+
+                    <tr><td class="group-row" colspan="2">WALLS &amp; DEALS</td></tr>
+                    <tr><td><code>BUILD THE WALL</code> <code>W!</code> <code>AND MEXICO WILL PAY FOR IT</code> a <code>PREVAILS</code> b</td><td class="means">array declaration and literal</td></tr>
+                    <tr><td><code>W!</code> <code>SECTION</code> i</td><td class="means">index (0-based, bounds-checked)</td></tr>
+                    <tr><td><code>(</code> type <code>F!</code> <code>ABSOLUTELY</code> v <code>&amp;</code> &hellip; <code>)!!</code></td><td class="means">deal literal: <code>&amp;</code> separates fields, <code>!!</code> closes</td></tr>
+                    <tr><td><code>D!</code> <code>FOLLOW</code> <code>F!</code></td><td class="means">field access, chainable to any depth</td></tr>
+
+                    <tr><td class="group-row" colspan="2">INPUT, OUTPUT, TRUTH</td></tr>
+                    <tr><td><code>EVERYONE IS TALKING ABOUT</code> expr</td><td class="means">print (numbers inflated, strings shouted)</td></tr>
+                    <tr><td><code>MANY PEOPLE ARE ASKING</code> <code>X!</code></td><td class="means">read one line of stdin into X!</td></tr>
+                    <tr><td><code>FACT CHECK</code> expr <code>SO TRUE</code> expected</td><td class="means">assert on the real value; unpardonable when it fails</td></tr>
+
+                    <tr><td class="group-row" colspan="2">GOVERNANCE</td></tr>
+                    <tr><td><code>I ALONE CAN FIX IT</code> block <code>WITCH HUNT!</code> [<code>ERR!</code>] block</td><td class="means">try / catch</td></tr>
+                    <tr><td><code>I ALONE CAN FIX IT</code> block <code>HUSH MONEY</code> amount <code>FROM</code> <code>ACCOUNT!</code></td><td class="means">try / pay off the error silently</td></tr>
+                    <tr><td><code>IMPEACH</code> expr</td><td class="means">throw</td></tr>
+                    <tr><td><code>EXECUTIVE ORDER</code> op <code>ABSOLUTELY</code> op</td><td class="means">remap an arithmetic operator</td></tr>
+                    <tr><td><code>SUPREME COURT OVERRULES</code> op</td><td class="means">50% overturn the order, 50% it stands</td></tr>
+                    <tr><td><code>CHAPTER 11</code></td><td class="means">reset every variable; six filings per program</td></tr>
+                    <tr><td><code>BIG BEAUTIFUL TARIFF</code> percent</td><td class="means">tax every number an imported function gives back</td></tr>
+
+                    <tr><td class="group-row" colspan="2">IMPORTS</td></tr>
+                    <tr><td><code>I KNOW THE BEST PEOPLE FROM</code> "FILE.MAGA"</td><td class="means">import every function</td></tr>
+                    <tr><td><code>I ONLY WANT</code> NAME <code>FROM</code> "FILE.MAGA"</td><td class="means">import the named functions</td></tr>
+                </tbody>
+            </table>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="run-it">
+            <div class="section-head">
+                <p class="kicker">Node 18 or newer. That's it. That's the requirement.</p>
+                <h2 class="foil">RUN IT LOCALLY, RUN IT BIGLY</h2>
+                <div class="rule" aria-hidden="true"></div>
+            </div>
+            <div class="steps">
+                <div class="card step">
+                    <div class="card-num foil"></div>
+                    <h3>CLONE AND INSTALL</h3>
+                    <p>One monorepo: the interpreter, this website, and a VS Code extension with syntax highlighting.</p>
+<pre class="shell" data-file="TERMINAL"><code><i>$</i> <b>git clone</b> https://github.com/y-a-v-a/Trumplang.git
+<i>$</i> <b>cd</b> Trumplang <b>&amp;&amp; npm install</b></code></pre>
+                </div>
+                <div class="card step">
+                    <div class="card-num foil"></div>
+                    <h3>RUN A PROGRAM</h3>
+                    <p>Thirty-plus example programs ship in the core package, including the ones on this page.</p>
+<pre class="shell" data-file="TERMINAL"><code><i>$</i> <b>cd</b> packages/trumplang-core
+<i>$</i> <b>npm start</b> examples/FIBONACCI.MAGA
+<i>$</i> <b>npm start</b> examples/STOP_THE_COUNT.MAGA</code></pre>
+                </div>
+                <div class="card step">
+                    <div class="card-num foil"></div>
+                    <h3>EXTREME VETTING</h3>
+                    <p>Every push is vetted in CI. Every test must PASS BIGLY, or it's TOTALLY RIGGED and the build is SAD.</p>
+<pre class="shell" data-file="TERMINAL"><code><i>$</i> <b>node</b> src/cli/index.js <b>EXTREME-VETTING</b> ALL
+<i>$</i> <b>node</b> src/cli/index.js <b>EXTREME-VETTING</b> DIRECTORY test/deal</code></pre>
                 </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p class="footer-stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
-        <p>TRUMPLANG - THE MOST INCREDIBLE PROGRAMMING LANGUAGE EVER CREATED</p>
-        <p><small>This is a parody language for educational and entertainment purposes only.</small></p>
-        <p><small>&copy; 2026 Vincent Bruijn &middot; <a href="https://www.vincentbruijn.nl">vincentbruijn.nl</a> &middot; <a href="https://www.y-a-v-a.org">y-a-v-a.org</a></small></p>
+        <p class="stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
+        <p class="foil">TRUMPLANG</p>
+        <p>THE MOST INCREDIBLE PROGRAMMING LANGUAGE EVER CREATED. THE OUTPUT LIES. THE LOGIC DOESN'T.</p>
+        <p><small>This is a parody language for educational and entertainment purposes only. No functions were harmed. Several were fired.</small></p>
+        <p><small>&copy; 2026 Vincent Bruijn &middot; <a href="https://www.vincentbruijn.nl">vincentbruijn.nl</a> &middot; <a href="https://www.y-a-v-a.org">y-a-v-a.org</a> &middot; <a href="https://github.com/y-a-v-a/Trumplang">GitHub</a> &middot; MIT License</small></p>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module" src="playground.js"></script>
 </body>
 </html>

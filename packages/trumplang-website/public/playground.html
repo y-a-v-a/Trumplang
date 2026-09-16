@@ -3,41 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#7A1B1B">
+    <meta name="theme-color" content="#c9a227">
     <title>Trumplang Playground - MAKE IT RUN</title>
+    <meta name="description" content="Write and run Trumplang in your browser. The real ANTLR4 interpreter, no server, numbers inflated at the podium.">
+    <meta property="og:title" content="TRUMPLANG PLAYGROUND - MAKE IT RUN">
+    <meta property="og:description" content="The real interpreter, in your browser. The output lies, the logic doesn't.">
+    <meta property="og:image" content="social-preview.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,4 61,38 97,38 68,59 79,94 50,72 21,94 32,59 3,38 39,38' fill='%23c9a227'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="flag-band" aria-hidden="true"></div>
-    <header>
-        <p class="header-stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
-        <h1>TRUMPLANG PLAYGROUND</h1>
-        <h2>WRITE CODE LIKE NOBODY HAS EVER SEEN</h2>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <linearGradient id="tl-foil" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff1b3"/>
+                <stop offset="0.3" stop-color="#e8c95f"/>
+                <stop offset="0.5" stop-color="#c9a227"/>
+                <stop offset="0.55" stop-color="#8a6914"/>
+                <stop offset="0.7" stop-color="#d9b13a"/>
+                <stop offset="1" stop-color="#fff0b3"/>
+            </linearGradient>
+            <symbol id="tl-mark" viewBox="0 0 200 200">
+                <path d="M60 72 H160 Q172 72 172 84 V150 Q172 162 160 162 H92 L70 184 V162 H60 Q48 162 48 150 V84 Q48 72 60 72 Z" fill="none" stroke="url(#tl-foil)" stroke-width="9" stroke-linejoin="round"/>
+                <path d="M30 70 C 42 34, 96 20, 142 30 C 168 36, 184 56, 178 84 C 172 72, 160 66, 148 68 C 154 76, 152 86, 144 90 C 140 80, 130 74, 118 74 C 98 64, 68 68, 48 78 C 40 81, 33 78, 30 70 Z" fill="url(#tl-foil)"/>
+                <path d="M62 60 C 84 44, 120 40, 150 50" fill="none" stroke="#8a6914" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <div class="ribbon" aria-hidden="true">&#9733; &#9733; &#9733; &nbsp; THE PLAYGROUND. THE REAL INTERPRETER. NO SERVER. I ALONE CAN FIX IT, CLIENT-SIDE. &nbsp; &#9733; &#9733; &#9733;</div>
+
+    <nav class="nav" aria-label="Main">
+        <div class="nav-inner">
+            <a class="nav-brand foil" href="index.html"><svg aria-hidden="true"><use href="#tl-mark"/></svg>TRUMPLANG</a>
+            <ul class="nav-links">
+                <li><a href="index.html#identity">IDENTITY</a></li>
+                <li><a href="index.html#syntax">SYNTAX</a></li>
+                <li><a href="index.html#governance">GOVERNANCE</a></li>
+                <li><a href="index.html#keywords">KEYWORDS</a></li>
+                <li><a href="https://github.com/y-a-v-a/Trumplang/blob/main/docs/LANGUAGE.md">REFERENCE</a></li>
+                <li><a href="https://github.com/y-a-v-a/Trumplang">GITHUB</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" style="padding-bottom: 1.5rem;">
+        <p class="stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
+        <h1 class="foil" style="font-size: clamp(1.9rem, 7vw, 3.6rem);">THE PLAYGROUND</h1>
+        <div class="hero-rule" aria-hidden="true"></div>
+        <p class="hero-sub">Write code like nobody has ever seen.</p>
+        <p class="hero-tagline">Ctrl / Cmd + Enter runs it. The link button shares it.</p>
     </header>
 
-    <main class="playground">
-        <div class="playground-controls">
-            <label for="examples">PICK A TREMENDOUS EXAMPLE:</label>
-            <select id="examples"></select>
-            <button id="run">MAKE IT RUN</button>
-        </div>
-        <div class="playground-panes">
-            <textarea id="editor" spellcheck="false"></textarea>
-            <pre id="output">LOADING THE INTERPRETER. THE BEST INTERPRETER.</pre>
-        </div>
-        <p class="playground-note">
-            IF THE NUMBERS IN THE OUTPUT LOOK 10% TOO GOOD, THAT'S NOT A BUG.
-            THE OUTPUT LIES, THE LOGIC DOESN'T. FACT CHECKS ALWAYS SEE THE REAL VALUES.
-            AND IF THE SUPREME COURT RULES AGAINST YOU — RUN IT AGAIN.
-        </p>
-        <p><a href="index.html">&larr; BACK TO THE MOST BEAUTIFUL HOMEPAGE</a></p>
+    <main>
+        <section style="margin-top: 0;">
+            <div class="playground" data-playground="NUMBER INFLATION">
+                <div class="playground-controls">
+                    <label for="examples">PICK A TREMENDOUS EXAMPLE</label>
+                    <select id="examples" aria-label="Example programs"></select>
+                    <span class="spacer"></span>
+                    <button class="btn btn-white btn-sm" id="share" type="button">Copy link</button>
+                    <button class="btn btn-gold" id="run" type="button">&#9654; Make it run</button>
+                </div>
+                <div class="playground-panes">
+                    <div class="pane">
+                        <span class="pane-label">EDITOR &middot; PROGRAM.MAGA</span>
+                        <div class="editor-wrap">
+                            <pre aria-hidden="true"><code id="editor-highlight"></code></pre>
+                            <textarea id="editor" spellcheck="false" autocapitalize="characters" aria-label="Trumplang source code"></textarea>
+                        </div>
+                    </div>
+                    <div class="pane">
+                        <span class="pane-label">OUTPUT &middot; TREMENDOUS RESULTS</span>
+                        <pre id="output" class="output idle" aria-live="polite">LOADING THE INTERPRETER. THE BEST INTERPRETER.</pre>
+                    </div>
+                </div>
+                <p class="playground-status" id="status"></p>
+                <p class="playground-note">
+                    If the numbers in the output look 10% too good, that's not a bug.
+                    The output lies, the logic doesn't. Fact checks always see the real values.
+                    And if the Supreme Court rules against you, run it again.
+                </p>
+                <p class="playground-links"><a href="index.html">&larr; Back to the most beautiful homepage</a> &nbsp;&middot;&nbsp; <a href="https://github.com/y-a-v-a/Trumplang/blob/main/docs/LANGUAGE.md">The complete language reference &rarr;</a></p>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-head">
+                <p class="kicker">Things the browser cannot do</p>
+                <h2 class="foil">KNOWN LIMITATIONS, ALL OF THEM TINY</h2>
+                <div class="rule" aria-hidden="true"></div>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>NO FILESYSTEM</h3>
+                    <p><span class="kw">I KNOW THE BEST PEOPLE FROM</span> and <span class="kw">I ONLY WANT</span> need files to hire from. In the browser they rant. Run Trumplang locally for the full trade war with <span class="kw">BIG BEAUTIFUL TARIFF</span>.</p>
+                </div>
+                <div class="card">
+                    <h3>NO TERMINAL</h3>
+                    <p><span class="kw">MANY PEOPLE ARE ASKING</span> reads a line from stdin. There is no stdin here, and the language says so, at length.</p>
+                </div>
+                <div class="card">
+                    <h3>NO DETERMINISM IN THE JUDICIARY</h3>
+                    <p><span class="kw">SUPREME COURT OVERRULES</span> is a coin flip by design. If the ruling goes against you, that's a feature. Run it again.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
-        <p class="footer-stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
-        <p>TRUMPLANG - THE MOST INCREDIBLE PROGRAMMING LANGUAGE EVER CREATED</p>
-        <p><small>This is a parody language for educational and entertainment purposes only.</small></p>
-        <p><small>&copy; 2026 Vincent Bruijn &middot; <a href="https://www.vincentbruijn.nl">vincentbruijn.nl</a> &middot; <a href="https://www.y-a-v-a.org">y-a-v-a.org</a></small></p>
+        <p class="stars" aria-hidden="true">&#9733; &#9733; &#9733;</p>
+        <p class="foil">TRUMPLANG</p>
+        <p>THE MOST INCREDIBLE PROGRAMMING LANGUAGE EVER CREATED. THE OUTPUT LIES. THE LOGIC DOESN'T.</p>
+        <p><small>This is a parody language for educational and entertainment purposes only. No functions were harmed. Several were fired.</small></p>
+        <p><small>&copy; 2026 Vincent Bruijn &middot; <a href="https://www.vincentbruijn.nl">vincentbruijn.nl</a> &middot; <a href="https://www.y-a-v-a.org">y-a-v-a.org</a> &middot; <a href="https://github.com/y-a-v-a/Trumplang">GitHub</a> &middot; MIT License</small></p>
     </footer>
 
     <script type="module" src="playground.js"></script>
