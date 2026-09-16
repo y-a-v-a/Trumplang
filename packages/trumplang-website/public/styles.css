@@ -1,8 +1,6 @@
 /* TRUMPLANG - THE MOST BEAUTIFUL STYLES. GOLD AND WHITE, LIKE THE LOBBY.
    Tower-lobby marble, gold leaf on everything, and not one lowercase keyword. */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&display=swap');
-
 :root {
     /* THE GOLD. 24 KARAT. THE BEST GOLD. */
     --gold-50: #fffbea;
@@ -703,6 +701,19 @@ select#examples {
     height: calc(100% - 1.25rem);
 }
 .editor-wrap textarea::selection { background: rgba(232, 201, 95, 0.35); color: transparent; }
+.editor-wrap .error-stripe {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: calc(0.82rem * 1.55);
+    background: linear-gradient(90deg, rgba(198, 40, 40, 0.45), rgba(198, 40, 40, 0.12));
+    border-left: 3px solid #ff8a8a;
+    pointer-events: none;
+    z-index: 1;
+    display: none;
+}
+.editor-wrap .error-stripe.on { display: block; }
+
 .editor-wrap:focus-within { box-shadow: 0 0 0 1px var(--gold-300) inset, 0 0 0 3px rgba(201, 162, 39, 0.35); }
 
 .output {

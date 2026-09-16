@@ -72,10 +72,35 @@ export function mountPlayground(opts = {}) {
     status.className = 'playground-status ' + kind;
   };
 
+  // A red stripe under the line the parser rejected. Lives inside the
+  // overlay's <pre> so it scrolls with the code.
+  let stripe = null;
+  if (overlay) {
+    stripe = document.createElement('div');
+    stripe.className = 'error-stripe';
+    overlay.parentElement.appendChild(stripe);
+  }
+  const markErrorLine = (message) => {
+    if (!stripe) return;
+    const m = /LINE (\d+)/.exec(message || '');
+    if (!m) {
+      stripe.classList.remove('on');
+      return;
+    }
+    const line = Number(m[1]);
+    const cs = getComputedStyle(editor);
+    const lineHeight = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.55;
+    const padTop = parseFloat(cs.paddingTop) || 0;
+    stripe.style.top = `${padTop + (line - 1) * lineHeight}px`;
+    stripe.style.height = `${lineHeight}px`;
+    stripe.classList.add('on');
+  };
+
   const paint = () => {
     if (!overlay) return;
     // Trailing newline keeps the overlay's height in sync with the textarea.
     overlay.innerHTML = highlight(editor.value) + '\n';
+    if (stripe) stripe.classList.remove('on');
   };
   const syncScroll = () => {
     if (!overlay) return;
@@ -136,6 +161,7 @@ export function mountPlayground(opts = {}) {
         'THIS CODE IS A DISASTER! VERY SAD CODE!\n' +
         result.error;
       output.className = 'output sad';
+      markErrorLine(result.error);
       setStatus('SAD! THE PROGRAM DID NOT SURVIVE. SEE THE RANT.', 'sad');
     }
   };

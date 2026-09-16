@@ -6,8 +6,9 @@ Trumplang stands as a tremendous tribute to Donald J. Trump's unique communicati
 
 ## Try It Live
 
-The playground runs the real interpreter in your browser:
-**[y-a-v-a.github.io/Trumplang](https://y-a-v-a.github.io/Trumplang/playground.html)** — number inflation, executive orders, pardons, the works.
+The website runs the real interpreter in your browser:
+**[y-a-v-a.github.io/Trumplang](https://y-a-v-a.github.io/Trumplang/)** — the syntax tour, every governance construct, and a
+[playground](https://y-a-v-a.github.io/Trumplang/playground.html) with number inflation, executive orders, pardons, the works.
 
 ## Getting Started
 

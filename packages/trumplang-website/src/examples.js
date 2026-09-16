@@ -350,6 +350,19 @@ MAKE AMERICA GREAT AGAIN`,
       },
     ],
   },
+  {
+    group: 'YOUR TURN',
+    examples: [
+      {
+        name: 'BLANK CANVAS',
+        code: `THE TIME FOR EMPTY TALK IS OVER!!!
+A LOT OF PEOPLE ARE SAYING THIS IS WHERE YOU WRITE SOMETHING TREMENDOUS
+I HAVE THE BEST TWEET PLAN! ABSOLUTELY "concepts of a plan"
+EVERYONE IS TALKING ABOUT PLAN!
+MAKE AMERICA GREAT AGAIN`,
+      },
+    ],
+  },
 ];
 
 /** Flat name -> code map (the smoke test and the select box both use it). */
