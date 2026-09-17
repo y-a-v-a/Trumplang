@@ -53,6 +53,29 @@ Every `<pre class="maga">` snippet on `index.html` is extracted by
 The keyword table is checked against every literal the lexer knows. If the
 grammar changes and the site doesn't, CI is TOTALLY RIGGED and says so.
 
+## Deploying to Vercel
+
+`vercel.json` in this directory makes the package deployable on its own.
+Because the bundle imports the interpreter from `../../trumplang-core`, the
+install runs at the monorepo root and the build runs here.
+
+1. Import the repository in Vercel and set **Root Directory** to
+   `packages/trumplang-website` (Framework Preset: Other).
+2. Make sure **Include source files outside of the Root Directory in the
+   Build Step** is enabled in the project's Git settings (it is the default
+   for new projects; `../../trumplang-core` must be visible to the build).
+3. Deploy. `vercel.json` supplies the rest:
+   - `installCommand`: `cd ../.. && npm install` (workspace install at the root)
+   - `buildCommand`: `npm run build` (esbuild -> `public/playground.js`)
+   - `outputDirectory`: `public`
+   - `ignoreCommand`: skips the build when neither this package nor
+     `trumplang-core` changed in the pushed commit
+   - `cleanUrls`: `/playground` serves `playground.html` (the `.html` links
+     keep working too, so GitHub Pages is unaffected)
+
+GitHub Pages deployment (`.github/workflows/deploy-playground.yml`) is
+unchanged; both can run side by side.
+
 ## Playground features
 
 - Syntax highlighting overlay in the editor (real lexer, see above)
