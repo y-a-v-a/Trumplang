@@ -470,7 +470,10 @@ kbd, .kw {
     border: 1px solid var(--gold-200);
     padding: 0.08em 0.38em;
     border-radius: 3px;
-    white-space: nowrap;
+    /* Long keyword phrases wrap on narrow screens; each line keeps its own box */
+    overflow-wrap: anywhere;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 /* ---------- Code blocks (dark room, gold leaf) ---------- */
