@@ -2,7 +2,7 @@
 
 Eight posts, pick your favourite. Every one fits in 280 characters, link included. The features they brag about are all real.
 
-Link: https://y-a-v-a.github.io/Trumplang/
+Link: https://trumplang.vercel.app/
 
 ---
 
@@ -12,7 +12,7 @@ I built a programming language where every number you print is inflated 10%. Pri
 
 The assertions still check the real value. The output lies. The logic doesn't.
 
-Tremendous. https://y-a-v-a.github.io/Trumplang/
+Tremendous. https://trumplang.vercel.app/
 
 ## 2. Infrastructure Week
 
@@ -20,7 +20,7 @@ New in TRUMPLANG: `IN TWO WEEKS`, a block that is scheduled and never runs.
 
 Also `CONCEPTS OF A PLAN`, a function with no body that still returns something.
 
-Some say it's the most honest keyword ever written. https://y-a-v-a.github.io/Trumplang/
+Some say it's the most honest keyword ever written. https://trumplang.vercel.app/
 
 ## 3. Error Handling
 
@@ -30,7 +30,7 @@ TRUMPLANG: `I ALONE CAN FIX IT` … `WITCH HUNT!`
 
 Or skip the catch and pay the error to go away with `HUSH MONEY`. Very legal, very cool.
 
-https://y-a-v-a.github.io/Trumplang/
+https://trumplang.vercel.app/
 
 ## 4. Checks and Balances
 
@@ -38,7 +38,7 @@ https://y-a-v-a.github.io/Trumplang/
 
 `SUPREME COURT OVERRULES` has a 50% chance of undoing it.
 
-Just like the Founders intended. Separation of powers, sort of. https://y-a-v-a.github.io/Trumplang/
+Just like the Founders intended. Separation of powers, sort of. https://trumplang.vercel.app/
 
 ## 5. Bankruptcy as a Feature
 
@@ -46,7 +46,7 @@ Just like the Founders intended. Separation of powers, sort of. https://y-a-v-a.
 
 You get six filings per program. After that, the runtime says no.
 
-Some limits even TRUMPLANG respects. SAD! https://y-a-v-a.github.io/Trumplang/
+Some limits even TRUMPLANG respects. SAD! https://trumplang.vercel.app/
 
 ## 6. Loops That Only Count When Winning
 
@@ -54,7 +54,7 @@ Some limits even TRUMPLANG respects. SAD! https://y-a-v-a.github.io/Trumplang/
 
 Behind? Nothing happens. The count continues.
 
-Finally, control flow with a strategy. https://y-a-v-a.github.io/Trumplang/
+Finally, control flow with a strategy. https://trumplang.vercel.app/
 
 ## 7. Style Guide
 
@@ -65,7 +65,7 @@ TRUMPLANG style guide:
 • Every function needs a superlative, "THE BEST" or "TREMENDOUS", or it won't compile
 • Lowercase keywords: 0
 
-Many people are saying it's the most readable language. Many. https://y-a-v-a.github.io/Trumplang/
+Many people are saying it's the most readable language. Many. https://trumplang.vercel.app/
 
 ## 8. Since 2016
 
@@ -73,4 +73,4 @@ I had the idea for a programming language based on his tweets back in 2016. Then
 
 It's finally here: a real interpreter, a grammar, a playground. Nobody builds esolangs slower than me.
 
-TRUMPLANG. Believe me. https://y-a-v-a.github.io/Trumplang/
+TRUMPLANG. Believe me. https://trumplang.vercel.app/
