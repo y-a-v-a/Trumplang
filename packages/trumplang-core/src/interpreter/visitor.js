@@ -632,12 +632,15 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
     } else {
       // Check else-if blocks
       debug('Condition is FALSE, checking else-if blocks');
+      // The first else-if whose CONDITION holds wins. Deciding by the body's
+      // result instead would let a branch that ends in null fall through
+      // into the next one - two branches of one chain, a rigged election.
       const elseIfStatements = ctx.elseIfStatement();
       if (elseIfStatements) {
         for (let i = 0; i < elseIfStatements.length; i++) {
-          const elseIfResult = this.visit(elseIfStatements[i]);
-          if (elseIfResult !== undefined && elseIfResult !== null) {
-            return elseIfResult;
+          if (this.visit(elseIfStatements[i].expression())) {
+            debug('Else-if condition is TRUE, executing else-if block');
+            return this.visit(elseIfStatements[i].statement());
           }
         }
       }
