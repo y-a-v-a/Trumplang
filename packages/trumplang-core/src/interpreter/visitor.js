@@ -706,6 +706,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
       while (this.visit(ctx.expression())) {
         debug(`While loop iteration: ${++loopCount}`);
         result = this.visit(ctx.blockStatement());
+        // AND I MEAN THAT inside a loop leaves the loop AND the function
+        if (result && result.isReturn) return result;
       }
 
       return result;
@@ -770,6 +772,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
         // Execute the loop body (block statement)
         result = this.visit(ctx.blockStatement());
+        // AND I MEAN THAT inside a loop leaves the loop AND the function
+        if (result && result.isReturn) return result;
       }
 
       return result;
@@ -826,6 +830,8 @@ class CustomTrumplangVisitor extends TrumplangVisitor {
 
         // Execute the loop body (block statement)
         result = this.visit(ctx.blockStatement());
+        // AND I MEAN THAT inside a loop leaves the loop AND the function
+        if (result && result.isReturn) return result;
       }
 
       return result;
