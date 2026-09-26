@@ -1,0 +1,190 @@
+==================================================================
+   ELECTION NIGHT  -  THE MOST WATCHED ELECTION NIGHT IN HISTORY
+   538 ELECTORAL VOTES. 270 TO WIN. EVERY BALLOT SIMULATED LIVE.
+==================================================================
+
+THE SAFE STATES. FULLY COUNTED. NOBODY NEEDED TO STOP ANYTHING:
+
+  ALABAMA         9  US +26.4       ALASKA          3  US +12.1   
+  ARKANSAS        6  US +30.2       CALIFORNIA     54  THEM +24.7 
+LEAKED FROM CONCEDE: "NOBODY CALLS ME ANYMORE. I SAW EVERYTHING IN THERE. I'M WRITING IT ALL DOWN — CHAPTER 1 DROPS SOON. VERY DISLOYAL ENVIRONMENT!"
+  COLORADO       10  THEM +15.5     CONNECTICUT     7  THEM +21.7 
+  DELAWARE        3  THEM +20.5     D.C.            3  THEM +88.0 
+LEAKED FROM CONCEDE: "NOBODY CALLS ME ANYMORE. I SAW EVERYTHING IN THERE. I'M WRITING IT ALL DOWN — CHAPTER 2 DROPS SOON. VERY DISLOYAL ENVIRONMENT!"
+  FLORIDA        30  US +2.5        HAWAII          4  THEM +30.6 
+  IDAHO           4  US +30.0       ILLINOIS       19  THEM +17.5 
+  INDIANA        11  US +15.9       IOWA            6  US +9.0    
+LEAKED FROM CONCEDE: "NOBODY CALLS ME ANYMORE. I SAW EVERYTHING IN THERE. I'M WRITING IT ALL DOWN — CHAPTER 3 DROPS SOON. VERY DISLOYAL ENVIRONMENT!"
+  KANSAS          6  US +15.7       KENTUCKY        8  US +26.5   
+  LOUISIANA       8  US +21.1       MAINE           4  THEM +7.9  
+THE BOOK IS OUT: "CONCEDE: WHAT I SAW" — NUMBER ONE BESTSELLER. EVERYONE'S READING IT. TOTAL FICTION, WRITTEN BY A LOSER WE BARELY KNEW!
+  MARYLAND       10  THEM +31.7     MASSACHUSETTS  11  THEM +30.1 
+  MINNESOTA      10  THEM +3.2      MISSISSIPPI     6  US +13.9   
+  MISSOURI       10  US +12.3       MONTANA         4  US +14.4   
+  NEBRASKA        5  US +18.2       NEW HAMPSHIRE   4  THEM +9.3  
+  NEW JERSEY     14  THEM +17.5     NEW MEXICO      5  THEM +13.0 
+  NEW YORK       28  THEM +23.4     NORTH DAKOTA    3  US +32.9   
+  OHIO           17  US +8.6        OKLAHOMA        7  US +32.4   
+  OREGON          8  THEM +15.7     RHODE ISLAND    4  THEM +19.1 
+  SOUTH CAROLINA  9  US +14.5       SOUTH DAKOTA    3  US +28.5   
+  TENNESSEE      11  US +25.0       TEXAS          40  US +7.7    
+  UTAH            6  US +16.9       VERMONT         3  THEM +37.9 
+  VIRGINIA       13  THEM +12.4     WASHINGTON     12  THEM +20.4 
+  WEST VIRGINIA   4  US +35.6       WYOMING         3  US +42.3   
+
+SAFE STATES: US 219, THEM 226. IT ALL COMES DOWN TO SEVEN STATES.
+
+==================================================================
+   THE BATTLEGROUND  -  LIVE. THE COUNT STOPS WHEN WE'RE AHEAD.
+==================================================================
+
+  ARIZONA         11 ELECTORAL VOTES
+    [█·········]  10% IN    US +8.2    
+    [██········]  20% IN    US +7.7    
+    [███·······]  30% IN    US +7.0    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+  GEORGIA         16 ELECTORAL VOTES
+    [█·········]  10% IN    US +11.6   
+    [██········]  20% IN    US +9.7    
+    [███·······]  30% IN    US +8.2    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+  MICHIGAN        15 ELECTORAL VOTES
+    [█·········]  10% IN    US +11.1   
+    [██········]  20% IN    US +11.0   
+    [███·······]  30% IN    US +8.2    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+  NEVADA          6 ELECTORAL VOTES
+    [█·········]  10% IN    US +6.5    
+    [██········]  20% IN    US +5.3    
+    [███·······]  30% IN    US +3.9    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+  NORTH CAROLINA  16 ELECTORAL VOTES
+    [█·········]  10% IN    US +11.1   
+    [██········]  20% IN    US +9.0    
+    [███·······]  30% IN    US +7.3    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+  PENNSYLVANIA    19 ELECTORAL VOTES
+    [█·········]  10% IN    US +9.5    
+    [██········]  20% IN    US +10.4   
+    [███·······]  30% IN    US +9.9    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+  WISCONSIN       10 ELECTORAL VOTES
+    [█·········]  10% IN    US +6.0    
+    [██········]  20% IN    US +4.9    
+    [███·······]  30% IN    US +5.5    
+STOP THE COUNT! WE'RE WAY AHEAD! IF YOU ONLY COUNT THE LEGAL VOTES, WE WIN EASILY. THE COUNT IS OVER!
+    >>> CALLED FOR US WITH 30% REPORTING. THE DECISION DESK IS VERY SMART.
+
+==================================================================
+   2:30 AM. THE BALLROOM. THE SPEECH.
+==================================================================
+"WE WON. WE WON BIG. ELECTORAL VOTES, AND I'M BEING CONSERVATIVE:"
+343.2
+"THE BIGGEST SINCE GEORGE WASHINGTON. MAYBE BIGGER. FRANKLY, WE DID WIN THIS ELECTION."
+  (THE CAMPAIGN'S OWN SPREADSHEET SAYS 312. THE CROWD HEARD A DECIMAL POINT.)
+
+==================================================================
+   MEANWHILE, THE FACT CHECKERS KEEP COUNTING. EVERY. SINGLE. BALLOT.
+==================================================================
+
+  STATE           EV   WHEN WE STOPPED   ALL BALLOTS
+  ARIZONA         11   US +7.0           THEM +0.4    <- FLIPPED
+  GEORGIA         16   US +8.2           THEM +0.8    <- FLIPPED
+  MICHIGAN        15   US +8.2           US +0.1    
+  NEVADA           6   US +3.9           THEM +3.8    <- FLIPPED
+  NORTH CAROLINA  16   US +7.3           US +1.3    
+  PENNSYLVANIA    19   US +9.9           US +1.1    
+  WISCONSIN       10   US +5.5           THEM +2.0    <- FLIPPED
+
+THE FULL COUNT: US 269, THEM 269. STATES WHERE STOPPING THE COUNT CHANGED THE WINNER: 4.
+NOBODY GETS TO 270. A PERFECT TIE. THE COUNT STOPPED AT 312. THE TRUTH STOPPED AT 269.
+NOBODY HAS EVER SEEN ANYTHING LIKE IT. (IT HAS NEVER HAPPENED. IT JUST HAPPENED. IN A SIMULATION.)
+
+THE COUNTING IS OVER. PERMANENTLY.
+COUNT_STATE — YOU'RE FIRED!
+
+==================================================================
+   THE MAP, EVERY BALLOT COUNTED, RANKED BY MARGIN
+==================================================================
+
+  ST EV               US <--+--> THEM
+  WY  3    █████████████████|                     US +42.3   
+  WV  4      ███████████████|                     US +35.6   
+  ND  3       ██████████████|                     US +32.9   
+  OK  7        █████████████|                     US +32.4   
+  AR  6        █████████████|                     US +30.2   
+  ID  4         ████████████|                     US +30.0   
+  SD  3         ████████████|                     US +28.5   
+  KY  8          ███████████|                     US +26.5   
+  AL  9          ███████████|                     US +26.4   
+  TN 11          ███████████|                     US +25.0   
+  LA  8            █████████|                     US +21.1   
+  NE  5             ████████|                     US +18.2   
+  UT  6              ███████|                     US +16.9   
+  IN 11              ███████|                     US +15.9   
+  KS  6              ███████|                     US +15.7   
+  SC  9               ██████|                     US +14.5   
+  MT  4               ██████|                     US +14.4   
+  MS  6               ██████|                     US +13.9   
+  MO 10                █████|                     US +12.3   
+  AK  3                █████|                     US +12.1   
+  IA  6                 ████|                     US +9.0    
+  OH 17                 ████|                     US +8.6    
+  TX 40                 ████|                     US +7.7    
+  FL 30                   ██|                     US +2.5    
+  NC 16                    █|                     US +1.3    
+  PA 19                    █|                     US +1.1    
+  MI 15                    █|                     US +0.1    
+  --------------------- 269 | 269 ---------------------  THE COUNTRY, SPLIT CLEAN IN HALF
+  AZ 11                     |█                    THEM +0.4   <- TIPPING POINT <- COUNT STOPPED EARLY
+  GA 16                     |█                    THEM +0.8   <- COUNT STOPPED EARLY
+  WI 10                     |█                    THEM +2.0   <- COUNT STOPPED EARLY
+  MN 10                     |██                   THEM +3.2  
+  NV  6                     |██                   THEM +3.8   <- COUNT STOPPED EARLY
+  ME  4                     |████                 THEM +7.9  
+  NH  4                     |████                 THEM +9.3  
+  VA 13                     |█████                THEM +12.4 
+  NM  5                     |██████               THEM +13.0 
+  CO 10                     |███████              THEM +15.5 
+  OR  8                     |███████              THEM +15.7 
+  IL 19                     |████████             THEM +17.5 
+  NJ 14                     |████████             THEM +17.5 
+  RI  4                     |████████             THEM +19.1 
+  WA 12                     |█████████            THEM +20.4 
+  DE  3                     |█████████            THEM +20.5 
+  CT  7                     |█████████            THEM +21.7 
+  NY 28                     |██████████           THEM +23.4 
+  CA 54                     |██████████           THEM +24.7 
+  MA 11                     |█████████████        THEM +30.1 
+  HI  4                     |█████████████        THEM +30.6 
+  MD 10                     |█████████████        THEM +31.7 
+  VT  3                     |████████████████     THEM +37.9 
+  DC  3                     |████████████████████ THEM +88.0 
+
+THE TIPPING POINT, THE ONE STATE THAT WOULD HAVE PUT EITHER SIDE OVER THE TOP: ARIZONA       
+
+==================================================================
+   THE MORNING AFTER
+==================================================================
+THE LAWYERS: "WE'RE TAKING THIS TO THE SUPREME COURT!"
+THE SUPREME COURT HAS NOTHING TO OVERRULE FOR WINNING. NO EXECUTIVE ORDER EXISTS. CASE DISMISSED!
+THE LAWYERS: "WE HAVE EVIDENCE. SO MUCH EVIDENCE. WE'LL RELEASE IT SOON."
+BIG ANNOUNCEMENT COMING IN TWO WEEKS. TWO WEEKS. WE HAVE IT ALL FIGURED OUT, IT'S GOING TO BE SOMETHING SPECIAL, BELIEVE ME!
+THE CONCESSION SPEECH: NEVER CALLED. CONCEPTS OF A PLAN. IT WROTE A BOOK INSTEAD - YOU WATCHED IT HAPPEN.
+
+THE CAMPAIGN'S DEBT: 38000000 DOLLARS. THE LAWYERS WANT TO BE PAID. THE SOLUTION IS OBVIOUS:
+CHAPTER 11! BANKRUPTCY NUMBER 1 OF 6. ALL DEBTS RESTRUCTURED, EVERY VARIABLE BACK TO ZERO. THE BRAND SURVIVES. GENIUS BUSINESS MOVE, EVERYONE SAYS SO!
+THE CAMPAIGN'S DEBT: 0 DOLLARS. BEAUTIFUL. AND THE ELECTION RESULTS?
+WHAT RESULTS? THE LEDGER IS CLEAN. THE DEAL IS EMPTY. NOBODY CAN PROVE ANYTHING. WE WON!

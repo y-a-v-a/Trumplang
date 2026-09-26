@@ -1,0 +1,12 @@
+{
+  "name": "trumplang-show-off",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Three programs nobody thought Trumplang could run - a Mandelbrot renderer, a Brainf*** interpreter and a full election night - with their real output",
+  "type": "module",
+  "scripts": {
+    "shoot": "node scripts/shoot.mjs"
+  },
+  "license": "MIT",
+  "author": "Vincent Bruijn <vebruijn@gmail.com>"
+}

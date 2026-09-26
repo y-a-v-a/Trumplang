@@ -10,6 +10,10 @@ The website runs the real interpreter in your browser:
 **[y-a-v-a.github.io/Trumplang](https://y-a-v-a.github.io/Trumplang/)** — the syntax tour, every governance construct, and a
 [playground](https://y-a-v-a.github.io/Trumplang/playground.html) with number inflation, executive orders, pardons, the works.
 
+## The Show-Off Room
+
+A Mandelbrot renderer, a Brainf*** interpreter and a full election night, all written in Trumplang, with screenshots of their real output: **[packages/trumplang-show-off](packages/trumplang-show-off/README.md)**.
+
 ## Getting Started
 
 To run a Trumplang program:
