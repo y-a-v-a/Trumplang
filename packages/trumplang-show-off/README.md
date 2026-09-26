@@ -2,7 +2,7 @@
 
 THE SHOW-OFF ROOM. Three programs nobody thought Trumplang could run, with their real output. Many people walked in and said "wow, I didn't know it could do that." True story!
 
-Open [`index.html`](index.html) in a browser for the full tour: what each program does, why it's ambitious, the hard parts, source excerpts and the screenshots.
+See it live at **[trumplang.vercel.app/show-off](https://trumplang.vercel.app/show-off)** (the website build copies this package into the site), or open [`index.html`](index.html) locally for the full tour: what each program does, why it's ambitious, the hard parts, source excerpts and the screenshots.
 
 | Program | What it does | Runtime |
 |---|---|---|

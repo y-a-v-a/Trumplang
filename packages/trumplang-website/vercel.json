@@ -4,7 +4,7 @@
   "installCommand": "cd ../.. && npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "public",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../trumplang-core",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ../trumplang-core ../trumplang-show-off",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [

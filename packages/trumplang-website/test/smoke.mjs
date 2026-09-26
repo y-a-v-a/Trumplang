@@ -159,6 +159,24 @@ console.log('\n5. THE HIGHLIGHTER PRESERVES EVERY CHARACTER');
   check('comments are highlighted', highlight('A LOT OF PEOPLE ARE SAYING HI\n').includes('class="tl-comment"'));
 }
 
+// ---------------------------------------------------------------------------
+console.log('\n6. THE SHOW-OFF ROOM IS COPIED IN, AND NOTHING ON IT IS A DEAD LINK');
+{
+  const { existsSync } = await import('node:fs');
+  const pub = join(here, '..', 'public');
+  const page = join(pub, 'show-off.html');
+  check('public/show-off.html was built', existsSync(page));
+  if (existsSync(page)) {
+    const html = readFileSync(page, 'utf8');
+    const local = [...html.matchAll(/(?:src|href)="(show-off\/[^"]+)"/g)].map((m) => m[1]);
+    check('the page links its screenshots, outputs and programs', local.length >= 9, `found ${local.length}`);
+    for (const ref of new Set(local)) {
+      check(`${ref} exists`, existsSync(join(pub, ref)));
+    }
+    check('no absolute trumplang.vercel.app links left behind', !html.includes('trumplang.vercel.app'));
+  }
+}
+
 if (failures > 0) {
   console.error(`\n${failures} SMOKE CHECK(S) TOTALLY RIGGED! SAD!`);
   process.exit(1);

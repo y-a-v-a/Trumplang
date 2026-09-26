@@ -45,6 +45,8 @@ docs/tweets_01-08-2021.csv
 
 # Website build artifacts (rebuild with: npm run build -w trumplang-website)
 packages/trumplang-website/public/playground.js
+packages/trumplang-website/public/show-off.html
+packages/trumplang-website/public/show-off/
 
 # Vercel CLI project link
 .vercel/
