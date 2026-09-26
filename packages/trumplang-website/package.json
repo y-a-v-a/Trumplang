@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/main.js --bundle --format=esm --platform=browser --keep-names --alias:fs=./src/stubs/empty.js --alias:path=./src/stubs/empty.js --outfile=public/playground.js",
+    "build": "esbuild src/main.js --bundle --format=esm --platform=browser --keep-names --loader:.MAGA=text --alias:fs=./src/stubs/empty.js --alias:path=./src/stubs/empty.js --outfile=public/playground.js",
     "start": "npm run build && serve public",
     "dev": "npm run build && serve public",
     "smoke": "npm run build && node test/smoke.mjs"

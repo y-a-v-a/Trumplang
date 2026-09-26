@@ -68,6 +68,17 @@ console.log('\n2. THE LANGUAGE IDENTITY, END TO END');
   check('domestic square untaxed', r.output.includes('17.6'));
 }
 {
+  const r = await runTrumplang(EXAMPLES['THE MAR-A-LAGO SET (MANDELBROT)']);
+  check('the set renders in gold', r.output.includes('@@@@@@@@@@'));
+  check('538 points in the set, fact checked', r.output.includes('538 POINTS IN THE SET'));
+}
+{
+  const r = await runTrumplang(EXAMPLES['ELECTION NIGHT (269 TO 269)']);
+  check('the count stops in the battleground', r.output.includes('CALLED FOR US WITH 30% REPORTING'));
+  check('the full count is a 269-269 tie', r.output.includes('THE FULL COUNT: US 269, THEM 269'));
+  check('the concession speech writes a book', r.output.includes('CONCEDE: WHAT I SAW'));
+}
+{
   const r = await runTrumplang(EXAMPLES['STOP THE COUNT']);
   check('the count stops while ahead', r.output.includes('STOP THE COUNT!'));
 }

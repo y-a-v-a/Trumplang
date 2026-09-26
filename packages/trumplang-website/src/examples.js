@@ -2,6 +2,11 @@
 // against the real interpreter, so the site never shows syntax the parser
 // would reject. Grouped in the order a newcomer should read them.
 
+// The showcase programs live in trumplang-core/examples and are bundled as
+// text (esbuild --loader:.MAGA=text), so there is exactly one copy of each.
+import MAR_A_LAGO_SET from '../../trumplang-core/examples/MAR_A_LAGO_SET.MAGA';
+import ELECTION_NIGHT from '../../trumplang-core/examples/ELECTION_NIGHT.MAGA';
+
 export const EXAMPLE_GROUPS = [
   {
     group: 'THE BASICS',
@@ -348,6 +353,13 @@ WITCH HUNT! BELIEVE ME
 I TOLD YOU SO
 MAKE AMERICA GREAT AGAIN`,
       },
+    ],
+  },
+  {
+    group: 'THE SHOWCASE',
+    examples: [
+      { name: 'THE MAR-A-LAGO SET (MANDELBROT)', code: MAR_A_LAGO_SET },
+      { name: 'ELECTION NIGHT (269 TO 269)', code: ELECTION_NIGHT },
     ],
   },
   {
